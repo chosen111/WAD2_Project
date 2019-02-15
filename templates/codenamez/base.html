@@ -4,23 +4,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/clean.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.min.css' %}">
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <title>
-        Rango - 
+        CodenameZ -- 
         {% block title_block %}
-            How to Tango with Django!
+            The Board Game
         {% endblock %}
     </title>
 </head>
 <body>
-    <div>
-        {% block sidebar_block %}
+    <header></header>
+    <main>
+        {% block main %}
         {% endblock %}
-    </div>
-    <div>
-        {% block body_block %}
-        {% endblock %}
-    </div>
+    </main>
+    <footer></footer>
 </body>
 </html>
