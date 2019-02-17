@@ -1,17 +1,43 @@
-@font-face {
-  font-family: "Black Ops One";
-  src: url("../fonts/BlackOpsOne.ttf") format("truetype");
-}
-
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
 html, body {
   min-width: 1260px;
   height: 100%;
+  font-family: "Open Sans";
+  color: #00dfa6;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+  transition: color .15s linear, text-shadow .15s linear, background-color .15s linear;
+}
+
+.button {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 4px;
+  margin: 5px;
+  padding: 5px 15px 5px 15px;
+  text-align: center;
+  cursor: pointer;
+  border-color: #00ac80;
+  background-color: rgba(0, 223, 166, 0.2);
+  color: #00dfa6;
+  transition: color .15s linear, border-color .15s linear, background-color .15s linear;
+}
+
+.button:hover {
+  color: #46ffd0;
+  border-color: #00dfa6;
+  background-color: rgba(0, 223, 166, 0.4);
 }
 
 div#logo {
   position: relative;
   font-family: "Black Ops One";
   color: #fff;
+  transition: text-shadow .15s linear, opacity .15s linear;
 }
 
 div#logo > span {
@@ -20,12 +46,12 @@ div#logo > span {
 
 div#logo span.logo-1 {
   position: relative;
-  color: #ffa366;
+  color: #00dfa6;
 }
 
 div#logo span.logo-2 {
   position: absolute;
-  color: #ff6600;
+  color: #00936d;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -44,15 +70,19 @@ div#logo.small {
 }
 
 div#logo.small span.logo-2 {
-  top: -18px;
+  top: -16px;
   font-size: 64px;
+}
+
+div#logo.small:hover {
+  opacity: .6;
 }
 
 div#bg {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: #000 url("../images/bg.jpg") no-repeat fixed center top/cover;
+  background: #00dfa6 url("../images/bg.jpg") no-repeat fixed center top/cover;
   background-blend-mode: luminosity;
 }
 
@@ -85,12 +115,18 @@ div#application {
 div#application header {
   order: 1;
   flex: 140px 0 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-content: center;
+  padding: 0 10px 0 10px;
 }
 
 div#application main {
   order: 2;
   flex: 1;
   padding: 10px;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 div#application footer {

@@ -1,0 +1,11 @@
+@mixin button($col: $teal) {
+    border-color: darken($col, 10%);
+    background-color: rgba($col, .2);
+    color: $col;
+
+    &:hover {
+        color: lighten($col, 20%);
+        border-color: $col;
+        background-color: rgba($col, .4);
+    }
+}

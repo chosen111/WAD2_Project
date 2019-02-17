@@ -1,15 +1,38 @@
-@import 'vars';
-@import 'fonts';
+@import '_fonts.scss';
+@import '_vars.scss';
+@import '_funcs.scss';
 
 html, body { 
     min-width: 1260px;
     height: 100%;
+    font-family: "Open Sans";
+    color: $teal;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+    transition: color .15s linear, text-shadow .15s linear, background-color .15s linear;
+}
+
+.button {
+    display: inline-block;
+    border: 1px solid;
+    border-radius: 4px;
+    margin: 5px;
+    padding: 5px 15px 5px 15px;
+    text-align: center;
+    cursor: pointer;
+    @include button($teal);
+
+    transition: color .15s linear, border-color .15s linear, background-color .15s linear;
 }
 
 div#logo {
     position: relative;
     font-family: "Black Ops One";
     color: #fff;
+    transition: text-shadow .15s linear, opacity .15s linear;
     > span {
         // Hack to add stroke to text as a shadow
         //                top-left          bottom-left         top-right        bottom-right        center
@@ -17,11 +40,11 @@ div#logo {
     }
     span.logo-1 {
         position: relative;
-        color: lighten($team-orange, 20%);
+        color: $teal;
     }
     span.logo-2 {
         position: absolute;
-        color: $team-orange;
+        color: $teal-border;
         // Hack to center an element horizontally
         left: 50%;
         transform: translateX(-50%);
@@ -38,8 +61,12 @@ div#logo {
     &.small {
         font-size: 32px;
         span.logo-2 {
-            top: -18px;
+            top: -16px;
             font-size: 64px;            
+        }
+        // When mouse is over the small logo
+        &:hover {
+            opacity: .6;
         }
     }
 }
@@ -48,7 +75,7 @@ div#bg {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #000 url('../images/bg.jpg') no-repeat fixed center top / cover;
+    background: $teal url('../images/bg.jpg') no-repeat fixed center top / cover;
     background-blend-mode: luminosity;
     
     &.team-orange { background-color: $team-orange }
@@ -76,12 +103,18 @@ div#application {
     header {
         order: 1;
         flex: 140px 0 0;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-content: center;
+        padding: 0 10px 0 10px;
     }
     
     main {
         order: 2;
         flex: 1;
         padding: 10px;
+        display: flex;
+        flex-flow: column nowrap;
     }
     
     footer {

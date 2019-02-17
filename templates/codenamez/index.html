@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block main %}
-    <div class="title">{% getLogoBySize "small" %}</div>
-    Index
+    <div class="title">{% createLogoBySize %}</div>
+    <div class="control">
+        {% createButton "return" "Return" %}
+        {% createButton "play" "Play" %}
+        {% createButton "options" "Options" %}
+    </div>
 {% endblock %}

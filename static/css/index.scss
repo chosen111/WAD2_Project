@@ -1,5 +1,21 @@
-div.title {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+@import '_vars.scss';
+@import '_funcs.scss';
+
+main {
+    align-items: center;    
+    div.control {
+        flex: 1;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        padding: 10px 0 10px 0;
+
+        .button {
+            font-size: 20px;
+        }
+        .button#return {
+            @include button($team-orange);
+        }
+    }
 }
+
