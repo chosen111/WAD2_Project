@@ -1,6 +1,8 @@
 {% extends 'codenamez/base.html' %}
 {% load staticfiles %}
+{% load codenamez_template_tags %}
 
 {% block main %}
+    {% getLogoBySize %}
     Index
 {% endblock %}
