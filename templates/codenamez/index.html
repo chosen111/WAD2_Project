@@ -2,7 +2,11 @@
 {% load staticfiles %}
 {% load codenamez_template_tags %}
 
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
+{% endblock %}
+
 {% block main %}
-    {% getLogoBySize %}
+    <div class="title">{% getLogoBySize "small" %}</div>
     Index
 {% endblock %}

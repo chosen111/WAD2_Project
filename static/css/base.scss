@@ -1,8 +1,47 @@
 @import 'vars';
+@import 'fonts';
 
 html, body { 
     min-width: 1260px;
     height: 100%;
+}
+
+div#logo {
+    position: relative;
+    font-family: "Black Ops One";
+    color: #fff;
+    > span {
+        // Hack to add stroke to text as a shadow
+        //                top-left          bottom-left         top-right        bottom-right        center
+        text-shadow: #000 -1px -1px 0, #000 -1px 1px 0, #000 1px -1px 0, #000 1px 1px 0, #000 0 0 5px;
+    }
+    span.logo-1 {
+        position: relative;
+        color: lighten($team-orange, 20%);
+    }
+    span.logo-2 {
+        position: absolute;
+        color: $team-orange;
+        // Hack to center an element horizontally
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    // If the logo has the class big then make it big
+    &.big {
+        font-size: 64px;
+        span.logo-2 {
+            top: -34px;
+            font-size: 128px;            
+        }
+    }
+    // If the logo has the class small then make it small
+    &.small {
+        font-size: 32px;
+        span.logo-2 {
+            top: -18px;
+            font-size: 64px;            
+        }
+    }
 }
 
 div#bg {
@@ -42,6 +81,7 @@ div#application {
     main {
         order: 2;
         flex: 1;
+        padding: 10px;
     }
     
     footer {
