@@ -9,8 +9,17 @@
 {% block main %}
     <div class="title">{% createLogoBySize %}</div>
     <div class="control">
-        {% createButton "return" "Return" %}
-        {% createButton "play" "Play" %}
+        {% createButton "continue" "Continue playing" %}
+        {% createButton "play" "Start a new game" %}
         {% createButton "options" "Options" %}
+
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                {% createButton "admin" "Admin" href="admin" %}
+            {% endif %}
+            {% createButton "logout" "Log Out" href="logout" %}
+        {% else %}
+            {% createButton "login" "Log In" href="login" %}
+        {% endif %}
     </div>
 {% endblock %}

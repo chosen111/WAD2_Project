@@ -1,3 +1,11 @@
-<div class="button" id="{{ id }}">
-    <span class="text">{{ text }}</span>
-</div>
+{% if href %}
+    <a href="{{ href }}">
+        <div class="button" id="{{ id }}">
+            <span class="text">{{ text }}</span>
+        </div>
+    </a>
+{% else %}
+    <div class="button" id="{{ id }}">
+        <span class="text">{{ text }}</span>
+    </div>
+{% endif %}

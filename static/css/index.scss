@@ -7,14 +7,24 @@ main {
         flex: 1;
         display: flex;
         flex-flow: column nowrap;
-        justify-content: center;
+        justify-content: center;        
         padding: 10px 0 10px 0;
 
         .button {
+            display: block;
             font-size: 20px;
-        }
-        .button#return {
-            @include button($team-orange);
+
+            &#continue {
+                @include button($team-orange);
+                margin-bottom: 40px;
+            }
+            &#options {
+                margin-bottom: 40px;
+            }
+            &#admin {
+                @include button($lred);
+                margin-bottom: 40px;
+            }
         }
     }
 }

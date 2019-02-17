@@ -28,9 +28,9 @@ a {
 }
 
 .button:hover {
-  color: #46ffd0;
   border-color: #00dfa6;
   background-color: rgba(0, 223, 166, 0.4);
+  color: #46ffd0;
 }
 
 div#logo {
