@@ -12,18 +12,20 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     response = { }
-    if request.user.userdata.game:
-        try:
-            game = Game.objects.get(game=request.user.userdata.game.game)
-            response['game'] = {
-                'game': game.game,
-                'name': game.name,
-                'players': game.players,
-                'created': game.created,
-                'started': game.started
-            }
-        except Game.DoesNotExist:
-            response['game'] = None
+    print(request.user.is_authenticated)
+    if request.user.is_authenticated:
+        if request.user.userdata.game:
+            try:
+                game = Game.objects.get(game=request.user.userdata.game.game)
+                response['game'] = {
+                    'game': game.game,
+                    'name': game.name,
+                    'players': game.players,
+                    'created': game.created,
+                    'started': game.started
+                }
+            except Game.DoesNotExist:
+                response['game'] = None
 
     return render(request, 'codenamez/index.html', response)
 
