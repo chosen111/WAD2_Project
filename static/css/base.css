@@ -28,6 +28,10 @@
   content: "";
 }
 
+.icon-close:before {
+  content: "";
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -58,7 +62,6 @@ a {
   bottom: 0;
   background: rgba(0, 0, 0, 0.75);
   opacity: 0;
-  animation: fadeIn .4s ease forwards;
 }
 
 .overlay section {
@@ -68,6 +71,19 @@ a {
   transform: translate(-50%, -50%);
   opacity: 0;
   animation: fadeIn .4s ease .4s forwards;
+}
+
+.overlay section div.icon-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #ff0000;
+  cursor: pointer;
+  transition: color .2s linear;
+}
+
+.overlay section div.icon-close:hover {
+  color: #ff6666;
 }
 
 .button {

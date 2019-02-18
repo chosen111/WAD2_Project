@@ -1,6 +1,41 @@
 $(document).ready(function() {
     let csrf_token = $('main .menu').data('csrf');
 
+    // Overlay functions
+    let Overlay = {
+        show(forced=false) {
+            let $overlay = $('.overlay');
+            if (!$overlay) return;
+
+            // If forced parameter is true, don't show any animations
+            if (forced) {
+                return $overlay.css({ opacity: 1 });
+            }
+            // Else show the overlay in a fashioned manner
+            else {
+                $overlay.stop().animate({ opacity: 1 });
+            }
+        },
+        // Remove overlay
+        remove(forced=false) {
+            let $overlay = $('.overlay');
+            if (!$overlay) return;
+
+            // If forced parameter is true, don't show any animations
+            if (forced) {
+                return $overlay.remove();
+            }
+            // Else hide the overlay in a fashioned manner
+            else {
+                $overlay.stop().animate({ opacity: 0 }, {
+                    complete() {
+                        $overlay.remove();
+                    }
+                });
+            }
+        }
+    }
+
     $(document).on('click', '.button#logout', function() {
         let href = $(this).data('href');
         if (!href) return;
@@ -18,11 +53,15 @@ $(document).ready(function() {
         let href = $(this).data('href');
         if (!href) return;
 
-        $('.overlay').remove();
+        Overlay.remove(forced=true);
 
         let $body = $('body');
         let $overlay = $("<div>", { class: 'overlay' });
-        let $loginScreen = $("<section>", { class: 'login-section' }).appendTo($overlay);
+        let $loginSection = $("<section>", { class: 'login-section' }).appendTo($overlay);
+        let $close = $("<div>", { class: "icon-close" }).appendTo($loginSection);
+        $close.on('click', function() {
+            Overlay.remove(forced=false);
+        })
 
         let $form = $("<form>", { id: "login-form" });
         $("<div>", { class: "title", text: "Log In" }).appendTo($form);
@@ -46,16 +85,17 @@ $(document).ready(function() {
             });
         })
         
-        $form.appendTo($loginScreen);
+        $form.appendTo($loginSection);
         $overlay.appendTo($body);
 
         let height = $form.height();
         $form.height(0);
-        
+
+        Overlay.show(forced=false);        
         $form.delay(400).animate({ height: height }, {
             duration: 400,
             complete: function() {
-                $(this).children().animate({ opacity: 1 }, 400);
+                $form.children().animate({ opacity: 1 }, 400);
             }
         });
     })

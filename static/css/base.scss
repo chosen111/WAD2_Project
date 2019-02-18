@@ -26,8 +26,6 @@ a {
     background: rgba(#000, .75);
     opacity: 0;
 
-    animation: fadeIn .4s ease forwards;
-
     section {
         position: absolute;
         left: 50%;
@@ -36,6 +34,19 @@ a {
         opacity: 0;
         
         animation: fadeIn .4s ease .4s forwards;
+
+        div.icon-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            color: $red;
+            cursor: pointer;
+            transition: color .2s linear;
+
+            &:hover {
+                color: lighten($red, 20%);
+            }
+        }
     }
 }
 
