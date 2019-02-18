@@ -28,5 +28,19 @@
         </main>
         <footer></footer>
     </div>
+
+    <div>
+            <ul>
+                {% if user.is_authenticated %}
+                     {% if user.is_staff %}
+                          hello staff {{ user.username }}!
+                     {% else %}
+                          hello {{ user.username }}!
+                     {% endif %}
+                {% endif %}
+
+
+            </ul>
+        </div>
 </body>
 </html>
