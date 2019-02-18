@@ -15,6 +15,7 @@ $(document).ready(function() {
             // Else show the overlay in a fashioned manner
             else {
                 $overlay.stop().animate({ opacity: 1 });
+                $overlay.children().delay(400).animate({ opacity: 1 });
             }
         },
         // Remove overlay
@@ -107,8 +108,7 @@ $(document).ready(function() {
         $form.height(0);
 
         Overlay.show(forced=false);        
-        $form.delay(400).animate({ height: height }, {
-            duration: 400,
+        $form.delay(800).animate({ height: height }, {
             complete: function() {
                 $form.children().animate({ opacity: 1 }, 400);
             }

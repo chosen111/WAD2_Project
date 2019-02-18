@@ -28,23 +28,26 @@ a {
 
     section {
         position: absolute;
+        border: 1px solid $teal-flat;
+        border-radius: 4px;
+        background: rgba(#000, .8);
+        padding: 15px 20px 15px 20px;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
         opacity: 0;
-        
-        animation: fadeIn .4s ease .4s forwards;
 
         div.icon-close {
             position: absolute;
             top: 8px;
             right: 8px;
-            color: $red;
+            color: $teal;
             cursor: pointer;
-            transition: color .2s linear;
+            transition: color .2s linear, text-shadow .2s linear;
 
             &:hover {
-                color: lighten($red, 20%);
+                color: lighten($teal, 20%);
+                text-shadow: $teal 0 0 1px;
             }
         }
     }

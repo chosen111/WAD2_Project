@@ -66,24 +66,28 @@ a {
 
 .overlay section {
   position: absolute;
+  border: 1px solid #006455;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px 20px 15px 20px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  animation: fadeIn .4s ease .4s forwards;
 }
 
 .overlay section div.icon-close {
   position: absolute;
   top: 8px;
   right: 8px;
-  color: #ff0000;
+  color: #00dfa6;
   cursor: pointer;
-  transition: color .2s linear;
+  transition: color .2s linear, text-shadow .2s linear;
 }
 
 .overlay section div.icon-close:hover {
-  color: #ff6666;
+  color: #46ffd0;
+  text-shadow: #00dfa6 0 0 1px;
 }
 
 .button {
