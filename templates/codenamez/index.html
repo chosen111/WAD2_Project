@@ -2,8 +2,12 @@
 {% load staticfiles %}
 {% load codenamez_template_tags %}
 
-{% block style %}
+{% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
+    <script type="text/javascript">
+        var is_authenticated = "{{ user.is_authenticated }}"
+    </script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 {% endblock %}
 
 {% block main %}
@@ -19,7 +23,7 @@
             {% endif %}
             {% createButton "logout" "Log Out" href="logout" %}
         {% else %}
-            {% createButton "login" "Log In" href="login" %}
+            {% createButton "login" "Log In" %}
         {% endif %}
     </div>
 {% endblock %}
