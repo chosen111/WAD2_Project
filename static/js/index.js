@@ -36,6 +36,12 @@ $(document).ready(function() {
         }
     }
 
+    $(document).on('keyup', function(e) {
+        if (e.key === 'Escape') {
+           Overlay.remove(forced=true);
+        }
+    });
+
     $(document).on('click', '.button#logout', function() {
         let href = $(this).data('href');
         if (!href) return;
