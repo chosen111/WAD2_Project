@@ -1,11 +1,3 @@
-{% if href %}
-    <a href="{{ href }}">
-        <div class="button" id="{{ id }}">
-            <span class="text">{{ text }}</span>
-        </div>
-    </a>
-{% else %}
-    <div class="button" id="{{ id }}">
-        <span class="text">{{ text }}</span>
-    </div>
-{% endif %}
+<div class="button" id="{{ id }}" data-href="{{ href }}">
+    <span class="text">{{ text }}</span>
+</div>

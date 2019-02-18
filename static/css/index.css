@@ -45,3 +45,7 @@ main div.control .button#admin:hover {
   background-color: rgba(255, 99, 71, 0.4);
   color: #ffb9ad;
 }
+
+div.overlay section.login-section {
+  flex: auto;
+}

@@ -1,6 +1,5 @@
-import json
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
@@ -15,4 +14,8 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('index'))
+
+    response = {
+        'redirect': reverse('index')
+    }
+    return JsonResponse(response)
