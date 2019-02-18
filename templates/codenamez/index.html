@@ -11,7 +11,8 @@
     <div class="title">{% createLogoBySize %}</div>
     <div class="menu" data-csrf="{{ csrf_token }}">
         {% createButton "continue" "Continue playing" %}
-        {% createButton "play" "Start a new game" %}
+        {% createButton "play" "Start a game" %}
+        {% createButton "play" "Join a game" %}
         {% createButton "options" "Options" %}
 
         {% if user.is_authenticated %}
