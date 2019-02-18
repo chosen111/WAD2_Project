@@ -33,7 +33,7 @@ $(document).ready(function() {
                     complete() {
                         $overlay.remove();
                     }
-                });
+                })
             }
         }
     }
@@ -44,7 +44,14 @@ $(document).ready(function() {
             // Remove the overlay
            Overlay.remove(forced=true);
         }
-    });
+    })
+
+    $(document).on('click', '.button#admin', function() {
+        let href = $(this).data('href');
+        if (!href) return; // There is no href data on the element (console tampered maybe?)
+        
+        window.location.assign(document.location.origin + '/' + href);
+    })
 
     $(document).on('click', '.button#logout', function() {
         let href = $(this).data('href');
@@ -96,7 +103,7 @@ $(document).ready(function() {
                 success(response) {
                     window.location.assign(document.location.origin + response['redirect']);
                 }
-            });
+            })
         })
         
         // Insert the form elements in our login section and the overlay in our body page
@@ -112,6 +119,6 @@ $(document).ready(function() {
             complete: function() {
                 $form.children().animate({ opacity: 1 }, 400);
             }
-        });
+        })
     })
 })
