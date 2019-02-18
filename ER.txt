@@ -1,0 +1,28 @@
+|_________ User _________|
+- username
+- password
+- email
+
+|_______ User Data _______|
+- user
+- ipaddress
+- avatar
+- game
+- options
+
+|________ Reports ________|
+- user
+- reason
+- when
+
+|_________ Game _________|
+- game :: uuid
+- name
+- password
+- players
+- history
+- started
+- ended
+- cancelled
+
+

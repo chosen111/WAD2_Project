@@ -1,12 +1,31 @@
+import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+
+from django.contrib.auth.models import User
+from codenamez.models import UserData
+from codenamez.models import Game
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
-    return render(request, 'codenamez/index.html', {})
+    response = { }
+    if request.user.userdata.game:
+        try:
+            game = Game.objects.get(game=request.user.userdata.game.game)
+            response['game'] = {
+                'game': game.game,
+                'name': game.name,
+                'players': game.players,
+                'created': game.created,
+                'started': game.started
+            }
+        except Game.DoesNotExist:
+            response['game'] = None
+
+    return render(request, 'codenamez/index.html', response)
 
 def user_login(request):
     response = {}

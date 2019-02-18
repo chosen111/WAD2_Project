@@ -10,7 +10,9 @@
 {% block main %}
     <div class="title">{% createLogoBySize %}</div>
     <div class="menu" data-csrf="{{ csrf_token }}">
-        {% createButton "continue" "Continue playing" %}
+        {% if game %}
+            {% createButton "continue" "Continue playing" %}
+        {% endif %}
         {% createButton "play" "Start a game" %}
         {% createButton "play" "Join a game" %}
         {% createButton "options" "Options" %}
