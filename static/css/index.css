@@ -2,7 +2,7 @@ main {
   align-items: center;
 }
 
-main div.control {
+main div.menu {
   flex: 1;
   display: flex;
   flex-flow: column nowrap;
@@ -10,37 +10,37 @@ main div.control {
   padding: 10px 0 10px 0;
 }
 
-main div.control .button {
+main div.menu .button {
   display: block;
   border-radius: 40px;
   font-size: 20px;
 }
 
-main div.control .button#continue {
+main div.menu .button#continue {
   border-color: #cc5200;
   background-color: rgba(255, 102, 0, 0.2);
   color: #ff6600;
   margin-bottom: 40px;
 }
 
-main div.control .button#continue:hover {
+main div.menu .button#continue:hover {
   border-color: #ff6600;
   background-color: rgba(255, 102, 0, 0.4);
   color: #ffa366;
 }
 
-main div.control .button#options {
+main div.menu .button#options {
   margin-bottom: 40px;
 }
 
-main div.control .button#admin {
+main div.menu .button#admin {
   border-color: #ff3814;
   background-color: rgba(255, 99, 71, 0.2);
   color: #ff6347;
   margin-bottom: 40px;
 }
 
-main div.control .button#admin:hover {
+main div.menu .button#admin:hover {
   border-color: #ff6347;
   background-color: rgba(255, 99, 71, 0.4);
   color: #ffb9ad;

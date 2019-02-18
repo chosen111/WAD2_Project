@@ -25,7 +25,7 @@ def user_login(request):
         else:
             response['error'] = "The username or password is invalid!"
     else:
-        return render(request, 'codenamez/index.html', {})
+        return HttpResponseRedirect(reverse('index'))
     
     return JsonResponse(response)
 
@@ -36,6 +36,6 @@ def user_logout(request):
         logout(request)
         response['redirect'] = reverse('index')
     else:
-        return render(request, 'codenamez/index.html', {})
+        return HttpResponseRedirect(reverse('index'))
     
     return JsonResponse(response)

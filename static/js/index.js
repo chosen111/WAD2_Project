@@ -1,34 +1,12 @@
-function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-function eraseCookie(name) {   
-    document.cookie = name+'=; Max-Age=-99999999;';  
-}
-
 $(document).ready(function() {
+    let csrf_token = $('main .menu').data('csrf');
+
     $(document).on('click', '.button#logout', function() {
         let href = $(this).data('href');
         if (!href) return;
 
         $.post({
-            headers: { "X-CSRFToken": token },
+            headers: { "X-CSRFToken": csrf_token },
             url: document.location.origin + href,
             success: function(response) {
                 window.location.assign(document.location.origin + response['redirect']);
@@ -44,9 +22,7 @@ $(document).ready(function() {
 
         let $body = $('body');
         let $overlay = $("<div>", { class: 'overlay' });
-
         let $loginScreen = $("<section>", { class: 'login-section' }).appendTo($overlay);
-        $body.append($overlay);
 
         let $form = $("<form>", { id: "login-form" });
         $("<div>", { class: "title", text: "Log In" }).appendTo($form);
@@ -61,7 +37,7 @@ $(document).ready(function() {
         let $submit = $("<div>", { class: "button", id: "submit", text: "Log In" }).appendTo($form);
         $submit.on('click', function() {
             $.post({
-                headers: { "X-CSRFToken": token },
+                headers: { "X-CSRFToken": csrf_token },
                 url: document.location.origin + href,
                 data: $form.serialize(),
                 success(response) {
@@ -71,6 +47,7 @@ $(document).ready(function() {
         })
         
         $form.appendTo($loginScreen);
+        $overlay.appendTo($body);
 
         let height = $form.height();
         $form.height(0);

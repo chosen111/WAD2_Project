@@ -4,15 +4,12 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
-    <script type="text/javascript">
-        var token = '{{ csrf_token }}';
-    </script>
     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 {% endblock %}
 
 {% block main %}
     <div class="title">{% createLogoBySize %}</div>
-    <div class="control">
+    <div class="menu" data-csrf="{{ csrf_token }}">
         {% createButton "continue" "Continue playing" %}
         {% createButton "play" "Start a new game" %}
         {% createButton "options" "Options" %}
