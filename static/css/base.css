@@ -1,5 +1,42 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
 @import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
+@font-face {
+  font-family: 'codenamez-ico';
+  src: url("../fonts/codenamez-ico.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'codenamez-ico' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-encryption:before {
+  content: "";
+}
+
+.icon-user:before {
+  content: "";
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 html, body {
   min-width: 1260px;
   height: 100%;
@@ -15,25 +52,22 @@ a {
 
 .overlay {
   position: fixed;
-  display: flex;
-  align-items: center;
-  justify-items: center;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.75);
   opacity: 0;
   animation: fadeIn .4s ease forwards;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.overlay section {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: fadeIn .4s ease .4s forwards;
 }
 
 .button {
@@ -54,6 +88,38 @@ a {
   border-color: #00dfa6;
   background-color: rgba(0, 223, 166, 0.4);
   color: #46ffd0;
+}
+
+.input {
+  display: inline-block;
+  padding: 8px;
+  border: 1px solid #00936d;
+  border-radius: 4px;
+  color: #00dfa6;
+  background: none;
+  background-image: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  box-shadow: none;
+  resize: none;
+}
+
+.input:not(.clear) {
+  transition: background-color .2s ease;
+}
+
+.input:not(.clear):hover:not(:focus):not(:disabled) {
+  background-color: rgba(0, 223, 166, 0.2);
+}
+
+.input:not(.clear):focus {
+  background-color: rgba(0, 223, 166, 0.3);
+}
+
+.input:not(.clear):disabled {
+  background-color: transparent;
 }
 
 div#logo {

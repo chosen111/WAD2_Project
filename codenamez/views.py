@@ -9,13 +9,33 @@ def index(request):
     return render(request, 'codenamez/index.html', {})
 
 def user_login(request):
-    return render(request, 'codenamez/index.html', {})
+    response = {}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        print(user)
+        if user:
+            if user.is_active:
+                login(request, user)
+                response['redirect'] = reverse('index')
+            else:
+                response['error'] = "Your account is disabled"
+        else:
+            response['error'] = "The username or password is invalid!"
+    else:
+        return render(request, 'codenamez/index.html', {})
+    
+    return JsonResponse(response)
 
 @login_required
 def user_logout(request):
-    logout(request)
-
-    response = {
-        'redirect': reverse('index')
-    }
+    response = {}
+    if request.method == 'POST':
+        logout(request)
+        response['redirect'] = reverse('index')
+    else:
+        return render(request, 'codenamez/index.html', {})
+    
     return JsonResponse(response)

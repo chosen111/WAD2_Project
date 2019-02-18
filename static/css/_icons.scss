@@ -1,0 +1,21 @@
+@import '_vars.scss';
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'codenamez-ico' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-encryption:before {
+    content: $icon-encryption; 
+}
+
+.icon-user:before {
+    content: $icon-user;
+}

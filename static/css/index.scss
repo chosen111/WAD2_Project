@@ -32,4 +32,50 @@ main {
 
 div.overlay section.login-section {
     flex: auto;
+    display: flex;
+    align-items: center;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px 20px 20px;
+        border: 1px solid $teal-flat;
+        border-radius: 4px;
+        background: rgba(#000, .8);
+        overflow: hidden;
+
+        > * {
+            opacity: 0;
+        }
+
+        .title {
+            font-size: 24px;
+            margin: 32px 0 32px 0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-flow: row nowrap;
+            margin: 4px 0 4px 0;
+
+            label {
+                padding: 10px;
+                border: 1px solid $teal-border;
+                border-radius: 4px 0 0 4px;
+                border-right: 0;                
+                background: darken($teal-border, 20%);
+            }
+            .input {
+                width: 250px;
+                border-radius: 0 4px 4px 0;
+                border-left: 0;
+            }
+        }
+
+        .button#submit {
+            padding: 6px 25px 6px 25px;
+            margin-top: 20px;
+        }
+    }
 }

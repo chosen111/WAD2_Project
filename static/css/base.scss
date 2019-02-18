@@ -1,6 +1,8 @@
 @import '_fonts.scss';
 @import '_vars.scss';
 @import '_funcs.scss';
+@import '_icons.scss';
+@import '_fx.scss';
 
 html, body { 
     min-width: 1260px;
@@ -17,20 +19,25 @@ a {
 
 .overlay {
     position: fixed;
-    display: flex;
-    align-items: center;
-    justify-items: center;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(#000, .6);
+    background: rgba(#000, .75);
     opacity: 0;
 
     animation: fadeIn .4s ease forwards;
-}
 
-@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    section {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        
+        animation: fadeIn .4s ease .4s forwards;
+    }
+}
 
 .button {
     display: inline-block;
@@ -43,6 +50,33 @@ a {
     @include button($teal);
 
     transition: color .15s linear, border-color .15s linear, background-color .15s linear;
+}
+
+.input {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid $teal-border;
+    border-radius: 4px;
+    color: $teal;
+
+    &:not(.clear) {
+        transition: background-color .2s ease;
+        &:hover:not(:focus):not(:disabled) {
+            background-color: rgba($teal, .2);
+        }
+        &:focus {
+            background-color: rgba($teal, .3);
+        }
+        &:disabled {
+            background-color: transparent;
+        }
+    }	
+    background: none;
+    background-image: none;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    outline: none;
+    box-shadow: none;
+    resize: none;
 }
 
 div#logo {

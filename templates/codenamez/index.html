@@ -5,7 +5,7 @@
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
     <script type="text/javascript">
-        var is_authenticated = "{{ user.is_authenticated }}"
+        var token = '{{ csrf_token }}';
     </script>
     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
 {% endblock %}
