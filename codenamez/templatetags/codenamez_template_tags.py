@@ -28,3 +28,7 @@ def user(user):
 @register.inclusion_tag('codenamez/tags/stats-row.html')
 def addStatsRow(id="placeholder", label="Placeholder", value="Placeholder", customClass=None):
     return { 'id': id, 'label': label, 'value': value, 'customClass': customClass }
+
+@register.inclusion_tag('codenamez/tags/error.html')
+def showError(message="null"):
+    return { 'message': message }

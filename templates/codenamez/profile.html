@@ -8,27 +8,50 @@
 {% endblock %}
 
 {% block main %}
-    <div class="avatarWrapper" style="{% if userProfile.user.is_staff %} margin-bottom: 40px; {% endif %}">
-        {% if userProfile.user.is_staff %}
-            <div class="icon-shield"></div>
-        {% endif %}
-        <div class="avatar" style="background: url({{ userProfile.avatar.url }}) no-repeat center center / cover"></div>
-    </div>
-    <h1 class="username">User Profile: {{ userProfile.user.username }}</h1>
-    <div class="stats">
-        <div class="l-col">
-            <h2>Account</h2>
-            <ul class="stats">
-                {% addStatsRow "date-joined" "Date Joined" userProfile.user.date_joined %}
-                {% addStatsRow "last-login" "Last Login" userProfile.user.last_login %}
-            </ul>
+    {% if error %}
+        {% showError error %}
+    {% elif userProfile %}
+        <div class="avatarWrapper" style="{% if userProfile.user.is_staff %}margin-bottom: 40px;{% endif %}">
+            {% if userProfile.user.is_staff %}
+                <div class="icon-shield"></div>
+            {% endif %}
+            {% if userProfile.avatar %}
+                <div class="avatar" style="background: url({{ userProfile.avatar.url }}) no-repeat center center / cover"></div>
+            {% else %}
+                <div class="avatar" style="background: #00dfa6 url({% static 'images/default_avatar.png' %}) no-repeat center center / cover"></div>
+            {% endif %}
         </div>
-        <div class="r-col">
-            <h2>Games</h2>
-            <ul class="stats">
-                {% addStatsRow %}
-                {% addStatsRow %}
-            </ul>
+        <div class="user-profile">
+            <div class="status {% if userProfile.user.is_authenticated %}online{% else %}offline{% endif %}"></div>
+            <h1 class="username">User Profile: {{ userProfile.user.username }}</h1>
         </div>
-    </div>
+        <div class="stats">
+            <div class="l-col">
+                <h2>Account</h2>
+                <ul class="stats">
+                    {% addStatsRow "date-joined" "Date Joined" userProfile.user.date_joined %}
+                    {% addStatsRow "last-login" "Last Login" userProfile.user.last_login %}
+                    {% addStatsRow "e-mail" "E-Mail" userProfile.user.email %}
+                    {% addStatsRow "first-name" "First Name" userProfile.user.first_name %}
+                    {% addStatsRow %}
+                    {% addStatsRow %}
+                    {% addStatsRow %}
+                </ul>
+            </div>
+            <div class="r-col">
+                <h2>Games</h2>
+                <ul class="stats">
+                    {% addStatsRow "won" "Won" "0" %}
+                    {% addStatsRow "lost" "Lost" "0" %}
+                    {% addStatsRow "played" "Played" "0" %}
+                    {% addStatsRow %}
+                    {% addStatsRow %}
+                    {% addStatsRow %}
+                    {% addStatsRow %}
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        {% showError user.username|add:" does not have a profile set yet" %}
+    {% endif %}
 {% endblock %}

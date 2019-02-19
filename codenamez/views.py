@@ -65,11 +65,16 @@ def user_logout(request):
 
 def show_profile(request, profileId):
     response = { }
-    userProfile = UserProfile.objects.get(user=User.objects.get(id=profileId))
-
-    response = {
-        'userProfile': userProfile,
-    }
+    try:
+        user = User.objects.get(id=profileId)
+        userProfile = UserProfile.objects.get(user=user)
+        response = {
+            'userProfile': userProfile,
+        }
+    except UserProfile.DoesNotExist:
+        response['user'] = user
+    except User.DoesNotExist:
+        response['error'] = "Profile with the id " + profileId + " does not exist!"
 
     return render(request, 'codenamez/profile.html', response)
 

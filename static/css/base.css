@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
 @font-face {
   font-family: 'codenamez-ico';
-  src: url("../fonts/codenamez-ico.ttf?f3cdt4") format("truetype");
+  src: url("../fonts/codenamez-ico.ttf?p5vvex") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -34,6 +34,10 @@
 
 .icon-shield:before {
   content: "";
+}
+
+.icon-warning:before {
+  content: "";
 }
 
 @keyframes fadeIn {
