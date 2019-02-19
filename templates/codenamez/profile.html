@@ -28,6 +28,9 @@
                 <h2>Account</h2>
                 <ul class="stats">
                     {% addStatsRow "e-mail" "E-Mail" userProfile.user.email %}
+                    {% if user.is_staff %}
+                        {% addStatsRow "ip-address" "IP Address" userProfile.ipaddress %}
+                    {% endif %}
                     {% addStatsRow "first-name" "First Name" userProfile.user.first_name %}
                     {% addStatsRow "last-name" "Last Name" userProfile.user.last_name %}
                     {% addStatsRow "date-joined" "Date Joined" userProfile.user.date_joined %}
