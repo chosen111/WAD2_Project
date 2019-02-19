@@ -37,13 +37,16 @@ main div.menu .button.admin {
   border-color: #ff3814;
   background-color: rgba(255, 99, 71, 0.2);
   color: #ff6347;
-  margin-bottom: 40px;
 }
 
 main div.menu .button.admin:hover {
   border-color: #ff6347;
   background-color: rgba(255, 99, 71, 0.4);
   color: #ffb9ad;
+}
+
+main div.menu a.admin {
+  margin-bottom: 40px;
 }
 
 div.overlay section.login-section {

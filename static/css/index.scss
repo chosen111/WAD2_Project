@@ -24,8 +24,10 @@ main {
             }
             &.admin {
                 @include button($lred);
-                margin-bottom: 40px;
             }
+        }
+        a.admin {
+            margin-bottom: 40px;
         }
     }
 }

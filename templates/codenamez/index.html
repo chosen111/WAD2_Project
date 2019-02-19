@@ -9,7 +9,7 @@
 
 {% block main %}
     <div class="title">{% createLogoBySize %}</div>
-    <div class="menu" data-csrf="{{ csrf_token }}">
+    <div class="menu">
         {% if game %}
             {% createButton "continue" "Continue playing" %}
         {% endif %}
@@ -19,7 +19,7 @@
 
         {% if user.is_authenticated %}
             {% if user.is_staff %}
-                {% createButton "admin" "Admin" href="admin" %}
+                {% createButton "admin" "Admin" href="/admin/" isAnchor=True %}
             {% endif %}
             {% createButton "logout" "Log Out" href="logout" %}
         {% else %}

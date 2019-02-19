@@ -1,3 +1,9 @@
-<div class="button {{ id }}" data-href="{{ href }}">
-    <span class="text">{{ text }}</span>
-</div>
+{% if isAnchor %}
+    <a class="button {{ id }}" href="{{ href }}">
+        <span class="text">{{ text }}</span>
+    </a>
+{% else %}
+    <div class="button {{ id }}" data-href="{{ href }}">
+        <span class="text">{{ text }}</span>
+    </div>
+{% endif %}
