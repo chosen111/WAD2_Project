@@ -19,9 +19,15 @@
     <div class="team-none" id="bg"></div>
     <div id="application">
         <header>
-            <!-- <a href="{% url 'index' %}">{% createLogoBySize "small" %}</a> -->
+            <a href="{% url 'index' %}">{% createLogoBySize "small" %}</a>
             <div class="menu"></div>
-            <div class="user"></div>
+            <div class="user">
+                {% if user.is_authenticated %}
+                    User authenticated
+                {% else %}
+                    Login
+                {% endif %}
+            </div>
         </header>
         <main>
             {% block main %} {% endblock %}

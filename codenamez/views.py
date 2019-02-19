@@ -17,19 +17,19 @@ def index(request):
         try:
             data = UserData.objects.get(user=request.user)
             if request.user.userdata.game:
-                try:
-                    game = Game.objects.get(game=request.user.userdata.game.game)
-                    response['game'] = {
-                        'game': game.game,
-                        'name': game.name,
-                        'players': game.players,
-                        'created': game.created,
-                        'started': game.started
-                    }
-                except Game.DoesNotExist:
-                    response['game'] = None
+                game = Game.objects.get(game=request.user.userdata.game.game)
+                response['game'] = {
+                    'game': game.game,
+                    'name': game.name,
+                    'players': game.players,
+                    'created': game.created,
+                    'started': game.started
+                }
+                
         except UserData.DoesNotExist:
-            pass 
+            pass
+        except Game.DoesNotExist:
+            response['game'] = None
             
     return render(request, 'codenamez/index.html', response)
 

@@ -46,14 +46,14 @@ $(document).ready(function() {
         }
     })
 
-    $(document).on('click', '.button#admin', function() {
+    $(document).on('click', '.button.admin', function() {
         let href = $(this).data('href');
         if (!href) return; // There is no href data on the element (console tampered maybe?)
         
         window.location.assign(document.location.origin + '/' + href);
     })
 
-    $(document).on('click', '.button#logout', function() {
+    $(document).on('click', '.button.logout', function() {
         let href = $(this).data('href');
         if (!href) return; // There is no href data on the element (console tampered maybe?)
 
@@ -66,7 +66,7 @@ $(document).ready(function() {
         })
     })
 
-    $(document).on('click', '.button#login', function() {
+    $(document).on('click', '.button.login', function() {
         let href = $(this).data('href');
         if (!href) return; // There is no href data on the element (console tampered maybe?)
 
