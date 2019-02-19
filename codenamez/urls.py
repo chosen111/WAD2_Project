@@ -6,6 +6,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^profile/(?P<profileId>[\w\-]+)/$', views.show_profile, name='show_profile'),
+    url(r'^game/(?P<gameId>[\w\-]+)/$', views.show_game, name='show_game'),
 
     #url(r'^about/', views.about, name='about'),
     #url(r'^add_category/$', views.add_category, name='add_category'),

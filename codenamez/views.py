@@ -27,7 +27,7 @@ def index(request):
                 'started': game.started
             }
             break
-    except (TypeError, AttributeError,Exception):
+    except (TypeError, AttributeError, Exception):
         pass
             
     return render(request, 'codenamez/index.html', response)
@@ -62,3 +62,13 @@ def user_logout(request):
         return HttpResponseRedirect(reverse('index'))
     
     return JsonResponse(response)
+
+def show_profile(request, profileId):
+    response = { }
+    userProfile = UserProfile.objects.get(user=User.objects.get(id=profileId))
+
+    return render(request, 'codenamez/profile.html', response)
+
+def show_game(request, gameId):
+    response = { }            
+    return render(request, 'codenamez/game.html', response)

@@ -274,10 +274,10 @@ div#application header {
 div#application main {
   order: 2;
   flex: 1;
-  margin: 10px 0 10px 0;
-  padding: 10px;
   display: flex;
   flex-flow: column nowrap;
+  margin: 10px 0 10px 0;
+  padding: 10px;
 }
 
 div#application footer {
