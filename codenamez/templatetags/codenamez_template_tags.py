@@ -24,3 +24,7 @@ def user(user):
     except UserProfile.DoesNotExist: 
         avatar = None
     return { 'username': user.username, 'avatar': avatar, 'is_staff': user.is_staff }
+
+@register.inclusion_tag('codenamez/tags/stats-row.html')
+def addStatsRow(id="placeholder", label="Placeholder", value="Placeholder", customClass=None):
+    return { 'id': id, 'label': label, 'value': value, 'customClass': customClass }

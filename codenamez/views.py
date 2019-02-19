@@ -67,6 +67,10 @@ def show_profile(request, profileId):
     response = { }
     userProfile = UserProfile.objects.get(user=User.objects.get(id=profileId))
 
+    response = {
+        'userProfile': userProfile,
+    }
+
     return render(request, 'codenamez/profile.html', response)
 
 def show_game(request, gameId):

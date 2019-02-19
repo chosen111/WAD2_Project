@@ -1,7 +1,3 @@
-main {
-  align-items: center;
-}
-
 main div.menu {
   flex: 1;
   display: flex;

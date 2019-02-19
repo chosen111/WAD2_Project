@@ -1,0 +1,31 @@
+@import 'vars.scss';
+
+main {
+    div.avatarWrapper {
+        position: relative;
+        margin: 20px 0 20px 0;
+
+        .icon-shield {
+            position: absolute;
+            font-size: 188px;
+            top: -30px;
+            left: -30px;
+            opacity: .6;
+        }
+
+        div.avatar {
+            position: relative;
+            height: 128px;
+            width: 128px;
+            border: 1px solid $teal-border;
+            border-radius: 128px;
+        }
+    }
+    
+    h1.username {
+        font-size: 24px;
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+    }
+}

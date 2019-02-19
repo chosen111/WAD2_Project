@@ -3,10 +3,32 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.min.css' %}">
     <!-- <script type="text/javascript" src="{% static 'js/index.js' %}"></script> -->
 {% endblock %}
 
 {% block main %}
-    <div class="title">{% createLogoBySize %}</div>
+    <div class="avatarWrapper" style="{% if userProfile.user.is_staff %} margin-bottom: 40px; {% endif %}">
+        {% if userProfile.user.is_staff %}
+            <div class="icon-shield"></div>
+        {% endif %}
+        <div class="avatar" style="background: url({{ userProfile.avatar.url }}) no-repeat center center / cover"></div>
+    </div>
+    <h1 class="username">User Profile: {{ userProfile.user.username }}</h1>
+    <div class="stats">
+        <div class="l-col">
+            <h2>Account</h2>
+            <ul class="stats">
+                {% addStatsRow "date-joined" "Date Joined" userProfile.user.date_joined %}
+                {% addStatsRow "last-login" "Last Login" userProfile.user.last_login %}
+            </ul>
+        </div>
+        <div class="r-col">
+            <h2>Games</h2>
+            <ul class="stats">
+                {% addStatsRow %}
+                {% addStatsRow %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
