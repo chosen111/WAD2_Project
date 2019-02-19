@@ -1,28 +1,43 @@
 |_________ User _________|
-- username
-- password
-- email
+- username - PK
 
-|_______ User Data _______|
-- user
-- ipaddress
-- avatar
-- game
-- options
+|_______ UserProfile _______|
+- user :: FK relates to User.username PK
+- ipaddress :: IPAddress Field
+- avatar :: Image Field
+- options :: Text Field (defaults to 'null')
 
-|________ Reports ________|
-- user
-- reason
-- when
+|________ Chat ________|
+- user :: FK relates to User.username PK
+- message :: Text Field
+- created :: Float Field (timestamp when the message has been created in the chat)
+- visible :: Bool Field (is the message visible?)
+- deleted :: Bool Field (is the message deleted?)
+
+|________ PrivateMessage ________|
+- user :: FK relates to User.username PK
+- target :: FK relates to User.username PK
+- message :: Text Field
+- created :: Float Field (timestamp when the message has been created in the chat)
+- visible :: Bool Field (is the message visible?)
+- deleted :: Bool Field (is the message deleted?)
 
 |_________ Game _________|
-- game :: uuid
-- name
-- password
-- players
-- history
-- started
-- ended
-- cancelled
+- id :: PK (auto generates an UUID v4) 
+- name :: Char Field
+- password :: Char Field
+- max_players :: Int Field
+- history :: Text Field (defaults to 'null')
+- created :: Float Field (timestamp when the game has been created)
+- started :: Float Field (timestamp when the game has actually started)
+- ended :: Float Field (timestamp when the game has ended)
+- cancelled :: Bool Field (if the game has been cancelled or not due to reasons)
+
+|_________ GameList _________|
+- game :: FK relates to Game.id
+- user :: FK relates to User.username
+- points :: Int Field (defaults to 0)
+- team :: Char Field (can be blank if he's not on any team)
+- joined :: Char Field (timestamp when the player joined the game)
 
 

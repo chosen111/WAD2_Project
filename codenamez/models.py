@@ -53,5 +53,8 @@ class GameList(models.Model):
     team = models.CharField(max_length=32, blank=True)
     joined = models.FloatField(blank=True)
 
+    class Meta:
+        unique_together = ("game", "user")
+
     def __str__(self):
         return str(self.game.id)
