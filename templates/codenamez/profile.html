@@ -8,9 +8,7 @@
 {% endblock %}
 
 {% block main %}
-    {% if error %}
-        {% showError error %}
-    {% elif userProfile %}
+    {% if userProfile %}
         <div class="avatarWrapper" style="{% if userProfile.user.is_staff %}margin-bottom: 40px;{% endif %}">
             {% if userProfile.user.is_staff %}
                 <div class="icon-shield"></div>
@@ -52,6 +50,6 @@
             </div>
         </div>
     {% else %}
-        {% showError user.username|add:" does not have a profile set yet" %}
+        {% showError error %}
     {% endif %}
 {% endblock %}

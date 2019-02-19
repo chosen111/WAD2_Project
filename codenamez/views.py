@@ -72,7 +72,7 @@ def show_profile(request, profileId):
             'userProfile': userProfile,
         }
     except UserProfile.DoesNotExist:
-        response['user'] = user
+        response['error'] = user.username + " does not have a profile set yet!"
     except User.DoesNotExist:
         response['error'] = "Profile with the id " + profileId + " does not exist!"
 
