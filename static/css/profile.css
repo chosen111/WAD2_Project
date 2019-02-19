@@ -80,7 +80,7 @@ main div.stats [class*="-col"] ul.stats li.row:hover {
 }
 
 main div.stats [class*="-col"] ul.stats li.row.last-name, main div.stats [class*="-col"] ul.stats li.row.last-login, main div.stats [class*="-col"] ul.stats li.row.played {
-  margin-bottom: 20px;
+  margin-bottom: 27px;
 }
 
 main div.stats [class*="-col"] ul.stats li.row label {
