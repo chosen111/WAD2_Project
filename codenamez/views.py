@@ -4,9 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
 from django.contrib.auth.models import User
-from codenamez.models import UserProfile
-from codenamez.models import Game
-from codenamez.models import GameList
+from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GameList
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -18,7 +16,7 @@ def index(request):
         gameList = GameList.objects.filter(user=request.user)
         for game in gameList:
             game = game.game
-            
+
             if game.cancelled or game.ended:
                 continue
 

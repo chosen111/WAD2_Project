@@ -11,15 +11,36 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+class Chat(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    message = models.TextField()
+    created = models.FloatField(default=time.time)
+    visible = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.message + ' by ' + self.user.username
+
+class PrivateMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="user_pm_set")
+    target = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="target_pm_set")
+    message = models.TextField()
+    created = models.FloatField(default=time.time)
+    visible = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.message + ' by ' + self.user.username
+
 class Game(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=128)
-    password = models.CharField(max_length=128, blank=True)
+    password = models.CharField(max_length=128, editable=False, blank=True)
     max_players = models.IntegerField()
     history = models.TextField(default='history: {}')
     created = models.FloatField(default=time.time)
-    started = models.FloatField(null=True, blank=True)    
-    ended = models.FloatField(null=True, blank=True)
+    started = models.FloatField(blank=True)    
+    ended = models.FloatField(blank=True)
     cancelled = models.BooleanField(default=False)
 
     def __str__(self):
@@ -29,8 +50,8 @@ class GameList(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
+    team = models.CharField(max_length=32, blank=True)
+    joined = models.FloatField(blank=True)
 
     def __str__(self):
-        return str(self.game)
-
-
+        return str(self.game.id)
