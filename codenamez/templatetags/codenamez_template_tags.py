@@ -23,7 +23,7 @@ def user(user):
         avatar = user.userprofile.avatar
     except UserProfile.DoesNotExist: 
         avatar = None
-    return { 'username': user.username, 'avatar': avatar, 'is_staff': user.is_staff }
+    return { 'id': user.id, 'username': user.username, 'avatar': avatar, 'is_staff': user.is_staff }
 
 @register.inclusion_tag('codenamez/tags/stats-row.html')
 def addStatsRow(id="placeholder", label="Placeholder", value="Placeholder", customClass=None):

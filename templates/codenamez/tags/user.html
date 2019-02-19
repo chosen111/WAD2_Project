@@ -1,5 +1,6 @@
 {% load staticfiles %}
-<div class="user">
+
+<a class="user" href="{% url 'show_profile' id %}">
     {% if avatar %}
         <div class="avatar" style="background: url({{ avatar.url }}) no-repeat center center / cover"></div>
     {% else %}
@@ -9,4 +10,4 @@
     {% if is_staff %}
         <span class="staff icon-shield"></span> 
     {% endif %}
-</div>
+</a>
