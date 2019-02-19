@@ -1,18 +1,3 @@
-main div.error {
-  display: flex;
-  align-items: center;
-}
-
-main div.error .icon-warning {
-  color: #ff6347;
-  margin-right: 10px;
-}
-
-main div.error span.message {
-  color: #ff6347;
-  font-size: 20px;
-}
-
 main div.avatarWrapper {
   position: relative;
   margin: 20px 0 20px 0;

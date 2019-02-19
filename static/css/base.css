@@ -185,6 +185,21 @@ a {
   background-color: rgba(0, 100, 85, 0.4);
 }
 
+.error {
+  display: flex;
+  align-items: center;
+}
+
+.error .icon-warning {
+  color: #ff6347;
+  margin-right: 10px;
+}
+
+.error span.message {
+  color: #ff6347;
+  font-size: 20px;
+}
+
 div#logo {
   position: relative;
   font-family: "Black Ops One";

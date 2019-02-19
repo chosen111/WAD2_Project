@@ -128,6 +128,21 @@ a {
     }
 }
 
+.error {
+    display: flex;
+    align-items: center;
+
+    .icon-warning {
+        color: $lred;
+        margin-right: 10px;
+    }
+
+    span.message {
+        color: $lred;
+        font-size: 20px;
+    }
+}
+
 div#logo {
     position: relative;
     font-family: "Black Ops One";
