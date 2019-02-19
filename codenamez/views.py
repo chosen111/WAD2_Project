@@ -1,35 +1,36 @@
-import json
+import json, uuid, time
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
 from django.contrib.auth.models import User
-from codenamez.models import UserData
+from codenamez.models import UserProfile
 from codenamez.models import Game
+from codenamez.models import GameList
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     response = { }
-    if request.user.is_authenticated:
-        data = None
-        try:
-            data = UserData.objects.get(user=request.user)
-            if request.user.userdata.game:
-                game = Game.objects.get(game=request.user.userdata.game.game)
-                response['game'] = {
-                    'game': game.game,
-                    'name': game.name,
-                    'players': game.players,
-                    'created': game.created,
-                    'started': game.started
-                }
-                
-        except UserData.DoesNotExist:
-            pass
-        except Game.DoesNotExist:
-            response['game'] = None
+
+    try:
+        gameList = GameList.objects.filter(user=request.user)
+        for game in gameList:
+            game = game.game
+            
+            if game.cancelled or game.ended:
+                continue
+
+            response['game'] = {
+                'id': str(game.id),
+                'name': game.name,
+                'created': game.created,
+                'started': game.started
+            }
+            break
+    except (TypeError, AttributeError):
+        pass
             
     return render(request, 'codenamez/index.html', response)
 
@@ -40,7 +41,6 @@ def user_login(request):
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-        print(user)
         if user:
             if user.is_active:
                 login(request, user)

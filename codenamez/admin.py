@@ -1,12 +1,16 @@
 from django.contrib import admin
 
-from codenamez.models import UserData, Game
+from codenamez.models import UserProfile, Game, GameList
 
-class UserDataAdmin(admin.ModelAdmin):
-    list_display = ('user', 'ipaddress', 'avatar', 'game', 'options')
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'ipaddress', 'avatar', 'options')
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('game', 'name', 'created', 'started', 'ended', 'cancelled')
+    list_display = ('id', 'name', 'created', 'started', 'ended', 'cancelled')
 
-admin.site.register(UserData, UserDataAdmin)
+class GameListAdmin(admin.ModelAdmin):
+    list_display = ('game', 'user')
+
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Game, GameAdmin)
+admin.site.register(GameList, GameListAdmin)

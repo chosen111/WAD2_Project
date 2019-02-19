@@ -50,7 +50,7 @@ $(document).ready(function() {
         let href = $(this).data('href');
         if (!href) return; // There is no href data on the element (console tampered maybe?)
         
-        window.location.assign(document.location.origin + '/' + href);
+        window.open(document.location.origin + '/' + href, '_blank');
     })
 
     $(document).on('click', '.button.logout', function() {
@@ -92,7 +92,7 @@ $(document).ready(function() {
         $("<div>", { class: "input-wrapper" }).append(
             $("<label>", { for: "password", class: "icon-encryption" })).append(
             $("<input>", { class: "input", id: "password", type: "password", name: "password", value: "", size: 50 })).appendTo($form);
-        let $submit = $("<div>", { class: "button", id: "submit", text: "Log In" }).appendTo($form);
+        let $submit = $("<div>", { class: "button submit", text: "Log In" }).appendTo($form);
         // When the submit button is clicked post the data to our login url
         $submit.on('click', function() {
             $.post({
@@ -101,7 +101,12 @@ $(document).ready(function() {
                 data: $form.serialize(),
                 // If the login is successful, redirect to index page
                 success(response) {
+                    if (response['error']) return console.error(response['error']);
+                    
                     window.location.assign(document.location.origin + response['redirect']);
+                },
+                fail() {
+                    console.log(arguments);
                 }
             })
         })
