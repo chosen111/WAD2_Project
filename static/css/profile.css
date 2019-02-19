@@ -79,6 +79,10 @@ main div.stats [class*="-col"] ul.stats li.row:hover {
   background-color: rgba(0, 100, 85, 0.4);
 }
 
+main div.stats [class*="-col"] ul.stats li.row.last-name, main div.stats [class*="-col"] ul.stats li.row.last-login, main div.stats [class*="-col"] ul.stats li.row.played {
+  margin-bottom: 20px;
+}
+
 main div.stats [class*="-col"] ul.stats li.row label {
   flex: 1;
   position: relative;

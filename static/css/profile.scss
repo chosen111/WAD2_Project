@@ -76,6 +76,10 @@ main {
                     &:hover {
                         background-color: rgba($teal-flat, .4);
                     }
+
+                    &.last-name, &.last-login, &.played {
+                        margin-bottom: 20px;
+                    }
                     
                     label {
                         flex: 1;
