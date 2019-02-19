@@ -31,16 +31,10 @@
                 {% else %}
                     {% createButton "login" "Log In" href="login" %}
                 {% endif %}
-            </div>
-        </header>
-        <main>
-            {% block main %} {% endblock %}
-        </main>
-        <footer></footer>
-    </div>
 
-    <div>
-            <ul>
+
+            </div>
+            <div class="user_info">
                 {% if user.is_authenticated %}
                      {% if user.is_staff %}
                           hello staff {{ user.username }}!
@@ -48,9 +42,16 @@
                           hello {{ user.username }}!
                      {% endif %}
                 {% endif %}
+            </div>
 
 
-            </ul>
-        </div>
+        </header>
+        <main>
+            {% block main %} {% endblock %}
+        </main>
+        <footer></footer>
+    </div>
+
+
 </body>
 </html>

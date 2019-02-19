@@ -27,7 +27,7 @@ def index(request):
                 'started': game.started
             }
             break
-    except (TypeError, AttributeError):
+    except (TypeError, AttributeError,Exception):
         pass
             
     return render(request, 'codenamez/index.html', response)
