@@ -206,6 +206,7 @@ div#application {
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-content: center;
+        align-items: center;
         padding: 0 20px 0 20px;
         border-bottom: 1px solid $teal-border;
         background-color: rgba(#000, .6);
