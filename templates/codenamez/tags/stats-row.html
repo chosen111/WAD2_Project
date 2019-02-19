@@ -1,4 +1,4 @@
 <li class="row {{ id }}">
     <label class="label">{{ label }}</label>
-    <span class="value">{{ value }}</span>
+    <span class="value">{% if value %}{{ value }}{% else %}-{% endif %}</span>
 </li>

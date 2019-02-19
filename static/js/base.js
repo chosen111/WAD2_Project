@@ -124,7 +124,6 @@ var Authentication = {
 
 // When document is ready
 $(document).ready(function() {
-    console.log(user);
     $(document).on('keyup', function(evt) {
         // If the Escape key is released
         if (evt.key === 'Escape') {

@@ -62,6 +62,10 @@ a {
   transition: color .15s linear, text-shadow .15s linear, background-color .15s linear;
 }
 
+a:focus {
+  outline: none;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -157,8 +161,9 @@ a {
   justify-content: flex-end;
   padding: 8px 20px 8px 20px;
   border-radius: 4px;
+  border: .5px solid transparent;
   cursor: pointer;
-  transition: background-color .2s ease;
+  transition: background-color .2s ease, border-color .2s ease;
 }
 
 .user .avatar {
@@ -183,6 +188,7 @@ a {
 
 .user:hover {
   background-color: rgba(0, 100, 85, 0.4);
+  border-color: #00936d;
 }
 
 .error {
@@ -289,6 +295,14 @@ div#application header {
   padding: 0 20px 0 20px;
   border-bottom: 1px solid #00936d;
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+div#application header .button.login {
+  display: block;
+  border-radius: 40px;
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
 }
 
 div#application main {
