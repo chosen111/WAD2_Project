@@ -6,7 +6,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ipaddress = models.GenericIPAddressField()
     avatar = models.ImageField(upload_to='profile_images', blank=True)
-    options = models.TextField(default='options: {}')
+    options = models.TextField(default='null')
 
     def __str__(self):
         return self.user.username
@@ -37,7 +37,7 @@ class Game(models.Model):
     name = models.CharField(max_length=128)
     password = models.CharField(max_length=128, editable=False, blank=True)
     max_players = models.IntegerField()
-    history = models.TextField(default='history: {}')
+    history = models.TextField(default='null')
     created = models.FloatField(default=time.time)
     started = models.FloatField(blank=True)    
     ended = models.FloatField(blank=True)

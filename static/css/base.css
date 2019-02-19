@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
 @font-face {
   font-family: 'codenamez-ico';
-  src: url("../fonts/codenamez-ico.ttf") format("truetype");
+  src: url("../fonts/codenamez-ico.ttf?f3cdt4") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -30,6 +30,10 @@
 
 .icon-close:before {
   content: "";
+}
+
+.icon-shield:before {
+  content: "";
 }
 
 @keyframes fadeIn {
@@ -142,6 +146,41 @@ a {
   background-color: transparent;
 }
 
+.user {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 20px 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s ease;
+}
+
+.user .avatar {
+  height: 32px;
+  width: 32px;
+  border: 1px solid #00936d;
+  border-radius: 32px;
+  margin-right: 10px;
+}
+
+.user .username {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user .staff {
+  margin-left: 5px;
+  font-size: 18px;
+}
+
+.user:hover {
+  background-color: rgba(0, 100, 85, 0.4);
+}
+
 div#logo {
   position: relative;
   font-family: "Black Ops One";
@@ -250,4 +289,51 @@ div#application footer {
   padding: 0 10px 0 10px;
   border-top: 1px solid #00936d;
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+div.overlay section.login-section {
+  flex: auto;
+  display: flex;
+  align-items: center;
+}
+
+div.overlay section.login-section form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+div.overlay section.login-section form > * {
+  opacity: 0;
+}
+
+div.overlay section.login-section form .title {
+  font-size: 24px;
+  margin: 32px 0 32px 0;
+}
+
+div.overlay section.login-section form .input-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 4px 0 4px 0;
+}
+
+div.overlay section.login-section form .input-wrapper label {
+  padding: 10px;
+  border: 1px solid #00936d;
+  border-radius: 4px 0 0 4px;
+  border-right: 0;
+  background: #002d21;
+}
+
+div.overlay section.login-section form .input-wrapper .input {
+  width: 250px;
+  border-radius: 0 4px 4px 0;
+  border-left: 0;
+}
+
+div.overlay section.login-section form .button.submit {
+  padding: 6px 25px 6px 25px;
+  margin-top: 20px;
 }

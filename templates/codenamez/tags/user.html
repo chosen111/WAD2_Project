@@ -1,0 +1,12 @@
+{% load staticfiles %}
+<div class="user">
+    {% if avatar %}
+        <div class="avatar" style="background: url({{ avatar.url }}) no-repeat center center / cover"></div>
+    {% else %}
+        <div class="avatar" style="background: #00dfa6 url({% static 'images/default_avatar.png' %}) no-repeat center center / cover"></div>
+    {% endif %}
+    <span class="username">{{ username }}</span>
+    {% if is_staff %}
+        <span class="staff icon-shield"></span> 
+    {% endif %}
+</div>
