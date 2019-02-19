@@ -1,5 +1,6 @@
 from django import template
 from django.urls import reverse
+from codenamez.models import UserProfile
 
 register = template.Library()
 
@@ -9,7 +10,6 @@ def createLogoBySize(size="big"):
 
 @register.inclusion_tag('codenamez/tags/button.html')
 def createButton(id, text, href=None, isAnchor=False):
-    link = None
     try:
         link = reverse(href)
     except:
@@ -19,4 +19,8 @@ def createButton(id, text, href=None, isAnchor=False):
 
 @register.inclusion_tag('codenamez/tags/user.html')
 def user(user):
-    return { 'username': user.username, 'avatar': user.userprofile.avatar, 'is_staff': user.is_staff }
+    try: 
+        avatar = user.userprofile.avatar
+    except UserProfile.DoesNotExist: 
+        avatar = None
+    return { 'username': user.username, 'avatar': avatar, 'is_staff': user.is_staff }
