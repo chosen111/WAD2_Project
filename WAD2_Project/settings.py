@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'codenamez',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +75,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'WAD2_Project.wsgi.application'
 ASGI_APPLICATION = 'WAD2_Project.routing.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+    },
+}
 
 
 # Database
@@ -140,3 +149,12 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
+
+
+# Caches
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': None
+    }
+}

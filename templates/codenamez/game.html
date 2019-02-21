@@ -4,12 +4,16 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/game.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
 {% endblock %}
 
 {% block main %}
+    {% showLoading "Searching for game" %}
+
+    <!--
     {% if game %}
-        {% showLoading "Connecting to "|add:game.name %}
+        
         <div class="gameWrapper">
             <section class="col-l"></section>
             <section class="col-r">
@@ -269,5 +273,5 @@
         </div>
     {% else %}
         {% showError error %}
-    {% endif %}
+    {% endif %}-->
 {% endblock %}

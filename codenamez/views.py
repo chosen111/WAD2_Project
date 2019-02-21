@@ -11,7 +11,6 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     response = { }
-
     try:
         gameList = GameList.objects.filter(user=request.user)
         for game in gameList:
@@ -81,16 +80,16 @@ def show_profile(request, profileId):
 @login_required
 def show_game(request, gameId):
     response = { }
-    try:
-        game = Game.objects.get(id=uuid.UUID(gameId))
-        is_playing = GameList.objects.get(user=request.user, game=game)
+    #try:
+        #game = Game.objects.get(id=uuid.UUID(gameId))
+        #is_playing = GameList.objects.get(user=request.user, game=game)
 
-        response = {
-            'game': game,
-        }
-    except (Game.DoesNotExist, ValueError):
-        response['error'] = "The game you are trying to access does not exist!"
-    except GameList.DoesNotExist:
-        response['error'] = "You are not currently invited to play in " + game.name
+        #response = {
+        #    'game': game,
+        #}
+    #except (Game.DoesNotExist, ValueError):
+        #response['error'] = "The game you are trying to access does not exist!"
+    #except GameList.DoesNotExist:
+        #response['error'] = "You are not currently invited to play in " + game.name
         
     return render(request, 'codenamez/game.html', response)

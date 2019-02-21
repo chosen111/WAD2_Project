@@ -1,4 +1,129 @@
 $(document).ready(function() {
+    let path = window.location.pathname.split('/');
+    let game = {
+        id: path[path.indexOf('game') + 1]
+    }
+
+    let scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    let socket = new ReconnectingWebSocket(scheme + '://' + window.location.host + "/codenamez/game/");
+
+    // Handle incoming messages
+    socket.onmessage = function (message) {
+        // Decode the JSON
+        console.log("Got websocket message " + message.data);
+        var data = JSON.parse(message.data);
+        console.log(data)
+        // Handle errors
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        // Handle joining
+        if (data.join) {
+            console.log("Joining game");
+            console.log(data.join);
+
+            /* Hook up send button to send a message
+            roomdiv.find("form").on("submit", function () {
+                socket.send(JSON.stringify({
+                    "command": "send",
+                    "room": data.join,
+                    "message": roomdiv.find("input").val()
+                }));
+                roomdiv.find("input").val("");
+                return false;
+            });
+            $("#chats").append(roomdiv);
+            // Handle leaving */
+        } else if (data.leave) {
+            console.log("Leaving game " + data.leave);
+        } else if (data.message) {
+            console.log("chat message")
+            /*var msgdiv = $("#room-" + data.room + " .messages");
+            var ok_msg = "";
+            // msg types are defined in chat/settings.py
+            // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
+            switch (data.msg_type) {
+                case 0:
+                    // Message
+                    ok_msg = "<div class='message'>" +
+                            "<span class='username'>" + data.username + "</span>" +
+                            "<span class='body'>" + data.message + "</span>" +
+                            "</div>";
+                    break;
+                case 1:
+                    // Warning / Advice messages
+                    ok_msg = "<div class='contextual-message text-warning'>" + data.message +
+                            "</div>";
+                    break;
+                case 2:
+                    // Alert / Danger messages
+                    ok_msg = "<div class='contextual-message text-danger'>" + data.message +
+                            "</div>";
+                    break;
+                case 3:
+                    // "Muted" messages
+                    ok_msg = "<div class='contextual-message text-muted'>" + data.message +
+                            "</div>";
+                    break;
+                case 4:
+                    // User joined room
+                    ok_msg = "<div class='contextual-message text-muted'>" + data.username +
+                            " joined the room!" +
+                            "</div>";
+                    break;
+                case 5:
+                    // User left room
+                    ok_msg = "<div class='contextual-message text-muted'>" + data.username +
+                            " left the room!" +
+                            "</div>";
+                    break;
+                default:
+                    console.log("Unsupported message type!");
+                    return;
+            }
+            msgdiv.append(ok_msg);
+            msgdiv.scrollTop(msgdiv.prop("scrollHeight")); */
+        } else {
+            console.log("Cannot handle message!");
+        }
+    };
+    // Says if we joined a room or not by if there's a div for it
+    let inRoom = function(room) {
+        return $("#room-" + roomId).length > 0;
+    };
+
+    /* Room join/leave
+    $("li.room-link").click(function () {
+        roomId = $(this).attr("data-room-id");
+        if (inRoom(roomId)) {
+            // Leave room
+            $(this).removeClass("joined");
+            socket.send(JSON.stringify({
+                "command": "leave",
+                "room": roomId
+            }));
+        } else {
+            // Join room
+            $(this).addClass("joined");
+            socket.send(JSON.stringify({
+                "command": "join",
+                "room": roomId
+            }));
+        }
+    }*/
+    // Helpful debugging
+    socket.onopen = function () {
+        console.log("Connected to game socket");
+        socket.send(JSON.stringify({
+            "command": "join",
+            "game": game.id
+        }));
+    };
+    socket.onclose = function () {
+        console.log("Disconnected from game socket");
+    }
+
     $(document).on('contextmenu', '.card', function(e) {
         let $flipCard = $(this).children();
         let toggle = $flipCard.hasClass('reversed') ? true : false;
@@ -11,4 +136,4 @@ $(document).ready(function() {
 
         e.preventDefault();
     })
-})
+});
