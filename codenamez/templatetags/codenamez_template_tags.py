@@ -35,3 +35,7 @@ def addStatsRow(id="placeholder", label="Placeholder", value="Placeholder", cust
 @register.inclusion_tag('codenamez/tags/error.html')
 def showError(message="null"):
     return { 'message': message }
+
+@register.inclusion_tag('codenamez/tags/loading.html')
+def showLoading(text=None):
+    return { 'text': text }

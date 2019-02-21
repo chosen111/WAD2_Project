@@ -9,6 +9,7 @@
 
 {% block main %}
     {% if game %}
+        {% showLoading "Connecting to "|add:game.name %}
         <div class="gameWrapper">
             <section class="col-l"></section>
             <section class="col-r">

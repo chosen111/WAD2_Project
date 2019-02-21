@@ -4,6 +4,7 @@ main div.gameWrapper {
     flex: 1;
     display: flex;
     align-self: stretch;
+    display: none;
 
     section.col-l {
         flex: 340px 0 0;
@@ -66,7 +67,7 @@ main div.gameWrapper {
                     }
                     .front {
                         background: $teal url('../images/cards/word.jpg') no-repeat center top / cover;
-                        color: $darkcyan;
+                        color: $dark-cyan;
 
                         .type {
                             position: absolute;

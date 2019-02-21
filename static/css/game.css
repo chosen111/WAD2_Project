@@ -2,6 +2,7 @@ main div.gameWrapper {
   flex: 1;
   display: flex;
   align-self: stretch;
+  display: none;
 }
 
 main div.gameWrapper section.col-l {

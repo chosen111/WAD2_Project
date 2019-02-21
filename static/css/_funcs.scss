@@ -13,3 +13,17 @@
         color: lighten($col, 20%);
     }
 }
+
+@mixin align-element($axis, $percentage) {
+    position: absolute;
+	@if $axis == 'y' {
+		top: $percentage; transform: translateY(-$percentage);
+	}
+	@else if $axis == 'x' {
+		left: $percentage; transform: translateX(-$percentage);
+	}
+	@else {
+		top: $percentage; left: $percentage;
+		transform: translate(-$percentage, -$percentage);
+	}
+}

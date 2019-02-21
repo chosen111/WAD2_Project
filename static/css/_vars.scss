@@ -7,9 +7,11 @@ $lred: #ff6347;
 $teal: #00dfa6;
 $teal-border: #00936d;
 $teal-flat: #006455;
-$darkcyan: #04142e;
-$ddarkcyan: #001625;
-$darkteal: #031f24;
+$dark-teal: #031f24;
+$cyan: #00aaff;
+$cyan-border: darken($cyan, 10%);
+$dark-cyan: #04142e;
+$darker-cyan: #001625;
 
 $icon-encryption: "\e900";
 $icon-user: "\e901";

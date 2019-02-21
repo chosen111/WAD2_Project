@@ -34,9 +34,11 @@ class PrivateMessage(models.Model):
 
 class Game(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=128)
     password = models.CharField(max_length=128, editable=False, null=True, blank=True)
     max_players = models.IntegerField()
+    data = models.TextField(default='{}')
     history = models.TextField(default='null')
     created = models.FloatField(default=time.time)
     started = models.FloatField(null=True, blank=True)    
