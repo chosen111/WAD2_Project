@@ -11,7 +11,7 @@
     <div class="title">{% createLogoBySize %}</div>
     <div class="menu">
         {% if game %}
-            {% createButton "continue" "Continue playing" %}
+            {% createButton "continue" "Continue playing" href="game" args=game.id isAnchor=True %}
         {% endif %}
         {% createButton "play" "Start a game" %}
         {% createButton "play" "Join a game" %}

@@ -9,13 +9,16 @@ def createLogoBySize(size="big"):
     return { 'size': size }
 
 @register.inclusion_tag('codenamez/tags/button.html')
-def createButton(id, text, href=None, isAnchor=False):
+def createButton(id, text, href=None, args=None, isAnchor=False):
     try:
-        link = reverse(href)
+        href = reverse(href)
     except:
-        link = href
+        pass
+    
+    if args:
+        href = "{}/{}".format(href, args)
 
-    return { 'id': id, 'text': text, 'href': link, 'isAnchor': isAnchor }
+    return { 'id': id, 'text': text, 'href': href, 'isAnchor': isAnchor }
 
 @register.inclusion_tag('codenamez/tags/user.html')
 def user(user):

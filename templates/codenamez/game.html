@@ -3,10 +3,45 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
-    <!-- <script type="text/javascript" src="{% static 'js/index.js' %}"></script> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/game.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-    <div class="title">{% createLogoBySize %}</div>
+    {% if game %}
+        <div class="gameWrapper">
+            <section class="col-l"></section>
+            <section class="col-r">
+                <ul class="board">
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                    <li class="card">card</li>
+                </ul>
+            </section>
+        </div>
+    {% else %}
+        {% showError error %}
+    {% endif %}
 {% endblock %}

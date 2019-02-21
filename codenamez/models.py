@@ -35,12 +35,12 @@ class PrivateMessage(models.Model):
 class Game(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=128)
-    password = models.CharField(max_length=128, editable=False, blank=True)
+    password = models.CharField(max_length=128, editable=False, null=True, blank=True)
     max_players = models.IntegerField()
     history = models.TextField(default='null')
     created = models.FloatField(default=time.time)
-    started = models.FloatField(blank=True)    
-    ended = models.FloatField(blank=True)
+    started = models.FloatField(null=True, blank=True)    
+    ended = models.FloatField(null=True, blank=True)
     cancelled = models.BooleanField(default=False)
 
     def __str__(self):
@@ -51,7 +51,7 @@ class GameList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
     team = models.CharField(max_length=32, blank=True)
-    joined = models.FloatField(blank=True)
+    joined = models.FloatField(null=True, blank=True)
 
     class Meta:
         unique_together = ("game", "user")
