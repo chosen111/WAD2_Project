@@ -6,11 +6,9 @@ main div.gameWrapper {
     align-self: stretch;
 
     section.col-l {
-        border: 1px solid red;
         flex: 340px 0 0;
     }
     section.col-r {
-        border: 1px solid green;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -18,14 +16,102 @@ main div.gameWrapper {
 
         ul.board {
             display: grid;
-            grid-template-columns: repeat(5, 180px);
-            grid-template-rows: repeat(5, 120px);
-            align-items: center;
+            grid-template-columns: repeat(5, 200px);
+            grid-template-rows: repeat(5, 126px);
             grid-gap: 5px 5px;
 
-            li {
-                background-color: red;
-                border: 1px solid #000;
+            li.card {
+                position: relative;
+                perspective: 1000px;
+                border-radius: 4px;
+                cursor: pointer;
+
+                .back { background: $teal url('../images/cards/bword.jpg') no-repeat center top / cover; }
+                &.orange-1 {
+                    .back { background: $team-orange url('../images/cards/orange-1.jpg') no-repeat center top / cover; }
+                    .front .type { background-color: $team-orange }
+                }
+                &.orange-2 {
+                    .back { background: $team-orange url('../images/cards/orange-2.jpg') no-repeat center top / cover; }
+                    .front .type { background-color: $team-orange }
+                }
+                &.purple-1 { 
+                    .back { background: $team-purple url('../images/cards/purple-1.jpg') no-repeat center top / cover; }
+                    .front .type { background-color: $team-purple }
+                }
+                &.purple-2 {
+                    .back { background: $team-purple url('../images/cards/purple-2.jpg') no-repeat center top / cover; }
+                    .front .type { background-color: $team-purple }
+                }
+                &.bystander-1 .back { background: #bbb url('../images/cards/bystander-1.jpg') no-repeat center top / cover; }
+                &.bystander-2 .back { background: #bbb url('../images/cards/bystander-2.jpg') no-repeat center top / cover; }
+                &.assassin {
+                    .back { background: #000 url('../images/cards/assassin.jpg') no-repeat center top / cover; }
+                    .front .type { background-color: $assassin }
+                }
+
+                .flip-card {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    transition: transform .4s ease;
+                    transform-style: preserve-3d;
+                                     
+                    .front, .back {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 5px;
+                        backface-visibility: hidden;
+                    }
+                    .front {
+                        background: $teal url('../images/cards/word.jpg') no-repeat center top / cover;
+                        color: $darkcyan;
+
+                        .type {
+                            position: absolute;
+                            top: 16px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 14px;
+                            height: 14px;
+                            border-radius: 20px;
+                        }
+                        .word, .word-upside {
+                            position: absolute;
+                            font-weight: bold;
+                            overflow: hidden;
+                            white-space: nowrap;
+                        }
+                        .word {
+                            bottom: 24px;
+                            left: 20px;
+                            right: 20px;
+                            font-weight: bold;
+                            text-align: center;
+                        }
+                        .word-upside {
+                            top: 50px;
+                            left: 22px;
+                            right: 66px;
+                            font-size: 12px;
+                            font-style: italic;
+                            transform: rotate(-180deg);
+                            direction: rtl;        
+                        }
+                    }
+                    .back {
+                        transform: rotateY(180deg);
+                    }
+
+                    &.normal {
+                        transform: rotateY(0deg);
+                    }
+                    &.reversed {
+                        transform: rotateY(180deg);
+                    }
+                }
+                
             }
         }
     }
