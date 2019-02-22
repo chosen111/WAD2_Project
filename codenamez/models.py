@@ -60,3 +60,9 @@ class GameList(models.Model):
 
     def __str__(self):
         return str(self.game.id)
+
+class WordList(models.Model):
+    word = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.word

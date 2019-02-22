@@ -33,7 +33,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             elif command == "send":
                 await self.chat(data["game"], data["message"], data["team"])
         except GameError as e:
-            await self.send_json({ 'error', e.code })
+            await self.send_json({"error": e.code })
 
     async def disconnect(self, code):
         """
@@ -47,18 +47,17 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         try:
             game = Game.objects.get(id=uuid.UUID(game_id))
             playing = GameList.objects.get(game=game, user=self.scope['user'])
-            players = GameList.objects.filter(game=game)            
+            players = GameList.objects.filter(game=game)
             response = {
+                'user': self.scope['user'].username,
                 'game': serializers.serialize('json', [game]),
                 'players': serializers.serialize('json', players),
             }
 
         except (Game.DoesNotExist, ValueError):
-            raise GameError("GAME_IS_INVALID")
-            #response['error'] = "The game you are trying to access does not exist!"
+            raise GameError("The game you are trying to access does not exist!")
         except GameList.DoesNotExist:
-            raise GameError("GAME_NOT_INVITED")
-            #response['error'] = "You are not currently invited to play in " + game.name
+            raise GameError("You are not currently invited to play in %s" % game.name)
         return response
        
     async def join_game(self, game_id):
@@ -88,7 +87,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         """
         Called by receive_json when someone sent a leave command.
         """
-        game = Game.objects.get(game=uuid.UUID(gameId))
+        game = Game.objects.get(id=uuid.UUID(gameId))
         await self.channel_layer.group_send(
             game.id,
             {

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GameList
+from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GameList, WordList
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'ipaddress', 'avatar', 'options')
@@ -17,8 +17,12 @@ class GameAdmin(admin.ModelAdmin):
 class GameListAdmin(admin.ModelAdmin):
     list_display = ('game', 'user', 'points', 'team', 'joined')
 
+class WordListAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'word')
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Chat, ChatAdmin)
 admin.site.register(PrivateMessage, PrivateMessageAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(GameList, GameListAdmin)
+admin.site.register(WordList, WordListAdmin)

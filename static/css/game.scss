@@ -4,12 +4,12 @@ main div.gameWrapper {
     flex: 1;
     display: flex;
     align-self: stretch;
-    display: none;
+    opacity: 0;
 
     section.col-l {
-        flex: 340px 0 0;
+        flex: 1;
     }
-    section.col-r {
+    section.col-board {
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -28,20 +28,20 @@ main div.gameWrapper {
                 cursor: pointer;
 
                 .back { background: $teal url('../images/cards/bword.jpg') no-repeat center top / cover; }
-                &.orange-1 {
-                    .back { background: $team-orange url('../images/cards/orange-1.jpg') no-repeat center top / cover; }
+                &.team-orange-1 {
+                    .back { background: $team-orange url('../images/cards/team-orange-1.jpg') no-repeat center top / cover; }
                     .front .type { background-color: $team-orange }
                 }
-                &.orange-2 {
-                    .back { background: $team-orange url('../images/cards/orange-2.jpg') no-repeat center top / cover; }
+                &.team-orange-2 {
+                    .back { background: $team-orange url('../images/cards/team-orange-2.jpg') no-repeat center top / cover; }
                     .front .type { background-color: $team-orange }
                 }
-                &.purple-1 { 
-                    .back { background: $team-purple url('../images/cards/purple-1.jpg') no-repeat center top / cover; }
+                &.team-purple-1 { 
+                    .back { background: $team-purple url('../images/cards/team-purple-1.jpg') no-repeat center top / cover; }
                     .front .type { background-color: $team-purple }
                 }
-                &.purple-2 {
-                    .back { background: $team-purple url('../images/cards/purple-2.jpg') no-repeat center top / cover; }
+                &.team-purple-2 {
+                    .back { background: $team-purple url('../images/cards/team-purple-2.jpg') no-repeat center top / cover; }
                     .front .type { background-color: $team-purple }
                 }
                 &.bystander-1 .back { background: #bbb url('../images/cards/bystander-1.jpg') no-repeat center top / cover; }
@@ -115,6 +115,10 @@ main div.gameWrapper {
                 
             }
         }
+    }
+    section.col-r {
+        flex: 1;
+        min-width: 200px;
     }
 
 }

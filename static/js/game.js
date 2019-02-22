@@ -8,36 +8,50 @@ $(document).ready(function() {
     let socket = new ReconnectingWebSocket(scheme + '://' + window.location.host + "/codenamez/game/");
 
     // Handle incoming messages
-    socket.onmessage = function (message) {
+    socket.onmessage = function (response) {
         // Decode the JSON
-        console.log("Got websocket message " + message.data);
-        var data = JSON.parse(message.data);
-        console.log(data)
+        console.log("Got websocket message " + response.data);
+        var response = JSON.parse(response.data);
         // Handle errors
-        if (data.error) {
-            alert(data.error);
-            return;
+        if (response.error) {
+            return Error.display(response.error);
         }
-        // Handle joining
-        if (data.join) {
-            console.log("Joining game");
-            console.log(data.join);
 
-            /* Hook up send button to send a message
-            roomdiv.find("form").on("submit", function () {
-                socket.send(JSON.stringify({
-                    "command": "send",
-                    "room": data.join,
-                    "message": roomdiv.find("input").val()
-                }));
-                roomdiv.find("input").val("");
-                return false;
-            });
-            $("#chats").append(roomdiv);
-            // Handle leaving */
-        } else if (data.leave) {
-            console.log("Leaving game " + data.leave);
-        } else if (data.message) {
+        if (response.join) {
+            let data = response.join;
+            let $main = $("main").empty();
+            let $gameWrapper = $("<div>", { class: "gameWrapper" });
+            let $colLeft = $("<section>", { class: "col-l" }).appendTo($gameWrapper);
+            let $colBoard = $("<section>", { class: "col-board" }).appendTo($gameWrapper);
+            let $colRight = $("<section>", { class: "col-r" }).appendTo($gameWrapper);
+
+            let $board = $("<ul>", { class: "board" }).appendTo($colBoard);
+            let game = JSON.parse(data.game);
+            let players = JSON.parse(data.players);
+            
+            let gameData = JSON.parse(game[0].fields.data);
+            let cards = gameData.cards;
+            let moves = gameData.moves[gameData.moves.length-1];
+            let isSpymaster = Game.Spymaster.isSpymaster(gameData, data.user);
+            for (let i in cards) {
+                let $card = $("<li>", { class: "card" }).addClass(Game.Cards.getTypeAsClass(cards[i].type)).appendTo($board);
+                let $flipCard = $("<div>", { class: "flip-card" }).appendTo($card);
+                if (moves.cards[i].guess) $flipCard.addClass("reversed");
+                let $front = $("<div>", { class: "front" }).appendTo($flipCard);
+                $("<div>", { class: "word-upside", text: cards[i].word.toUpperCase() }).appendTo($front);
+                $("<div>", { class: "word", text: cards[i].word.toUpperCase() }).appendTo($front);
+                if (isSpymaster) {
+                    $("<div>", { class: "type" }).appendTo($front);
+                }
+                let $back = $("<div>", { class: "back" }).appendTo($flipCard);
+            }
+            $gameWrapper.appendTo($main);
+            $gameWrapper.animate({ opacity: 1 }, 800);
+        } 
+        else if (response.leave) {
+            console.log("Leaving game " + response.leave);
+        } 
+        else if (response.message) {
             console.log("chat message")
             /*var msgdiv = $("#room-" + data.room + " .messages");
             var ok_msg = "";
@@ -136,4 +150,30 @@ $(document).ready(function() {
 
         e.preventDefault();
     })
+
+    let Error = {
+        display(err) {
+            $('.loading').addClass('fail');
+            $('.loading .icon span').text("Error");
+            $('.loading .message').prepend($("<div>", { class: "icon-warning" }))
+            $('.loading .message span').text(err);            
+        }
+    }
+
+    let Game = {
+        Cards: {
+            getTypeAsClass(type) {
+                let rand = Math.round(Math.random()) + 1;
+                switch(type) {
+                    case "team-orange": case "team-purple": case "bystander": return type + "-" + rand;
+                    default: return type;
+                }
+            }
+        },
+        Spymaster: {
+            isSpymaster(game, user) {
+                return (game.spymaster["team-orange"].player === user || game.spymaster["team-purple"].player === user)
+            }
+        }
+    }
 });
