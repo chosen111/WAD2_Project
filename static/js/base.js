@@ -185,8 +185,7 @@ var Authentication = {
         })
 
         // Prepare the form elements
-        // Prepare the form elements
-        let $form = $("<form>", { id: "login-form" });
+        let $form = $("<form>", { id: "register-form" });
         $("<div>", { class: "title", text: "Sign Up" }).appendTo($form);
         let $alternative = $("<div>", { class: "alternative" }).appendTo($form);
         Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
