@@ -2,14 +2,14 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
 @import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
 @font-face {
-  font-family: 'codenamez-ico';
-  src: url("../fonts/codenamez-ico.ttf?p5vvex") format("truetype");
+  font-family: 'icodenamez';
+  src: url("../fonts/icodenamez.ttf?p5vv3x") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
-  font-family: 'codenamez-ico' !important;
+  font-family: 'icodenamez' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -20,24 +20,56 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-encryption:before {
-  content: "";
+.icon-user:before {
+  content: "";
 }
 
-.icon-user:before {
+.icon-locked:before {
   content: "";
 }
 
+.icon-mail:before {
+  content: "";
+}
+
+.icon-sq-facebook:before {
+  content: "";
+}
+
+.icon-sq-twitter:before {
+  content: "";
+}
+
+.icon-facebook:before {
+  content: "";
+}
+
+.icon-twitter:before {
+  content: "";
+}
+
+.icon-rarrow:before {
+  content: "";
+}
+
+.icon-larrow:before {
+  content: "";
+}
+
+.icon-check:before {
+  content: "";
+}
+
 .icon-close:before {
-  content: "";
+  content: "";
 }
 
 .icon-shield:before {
-  content: "";
+  content: "";
 }
 
 .icon-warning:before {
-  content: "";
+  content: "";
 }
 
 @keyframes fadeIn {
@@ -50,20 +82,29 @@
 }
 
 html, body {
-  min-width: 1260px;
   height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
   font-family: "Open Sans";
   color: #00dfa6;
 }
 
 a {
-  color: inherit;
+  color: #46ffd0;
   text-decoration: inherit;
   transition: color .15s linear, text-shadow .15s linear, background-color .15s linear;
+  cursor: pointer;
 }
 
 a:focus {
   outline: none;
+}
+
+a:hover {
+  text-shadow: #00dfa6 0 0 1px;
 }
 
 .overlay {
@@ -73,7 +114,22 @@ a:focus {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.75);
+}
+
+.overlay.hidden {
   opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s linear .3s, opacity .4s ease;
+}
+
+.overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 0s linear 0s, opacity .4s ease;
+}
+
+.overlay.forced {
+  transition: none;
 }
 
 .overlay section {
@@ -85,7 +141,6 @@ a:focus {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0;
 }
 
 .overlay section div.icon-close {
@@ -102,12 +157,49 @@ a:focus {
   text-shadow: #00dfa6 0 0 1px;
 }
 
+section.notification {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 110px;
+  overflow: hidden;
+}
+
+section.notification div.notification {
+  display: flex;
+  align-items: center;
+  height: 0;
+  padding: 0 10px 0 10px;
+  margin: 2px 5px 2px 5px;
+  border: 1px solid #00dfa6;
+  border-radius: 5px;
+  background-color: #00130e;
+  opacity: 0;
+}
+
+section.notification div.notification.alert {
+  color: #ff6347;
+  border-color: #ff6347;
+  background-color: #2e0700;
+}
+
+section.notification div.notification.warning {
+  color: #a68e42;
+  border-color: #a68e42;
+  background-color: #141108;
+}
+
+section.notification div.notification i {
+  margin-right: 10px;
+}
+
 .button {
   display: inline-block;
   border: 1px solid;
   border-radius: 4px;
   margin: 5px;
-  padding: 5px 15px 5px 15px;
+  padding: 8px 15px 8px 15px;
   text-align: center;
   cursor: pointer;
   border-color: #00ac80;
@@ -122,7 +214,28 @@ a:focus {
   color: #46ffd0;
 }
 
+.button i {
+  margin-right: 10px;
+}
+
 .input {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  margin: 4px 0 4px 0;
+}
+
+.input label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  border: 1px solid #00936d;
+  border-radius: 4px 0 0 4px;
+  border-right: 0;
+  background: #002d21;
+}
+
+.input input {
   display: inline-block;
   padding: 8px;
   border: 1px solid #00936d;
@@ -138,19 +251,19 @@ a:focus {
   resize: none;
 }
 
-.input:not(.clear) {
+.input input:not(.clear) {
   transition: background-color .2s ease;
 }
 
-.input:not(.clear):hover:not(:focus):not(:disabled) {
+.input input:not(.clear):hover:not(:focus):not(:disabled) {
   background-color: rgba(0, 223, 166, 0.2);
 }
 
-.input:not(.clear):focus {
+.input input:not(.clear):focus {
   background-color: rgba(0, 223, 166, 0.3);
 }
 
-.input:not(.clear):disabled {
+.input input:not(.clear):disabled {
   background-color: transparent;
 }
 
@@ -189,21 +302,6 @@ a:focus {
 .user:hover {
   background-color: rgba(0, 100, 85, 0.4);
   border-color: #00936d;
-}
-
-.error {
-  display: flex;
-  align-items: center;
-}
-
-.error .icon-warning {
-  color: #ff6347;
-  margin-right: 10px;
-}
-
-.error span.message {
-  color: #ff6347;
-  font-size: 20px;
 }
 
 @keyframes rotate {
@@ -302,6 +400,25 @@ a:focus {
   animation: blink 2s ease infinite;
 }
 
+.panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel .title {
+  align-self: center;
+  width: 200px;
+  border-bottom: 1px solid #00dfa6;
+  border-radius: 15px;
+  padding: 4px;
+  text-align: center;
+}
+
+.panel .content {
+  border: 1px solid #00dfa6;
+  border-radius: 4px;
+}
+
 div#logo {
   position: relative;
   font-family: "Black Ops One";
@@ -347,7 +464,7 @@ div#logo.small:hover {
   opacity: .6;
 }
 
-div#bg {
+.background {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -355,15 +472,15 @@ div#bg {
   background-blend-mode: luminosity;
 }
 
-div#bg.team-orange {
+.background.team-orange {
   background-color: #ff6600;
 }
 
-div#bg.team-purple {
+.background.team-purple {
   background-color: #660066;
 }
 
-div#bg:after {
+.background:after {
   content: "";
   position: absolute;
   top: 0;
@@ -373,7 +490,8 @@ div#bg:after {
   background: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6));
 }
 
-div#application {
+.application {
+  flex: 1;
   position: relative;
   display: flex;
   flex-flow: column nowrap;
@@ -381,9 +499,9 @@ div#application {
   min-height: 800px;
 }
 
-div#application header {
+.application header {
   order: 1;
-  flex: 100px 0 0;
+  flex: 64px 0 0;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-content: center;
@@ -393,7 +511,7 @@ div#application header {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-div#application header .button.login {
+.application header .button.login {
   display: block;
   border-radius: 40px;
   font-size: 20px;
@@ -401,17 +519,31 @@ div#application header .button.login {
   border: none;
 }
 
-div#application main {
+.application main {
   order: 2;
   flex: 1;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  margin: 10px 0 10px 0;
-  padding: 10px;
+  margin: 10px;
 }
 
-div#application footer {
+.application main .error {
+  display: flex;
+  align-items: center;
+}
+
+.application main .error .icon-warning {
+  color: #ff6347;
+  margin-right: 10px;
+}
+
+.application main .error span.message {
+  color: #ff6347;
+  font-size: 20px;
+}
+
+.application footer {
   order: 3;
   flex: 40px 0 0;
   display: grid;
@@ -422,49 +554,102 @@ div#application footer {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-div.overlay section.login-section {
+.overlay section.login-section, .overlay section.register-section {
   flex: auto;
   display: flex;
   align-items: center;
+  background: radial-gradient(ellipse at top, #00130e, transparent), radial-gradient(ellipse at bottom, #00130e, transparent);
 }
 
-div.overlay section.login-section form {
+.overlay section.login-section:before, .overlay section.register-section:before {
+  background: url("../images/bg.jpg");
+  opacity: .5;
+}
+
+.overlay section.login-section form, .overlay section.register-section form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px;
   overflow: hidden;
-}
-
-div.overlay section.login-section form > * {
   opacity: 0;
+  animation: fadeIn .4s ease .8s forwards;
 }
 
-div.overlay section.login-section form .title {
+.overlay section.login-section form .alternative, .overlay section.register-section form .alternative {
+  display: flex;
+  align-self: stretch;
+}
+
+.overlay section.login-section form .alternative .button, .overlay section.register-section form .alternative .button {
+  flex: 1;
+}
+
+.overlay section.login-section form .alternative .button.facebook, .overlay section.register-section form .alternative .button.facebook {
+  border-color: #2d4373;
+  background-color: rgba(59, 89, 152, 0.2);
+  color: #3b5998;
+}
+
+.overlay section.login-section form .alternative .button.facebook:hover, .overlay section.register-section form .alternative .button.facebook:hover {
+  border-color: #3b5998;
+  background-color: rgba(59, 89, 152, 0.4);
+  color: #718dc8;
+}
+
+.overlay section.login-section form .alternative .button.twitter, .overlay section.register-section form .alternative .button.twitter {
+  border-color: #0e8aea;
+  background-color: rgba(56, 161, 243, 0.2);
+  color: #38a1f3;
+}
+
+.overlay section.login-section form .alternative .button.twitter:hover, .overlay section.register-section form .alternative .button.twitter:hover {
+  border-color: #38a1f3;
+  background-color: rgba(56, 161, 243, 0.4);
+  color: #98cef9;
+}
+
+.overlay section.login-section form .separator, .overlay section.register-section form .separator {
+  align-self: stretch;
+  position: relative;
+  margin: 20px 0 20px 0;
+  text-align: center;
+}
+
+.overlay section.login-section form .separator:before, .overlay section.login-section form .separator:after, .overlay section.register-section form .separator:before, .overlay section.register-section form .separator:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  border-top: 1px solid #00dfa6;
+  border-bottom: 1px solid #00130e;
+}
+
+.overlay section.login-section form .separator:before, .overlay section.register-section form .separator:before {
+  left: 0;
+}
+
+.overlay section.login-section form .separator:after, .overlay section.register-section form .separator:after {
+  right: 0;
+}
+
+.overlay section.login-section form .title, .overlay section.register-section form .title {
   font-size: 24px;
   margin: 32px 0 32px 0;
 }
 
-div.overlay section.login-section form .input-wrapper {
-  display: flex;
-  flex-flow: row nowrap;
-  margin: 4px 0 4px 0;
-}
-
-div.overlay section.login-section form .input-wrapper label {
-  padding: 10px;
-  border: 1px solid #00936d;
-  border-radius: 4px 0 0 4px;
-  border-right: 0;
-  background: #002d21;
-}
-
-div.overlay section.login-section form .input-wrapper .input {
+.overlay section.login-section form input, .overlay section.register-section form input {
   width: 250px;
   border-radius: 0 4px 4px 0;
   border-left: 0;
 }
 
-div.overlay section.login-section form .button.submit {
+.overlay section.login-section form .extra, .overlay section.register-section form .extra {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.overlay section.login-section form .button.submit, .overlay section.register-section form .button.submit {
   padding: 6px 25px 6px 25px;
   margin-top: 20px;
 }

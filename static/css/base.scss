@@ -4,20 +4,28 @@
 @import '_icons.scss';
 @import '_fx.scss';
 
-html, body { 
-    min-width: 1260px;
+html, body {
     height: 100%;
+    width: 100%;
+}
+
+body {
+    display: flex;
     font-family: "Open Sans";
     color: $teal;
 }
 
 a {
-    color: inherit;
+    color: lighten($teal, 20%);
     text-decoration: inherit;
     transition: color .15s linear, text-shadow .15s linear, background-color .15s linear;
+    cursor: pointer;
 
     &:focus {
         outline: none;
+    }
+    &:hover {
+        text-shadow: $teal 0 0 1px;
     }
 }
 
@@ -28,7 +36,20 @@ a {
     right: 0;
     bottom: 0;
     background: rgba(#000, .75);
-    opacity: 0;
+    
+    &.hidden {
+        opacity: 0;
+        visibility: hidden;
+        transition: visibility 0s linear .3s, opacity .4s ease;
+    }
+    &.visible {
+        opacity: 1;
+        visibility: visible;
+        transition: visibility 0s linear 0s, opacity .4s ease;
+    }
+    &.forced {
+        transition: none;
+    }
 
     section {
         position: absolute;
@@ -39,7 +60,6 @@ a {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        opacity: 0;
 
         div.icon-close {
             position: absolute;
@@ -57,45 +77,103 @@ a {
     }
 }
 
+section.notification {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 110px;
+    overflow: hidden;
+
+    div.notification {
+        display: flex;
+        align-items: center;
+        height: 0; // 40px;
+        padding: 0 10px 0 10px;
+        margin: 2px 5px 2px 5px;
+        border: 1px solid $teal;
+        border-radius: 5px;
+        background-color: darken($teal, 40%);
+        opacity: 0;
+
+        &.alert {
+            color: $lred;
+            border-color: $lred;
+            background-color: darken($lred, 55%);
+        }
+        &.warning {
+            color: $mustard;
+            border-color: $mustard;
+            background-color: darken($mustard, 40%);
+        }
+
+        i {
+            margin-right: 10px;
+        }
+    }
+}
+
 .button {
     display: inline-block;
     border: 1px solid;
     border-radius: 4px;
     margin: 5px;
-    padding: 5px 15px 5px 15px;
+    padding: 8px 15px 8px 15px;
     text-align: center;
     cursor: pointer;
     @include button($teal);
 
     transition: color .15s linear, border-color .15s linear, background-color .15s linear;
+    i {
+        margin-right: 10px;
+    }
 }
 
 .input {
-    display: inline-block;
-    padding: 8px;
-    border: 1px solid $teal-border;
-    border-radius: 4px;
-    color: $teal;
+    display: inline-flex;
+    flex-flow: row nowrap;
+    margin: 4px 0 4px 0;
 
-    &:not(.clear) {
-        transition: background-color .2s ease;
-        &:hover:not(:focus):not(:disabled) {
-            background-color: rgba($teal, .2);
-        }
-        &:focus {
-            background-color: rgba($teal, .3);
-        }
-        &:disabled {
-            background-color: transparent;
-        }
-    }	
-    background: none;
-    background-image: none;
-    appearance: none; -webkit-appearance: none; -moz-appearance: none;
-    outline: none;
-    box-shadow: none;
-    resize: none;
+    label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        border: 1px solid $teal-border;
+        border-radius: 4px 0 0 4px;
+        border-right: 0;                
+        background: darken($teal-border, 20%);
+    }
+
+    input {
+        display: inline-block;
+        padding: 8px;
+        border: 1px solid $teal-border;
+        border-radius: 4px;
+        color: $teal;
+    
+        &:not(.clear) {
+            transition: background-color .2s ease;
+            &:hover:not(:focus):not(:disabled) {
+                background-color: rgba($teal, .2);
+            }
+            &:focus {
+                background-color: rgba($teal, .3);
+            }
+            &:disabled {
+                background-color: transparent;
+            }
+        }	
+        background: none;
+        background-image: none;
+        appearance: none; -webkit-appearance: none; -moz-appearance: none;
+        outline: none;
+        box-shadow: none;
+        resize: none;
+    }
 }
+
+
 
 .user {
     display: inline-flex;
@@ -131,21 +209,6 @@ a {
     &:hover {
         background-color: rgba($teal-flat, .4);
         border-color: $teal-border;
-    }
-}
-
-.error {
-    display: flex;
-    align-items: center;
-
-    .icon-warning {
-        color: $lred;
-        margin-right: 10px;
-    }
-
-    span.message {
-        color: $lred;
-        font-size: 20px;
     }
 }
 
@@ -243,6 +306,23 @@ a {
   }
 }
 
+.panel {
+    display: flex;
+    flex-direction: column;
+    .title {
+        align-self: center;
+        width: 200px;
+        border-bottom: 1px solid $teal;
+        border-radius: 15px;
+        padding: 4px;
+        text-align: center;
+    }
+    .content {
+        border: 1px solid $teal;
+        border-radius: 4px;
+    }   
+}
+
 div#logo {
     position: relative;
     font-family: "Black Ops One";
@@ -286,7 +366,7 @@ div#logo {
     }
 }
 
-div#bg {
+.background {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -308,7 +388,8 @@ div#bg {
     }
 }
 
-div#application {
+.application {
+    flex: 1;
     position: relative;
     display: flex;
     flex-flow: column nowrap;
@@ -317,7 +398,7 @@ div#application {
 
     header {
         order: 1;
-        flex: 100px 0 0;
+        flex: 64px 0 0;
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-content: center;
@@ -341,8 +422,22 @@ div#application {
         display: flex;
         flex-flow: column nowrap;
         align-items: center; 
-        margin: 10px 0 10px 0;
-        padding: 10px;
+        margin: 10px;
+
+        .error {
+            display: flex;
+            align-items: center;
+        
+            .icon-warning {
+                color: $lred;
+                margin-right: 10px;
+            }
+        
+            span.message {
+                color: $lred;
+                font-size: 20px;
+            }
+        }
     }
     
     footer {
@@ -357,48 +452,82 @@ div#application {
     }
 }
 
-div.overlay section.login-section {
+.overlay section.login-section, .overlay section.register-section {
     flex: auto;
     display: flex;
     align-items: center;
+    background: radial-gradient(ellipse at top, darken($teal, 40%), transparent),
+                radial-gradient(ellipse at bottom, darken($teal, 40%), transparent);
+    
+    &:before {
+        background: url("../images/bg.jpg");
+        opacity: .5;
+    }
 
     form {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 10px;
         overflow: hidden;
+        opacity: 0;
+        animation: fadeIn .4s ease .8s forwards; 
 
-        > * {
-            opacity: 0;
+        .alternative {
+            display: flex;
+            align-self: stretch;
+            .button {
+                flex: 1;
+                &.facebook {
+                    @include button($facebook);
+                }
+                &.twitter {
+                    @include button($twitter);
+                }
+            }
         }
 
+        .separator {
+            align-self: stretch;
+            position: relative;
+            margin: 20px 0 20px 0;
+            text-align: center;
+            &:before, &:after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                width: 42%;
+                border-top: 1px solid $teal;
+                border-bottom: 1px solid darken($teal, 40%);
+            }
+            &:before {
+                left: 0;
+            }
+            &:after {
+                right: 0;
+            }
+        }
         .title {
             font-size: 24px;
             margin: 32px 0 32px 0;
         }
 
-        .input-wrapper {
-            display: flex;
-            flex-flow: row nowrap;
-            margin: 4px 0 4px 0;
+        input {
+            width: 250px;
+            border-radius: 0 4px 4px 0;
+            border-left: 0;
+        }
 
-            label {
-                padding: 10px;
-                border: 1px solid $teal-border;
-                border-radius: 4px 0 0 4px;
-                border-right: 0;                
-                background: darken($teal-border, 20%);
-            }
-            .input {
-                width: 250px;
-                border-radius: 0 4px 4px 0;
-                border-left: 0;
-            }
+        .extra {
+            margin-top: 20px;
+            text-align: center;
         }
 
         .button.submit {
             padding: 6px 25px 6px 25px;
             margin-top: 20px;
         }
+
+        
     }
 }

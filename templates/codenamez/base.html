@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/clean.min.css' %}">
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/clean.min.css' %}">-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.min.css' %}">
     <script type="text/javascript">
         var csrf_token = '{{ csrf_token }}'
@@ -27,8 +27,8 @@
     </title>
 </head>
 <body>
-    <div class="team-none" id="bg"></div>
-    <div id="application">
+    <div class="background team-none"></div>
+    <section class="application">
         <header>
             <a href="{% url 'index' %}">{% createLogoBySize "small" %}</a>
             <div class="menu-col"></div>
@@ -45,5 +45,7 @@
         </main>
         <footer></footer>
     </div>
+    <section class="overlay hidden"></section>
+    <section class="notification"></section>
 </body>
 </html>

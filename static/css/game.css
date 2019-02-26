@@ -1,96 +1,127 @@
-main div.gameWrapper {
+main div.game-wrapper {
   flex: 1;
   display: flex;
   align-self: stretch;
   opacity: 0;
 }
 
-main div.gameWrapper section.col-l {
-  flex: 1;
+main div.game-wrapper > section {
+  border: 1px solid white;
 }
 
-main div.gameWrapper section.col-board {
+main div.game-wrapper section.col-1 {
+  display: grid;
+  grid-template-columns: 350px;
+  grid-template-rows: auto 550px;
+  grid-row-gap: 10px;
+  padding: 0 20px 0 20px;
+}
+
+main div.game-wrapper section.col-2 {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
 
-main div.gameWrapper section.col-board ul.board {
-  display: grid;
-  grid-template-columns: repeat(5, 200px);
-  grid-template-rows: repeat(5, 126px);
-  grid-gap: 5px 5px;
+main div.game-wrapper section.col-2 div.game-info {
+  display: flex;
 }
 
-main div.gameWrapper section.col-board ul.board li.card {
+main div.game-wrapper section.col-2 div.game-info span.name {
+  flex: 1;
+  border-bottom: 1px solid #00dfa6;
+  border-radius: 15px;
+  padding: 4px;
+  text-align: center;
+}
+
+main div.game-wrapper section.col-2 ul.board {
+  display: grid;
+  grid-template-columns: repeat(5, 180px);
+  grid-template-rows: repeat(5, 114px);
+  grid-gap: 10px 10px;
+}
+
+main div.game-wrapper section.col-2 ul.board li.card {
   position: relative;
   perspective: 1000px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .back {
+main div.game-wrapper section.col-2 ul.board li.card .back {
   background: #00dfa6 url("../images/cards/bword.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-orange-1 .back {
+main div.game-wrapper section.col-2 ul.board li.card.team-orange-1 .back {
   background: #ff6600 url("../images/cards/team-orange-1.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-orange-1 .front .type {
+main div.game-wrapper section.col-2 ul.board li.card.team-orange-1 .front .type {
   background-color: #ff6600;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-orange-2 .back {
+main div.game-wrapper section.col-2 ul.board li.card.team-orange-2 .back {
   background: #ff6600 url("../images/cards/team-orange-2.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-orange-2 .front .type {
+main div.game-wrapper section.col-2 ul.board li.card.team-orange-2 .front .type {
   background-color: #ff6600;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-purple-1 .back {
+main div.game-wrapper section.col-2 ul.board li.card.team-purple-1 .back {
   background: #660066 url("../images/cards/team-purple-1.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-purple-1 .front .type {
+main div.game-wrapper section.col-2 ul.board li.card.team-purple-1 .front .type {
   background-color: #660066;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-purple-2 .back {
+main div.game-wrapper section.col-2 ul.board li.card.team-purple-2 .back {
   background: #660066 url("../images/cards/team-purple-2.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.team-purple-2 .front .type {
+main div.game-wrapper section.col-2 ul.board li.card.team-purple-2 .front .type {
   background-color: #660066;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.bystander-1 .back {
+main div.game-wrapper section.col-2 ul.board li.card.bystander-1 .back {
   background: #bbb url("../images/cards/bystander-1.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.bystander-2 .back {
+main div.game-wrapper section.col-2 ul.board li.card.bystander-2 .back {
   background: #bbb url("../images/cards/bystander-2.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.assassin .back {
+main div.game-wrapper section.col-2 ul.board li.card.assassin .back {
   background: #000 url("../images/cards/assassin.jpg") no-repeat center top/cover;
 }
 
-main div.gameWrapper section.col-board ul.board li.card.assassin .front .type {
+main div.game-wrapper section.col-2 ul.board li.card.assassin .front .type {
   background-color: #000;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 5px;
   transition: transform .4s ease;
   transform-style: preserve-3d;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .front, main div.gameWrapper section.col-board ul.board li.card .flip-card .back {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card.guess-team-orange {
+  border: 1px solid #ff6600;
+  box-shadow: 0 0 8px #ff6600;
+}
+
+main div.game-wrapper section.col-2 ul.board li.card .flip-card.guess-team-purple {
+  border: 1px solid #990099;
+  box-shadow: 0 0 8px #990099;
+}
+
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .front, main div.game-wrapper section.col-2 ul.board li.card .flip-card .back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -98,14 +129,14 @@ main div.gameWrapper section.col-board ul.board li.card .flip-card .front, main 
   backface-visibility: hidden;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .front {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .front {
   background: #00dfa6 url("../images/cards/word.jpg") no-repeat center top/cover;
-  color: #04142e;
+  color: #031f24;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .front .type {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .front .type {
   position: absolute;
-  top: 16px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
   width: 14px;
@@ -113,44 +144,45 @@ main div.gameWrapper section.col-board ul.board li.card .flip-card .front .type 
   border-radius: 20px;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .front .word, main div.gameWrapper section.col-board ul.board li.card .flip-card .front .word-upside {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .front .word, main div.game-wrapper section.col-2 ul.board li.card .flip-card .front .word-upside {
   position: absolute;
   font-weight: bold;
   overflow: hidden;
   white-space: nowrap;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .front .word {
-  bottom: 24px;
-  left: 20px;
-  right: 20px;
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .front .word {
+  bottom: 20px;
+  left: 16px;
+  right: 16px;
   font-weight: bold;
   text-align: center;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .front .word-upside {
-  top: 50px;
-  left: 22px;
-  right: 66px;
-  font-size: 12px;
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .front .word-upside {
+  top: 44px;
+  left: 20px;
+  right: 60px;
+  font-size: 10px;
   font-style: italic;
   transform: rotate(-180deg);
   direction: rtl;
+  color: #074853;
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card .back {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card .back {
   transform: rotateY(180deg);
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card.normal {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card.normal {
   transform: rotateY(0deg);
 }
 
-main div.gameWrapper section.col-board ul.board li.card .flip-card.reversed {
+main div.game-wrapper section.col-2 ul.board li.card .flip-card.reversed {
   transform: rotateY(180deg);
 }
 
-main div.gameWrapper section.col-r {
+main div.game-wrapper section.col-3 {
   flex: 1;
   min-width: 200px;
 }
