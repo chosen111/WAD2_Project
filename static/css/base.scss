@@ -130,15 +130,15 @@ section.notification {
 }
 
 .input {
-    display: inline-flex;
-    flex-flow: row nowrap;
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 40px minmax(100px, 240px) auto;
     margin: 4px 0 4px 0;
 
     label {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
         border: 1px solid $teal-border;
         border-radius: 4px 0 0 4px;
         border-right: 0;                
@@ -171,9 +171,21 @@ section.notification {
         box-shadow: none;
         resize: none;
     }
+
+    .alert {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 0;
+        width: 40px;
+        color: $lred;  
+        animation: fadeInError .2s ease-in-out;
+    }
 }
-
-
+::placeholder {
+    font-size: 10px;
+    font-weight: 600;
+}
 
 .user {
     display: inline-flex;
@@ -212,27 +224,7 @@ section.notification {
     }
 }
 
-// #KEYFRAMES
-@keyframes rotate {
-	from {
-		transform: rotate(0);
-	}
-	to {
-		transform: rotate(360deg);
-	}
-}
 
-@keyframes blink {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
 
 .loading {
     align-self: stretch;
@@ -459,6 +451,9 @@ div#logo {
     background: radial-gradient(ellipse at top, darken($teal, 40%), transparent),
                 radial-gradient(ellipse at bottom, darken($teal, 40%), transparent);
     
+    opacity: 0;
+    animation: fadeIn .4s ease forwards; 
+    
     &:before {
         background: url("../images/bg.jpg");
         opacity: .5;
@@ -512,14 +507,17 @@ div#logo {
             margin: 32px 0 32px 0;
         }
 
-        input {
-            width: 250px;
-            border-radius: 0 4px 4px 0;
-            border-left: 0;
-        }
+        .input {
+            max-width: 280px;
+            input {
+                border-radius: 0 4px 4px 0;
+                border-left: 0;
+            }
+        }        
 
         .extra {
             margin-top: 20px;
+            font-size: 14px;
             text-align: center;
         }
 

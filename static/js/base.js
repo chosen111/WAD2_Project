@@ -48,11 +48,24 @@ var Button = {
 }
 
 var Input = {
-    create(ico, id, placeholder, cls, value) {
+    create(type, ico, id, placeholder, cls, value) {
         let $input = $("<div>", { class: "input" }).addClass(id).addClass(cls);
         if (ico) $("<label>", { for: id, class: ico }).appendTo($input);
-        $("<input>", { id: id, type: "text", name: id, value: value, placeholder: placeholder, size: 50 }).appendTo($input);
+        $("<input>", { id: id, type: type, name: id, value: value, placeholder: placeholder, size: 50 }).appendTo($input);
         return $input;
+    },
+    error($form, error) {
+        console.log($form);
+        console.log(error);
+        $form.find('.input.error').removeClass('error').children('.alert').remove();
+        for(let key in error) {
+            let $input = $form.find(`.input.${key}`).addClass('error');
+            if ($input.length == 0) Notification.push("icon-warning", `Cannot find the input: ${key}`, type="warning");
+
+            $("<i>", { class: "icon-warning alert" }).appendTo($input);
+            console.log($input);
+        }
+        console.log(error);
     }
 }
 
@@ -92,7 +105,7 @@ var Redirect = {
 // Authentication functions
 var Authentication = {
     login(href) {
-        Notification.push("icon-warning", "Test notification", type="alert", timeout=100);
+        Notification.push("icon-warning", "Test notification", type="alert");
         if (!href) return; // There is no href data on the element (console tampered maybe?)
 
         // Select the body element and append the main elements
@@ -111,8 +124,8 @@ var Authentication = {
         Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
         Button.create("icon-sq-twitter", "Twitter", "twitter").appendTo($alternative);
         $("<div>", { class: "separator", text: "OR" }).appendTo($form);
-        Input.create(ico="icon-user", id="username").appendTo($form);
-        Input.create(ico="icon-locked", id="password").appendTo($form);
+        Input.create(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
+        Input.create(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
         // Extra account options
         let $extra = $("<div>", { class: "extra" }).appendTo($form);
         $("<div>", { text: "Don't have an account? " }).append($("<a>", { class: "register", text: "Sign Up!" })).appendTo($extra);
@@ -126,10 +139,17 @@ var Authentication = {
                 data: $form.serialize(),
                 // If the login is successful, redirect to index page
                 success(response) {
-                    if (response['error']) return console.error(response['error']);
+                    if (response['error']) {
+                        let error = {
+                            username: "Invalid asd",
+                            password: "Invalid asd"
+                        }
+                        Input.error($form, error);
+                        return console.error(response['error']);
+                    }
                     Redirect.open(document.location.origin + response['redirect'])
                 },
-                fail() {
+                fail() {                    
                     console.log(arguments);
                 }
             })
@@ -165,36 +185,45 @@ var Authentication = {
         })
 
         // Prepare the form elements
-        let $form = $("<form>", { id: "register-form" });
+        // Prepare the form elements
+        let $form = $("<form>", { id: "login-form" });
         $("<div>", { class: "title", text: "Sign Up" }).appendTo($form);
-        $("<div>", { class: "input-wrapper" }).append(
-            $("<label>", { for: "username", class: "icon-user" })).append(
-            $("<input>", { class: "input", id: "username", type: "text", name: "username", value: "", size: 50 })).appendTo($form);
-        $("<div>", { class: "input-wrapper" }).append(
-            $("<label>", { for: "email", class: "icon-user" })).append(
-            $("<input>", { class: "input", id: "email", type: "text", name: "email", value: "", size: 50 })).appendTo($form);
-        $("<div>", { class: "input-wrapper" }).append(
-            $("<label>", { for: "password", class: "icon-encryption" })).append(
-            $("<input>", { class: "input", id: "password", type: "password", name: "password", value: "", size: 50 })).appendTo($form);
-        $("<div>", { class: "input-wrapper" }).append(
-            $("<label>", { for: "confirm-password", class: "icon-encryption" })).append(
-            $("<input>", { class: "input", id: "confirm-password", type: "password", name: "confirm-password", value: "", size: 50 })).appendTo($form);
-        let $submit = $("<div>", { class: "button submit", text: "Log In" }).appendTo($form);
+        let $alternative = $("<div>", { class: "alternative" }).appendTo($form);
+        Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
+        Button.create("icon-sq-twitter", "Twitter", "twitter").appendTo($alternative);
+        $("<div>", { class: "separator", text: "OR" }).appendTo($form);
+        Input.create(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
+        Input.create(type="text", ico="icon-mail", id="email", placeholder="E-MAIL ADDRESS").appendTo($form);
+        Input.create(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
+        Input.create(type="password", ico="icon-locked", id="confirm-password", placeholder="PASSWORD").appendTo($form);
+        // Extra account options
+        let $extra = $("<div>", { class: "extra" }).appendTo($form);
+        $("<div>", { text: "Don't have an account? " }).append($("<a>", { class: "register", text: "Sign Up!" })).appendTo($extra);
+        $("<div>").append($("<a>", { class: "recover", text: "Forgot password?" })).appendTo($extra);
+        Button.create("icon-check", "Register", "submit").appendTo($form);
         // When the submit button is clicked post the data to our login url
-        $submit.on('click', function() {
+        $form.on('submit', function(evt) {
             $.post({
                 headers: { "X-CSRFToken": csrf_token },
-                url: '/codenamez/register',
+                url: document.location.origin + href,
                 data: $form.serialize(),
                 // If the login is successful, redirect to index page
                 success(response) {
-                    if (response['error']) return console.error(response['error']);
+                    if (response['error']) {
+                        let error = {
+                            username: "Invalid asd",
+                            password: "Invalid asd"
+                        }
+                        Input.error($form, error);
+                        return console.error(response['error']);
+                    }
                     Redirect.open(document.location.origin + response['redirect'])
                 },
-                fail() {
+                fail() {                    
                     console.log(arguments);
                 }
             })
+            evt.preventDefault();
         })
         // Insert the form elements in our login section and the overlay in our body page
         $form.appendTo($loginSection);

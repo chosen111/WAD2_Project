@@ -16,6 +16,7 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  text-shadow: 1px 1px 0 #000;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -78,6 +79,40 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fadeInError {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    color: #ff8e7a;
+  }
+  100% {
+    color: #ff6347;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -219,8 +254,9 @@ section.notification div.notification i {
 }
 
 .input {
-  display: inline-flex;
-  flex-flow: row nowrap;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 40px minmax(100px, 240px) auto;
   margin: 4px 0 4px 0;
 }
 
@@ -228,7 +264,6 @@ section.notification div.notification i {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
   border: 1px solid #00936d;
   border-radius: 4px 0 0 4px;
   border-right: 0;
@@ -267,6 +302,21 @@ section.notification div.notification i {
   background-color: transparent;
 }
 
+.input .alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 0;
+  width: 40px;
+  color: #ff6347;
+  animation: fadeInError .2s ease-in-out;
+}
+
+::placeholder {
+  font-size: 10px;
+  font-weight: 600;
+}
+
 .user {
   display: inline-flex;
   flex-flow: row nowrap;
@@ -302,27 +352,6 @@ section.notification div.notification i {
 .user:hover {
   background-color: rgba(0, 100, 85, 0.4);
   border-color: #00936d;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes blink {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
 }
 
 .loading {
@@ -559,6 +588,8 @@ div#logo.small:hover {
   display: flex;
   align-items: center;
   background: radial-gradient(ellipse at top, #00130e, transparent), radial-gradient(ellipse at bottom, #00130e, transparent);
+  opacity: 0;
+  animation: fadeIn .4s ease forwards;
 }
 
 .overlay section.login-section:before, .overlay section.register-section:before {
@@ -638,14 +669,18 @@ div#logo.small:hover {
   margin: 32px 0 32px 0;
 }
 
-.overlay section.login-section form input, .overlay section.register-section form input {
-  width: 250px;
+.overlay section.login-section form .input, .overlay section.register-section form .input {
+  max-width: 280px;
+}
+
+.overlay section.login-section form .input input, .overlay section.register-section form .input input {
   border-radius: 0 4px 4px 0;
   border-left: 0;
 }
 
 .overlay section.login-section form .extra, .overlay section.register-section form .extra {
   margin-top: 20px;
+  font-size: 14px;
   text-align: center;
 }
 

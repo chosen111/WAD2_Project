@@ -1,1 +1,8 @@
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } };
+@keyframes fadeInError {
+	0% { opacity: 0 }
+ 	50% { opacity: 1; color: lighten($lred, 10%); }
+	100% { color: $lred }
+}
+@keyframes rotate { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes blink { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
