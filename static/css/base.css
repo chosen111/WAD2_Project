@@ -142,6 +142,141 @@ a:hover {
   text-shadow: #00dfa6 0 0 1px;
 }
 
+.is-tooltip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  padding: 4px 6px 4px 6px;
+  border-radius: 2px;
+  border-color: #00dfa6;
+  border: 1px solid;
+  background-color: #031f24;
+  font-size: 13px;
+  white-space: pre;
+  z-index: 5000;
+  transition: opacity .2s ease;
+}
+
+.is-tooltip.alert {
+  border-color: #ff6347;
+  border: 1px solid;
+  color: #ff6347;
+  background-color: #2e0700;
+}
+
+.is-tooltip:before, .is-tooltip:after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  pointer-events: none;
+}
+
+.is-tooltip.top:before, .is-tooltip.top:after, .is-tooltip.bottom:before, .is-tooltip.bottom:after {
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+
+.is-tooltip.left:before, .is-tooltip.left:after, .is-tooltip.right:before, .is-tooltip.right:after {
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.is-tooltip.top:before, .is-tooltip.top:after {
+  top: 0;
+}
+
+.is-tooltip.bottom:before, .is-tooltip.bottom:after {
+  top: 100%;
+}
+
+.is-tooltip.left:before, .is-tooltip.left:after {
+  left: 0;
+}
+
+.is-tooltip.right:before, .is-tooltip.right:after {
+  left: 100%;
+}
+
+.is-tooltip.right:before {
+  border-left: 5px solid;
+}
+
+.is-tooltip.right:after {
+  z-index: 10;
+  margin-left: -1px;
+}
+
+.is-tooltip.right.default:after {
+  border-left: 5px solid #031f24;
+}
+
+.is-tooltip.right.alert:after {
+  border-left: 5px solid #2e0700;
+}
+
+.is-tooltip.bottom:before {
+  border-top: 5px solid;
+}
+
+.is-tooltip.bottom:after {
+  margin-top: -1px;
+  z-index: 10;
+}
+
+.is-tooltip.bottom.default:after {
+  border-top: 5px solid #031f24;
+}
+
+.is-tooltip.bottom.alert:after {
+  border-top: 5px solid #2e0700;
+}
+
+.is-tooltip.left:before {
+  left: -13px;
+  border-right: 5px solid;
+}
+
+.is-tooltip.left:after {
+  left: -12px;
+  z-index: 10;
+}
+
+.is-tooltip.left.default:after {
+  border-right: 5px solid #031f24;
+}
+
+.is-tooltip.left.alert:after {
+  border-right: 5px solid #2e0700;
+}
+
+.is-tooltip.top:before {
+  top: -6px;
+  border-bottom: 5px solid;
+}
+
+.is-tooltip.top:after {
+  top: -5px;
+  z-index: 10;
+}
+
+.is-tooltip.top.default:after {
+  border-bottom: 5px solid #031f24;
+}
+
+.is-tooltip.top.alert:after {
+  border-bottom: 5px solid #2e0700;
+}
+
+.is-tooltip i {
+  margin-right: 5px;
+}
+
 .overlay {
   position: fixed;
   top: 0;

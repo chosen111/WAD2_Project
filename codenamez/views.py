@@ -43,9 +43,16 @@ def user_login(request):
                 login(request, user)
                 response['redirect'] = reverse('index')
             else:
-                response['error'] = "Your account is disabled"
+                response['error'] = { 
+                    'notification': "The account you are trying to access is disabled !" 
+                }
         else:
-            response['error'] = "The username or password is invalid!"
+            response['error'] = { 
+                'form': {
+                    'username': "The username or password is invalid !", 
+                    'password': "The username or password is invalid !"
+                }
+            }
     else:
         return HttpResponseRedirect(reverse('index'))
     

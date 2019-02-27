@@ -47,30 +47,35 @@ var Button = {
     }
 }
 
-var Input = {
-    create(type, ico, id, placeholder, cls, value) {
+var Form = {
+    input(type, ico, id, placeholder, cls, value) {
         let $input = $("<div>", { class: "input" }).addClass(id).addClass(cls);
         if (ico) $("<label>", { for: id, class: ico }).appendTo($input);
         $("<input>", { id: id, type: type, name: id, value: value, placeholder: placeholder, size: 50 }).appendTo($input);
         return $input;
     },
-    error($form, error) {
-        console.log($form);
-        console.log(error);
-        $form.find('.input.error').removeClass('error').children('.alert').remove();
-        for(let key in error) {
-            let $input = $form.find(`.input.${key}`).addClass('error');
-            if ($input.length == 0) Notification.push("icon-warning", `Cannot find the input: ${key}`, type="warning");
+    error: {
+        show($form, error) {
+            if (!error) return;
 
-            $("<i>", { class: "icon-warning alert" }).appendTo($input);
-            console.log($input);
+            for(let key in error) {
+                let $input = $form.find(`.input.${key}`).addClass('error');
+                if ($input.length == 0) Notification.push("icon-warning", `Cannot find the input: ${key}`, type="warning");
+
+                let $icon = $("<i>", { class: "icon-warning alert" }).appendTo($input);
+                Tooltip.add($icon, ico="icon-warning", text=error[key], type="alert");
+            }
+        },
+        clear($form) {
+            $form.find('.input.error').removeClass('error').children('.alert').remove();
         }
-        console.log(error);
     }
 }
 
 var Notification = {
     push(ico, text, type, timeout=5) {
+        if (!text) return;
+        
         let $section = $("section.notification");
         let $notification = $("<div>", { class: "notification" }).addClass(type);
         if (ico) $("<i>", { class: ico }).appendTo($notification);
@@ -86,6 +91,63 @@ var Notification = {
                 $notification.remove();
             }
         })
+    }
+}
+
+// Tooltip functions
+var Tooltip = {
+    add(el, ico, text, type="default") {
+        el.addClass('has-tooltip').data({ tooltip: text, tooltipType: type, tooltipIco: ico });
+        return el;
+    },
+    show(el) {
+        let $tooltip = $("<div>", { class: `is-tooltip ${el.data('tooltip-type')}` }).appendTo($('body'));
+        if (el.data('tooltip-ico')) $("<i>", { class: el.data('tooltip-ico') }).appendTo($tooltip);
+        $("<span>", { class: "text", text: el.data('tooltip') }).appendTo($tooltip);
+
+        el.data('tooltip-ref', $tooltip);
+
+        // Huge calculations to determine where the tooltip should be positioned, don't even ask
+        let { left, top } = el.offset();
+        let preset = {
+          top: document.documentElement.clientHeight-top+5,
+          middle: top+el[0].offsetHeight/2-$tooltip[0].offsetHeight/2,
+          bottom: top+el[0].offsetHeight+5,
+          left: document.documentElement.clientWidth-left+5,
+          center: left+el[0].offsetWidth/2-$tooltip[0].offsetWidth/2,
+          right: left+el[0].offsetWidth+5
+        }
+        let position = { 
+          x: { css: "left", px: preset.center },
+          y: { css: "bottom", px: preset.top }
+        }
+        let arrow = "bottom";
+
+        if (position.x.px - $tooltip[0].offsetWidth <= 0 || position.x.px + $tooltip[0].offsetWidth >= document.documentElement.clientWidth) {
+          position.y = { css: "top", px: preset.middle }
+          if (position.x.px - $tooltip[0].offsetWidth <= 0) {
+            position.x = { css: "left", px: preset.right }
+            arrow = "left";
+          }
+          if (position.x.px + $tooltip[0].offsetWidth >= document.documentElement.clientWidth) {
+            position.x = { css: "right", px: preset.left }
+            arrow = "right"
+          }
+        }
+        else {
+          if (top - $tooltip[0].offsetHeight - 10 <= 0) {
+            position.y = { css: "top", px: preset.bottom }
+            arrow = "top";
+          }      
+        }
+        $tooltip.css(position.x.css, position.x.px).css(position.y.css, position.y.px);
+        $tooltip.addClass(arrow);
+    },
+    hide(el) {
+        $tooltip = el.data('tooltip-ref');
+        if (!$tooltip) return;
+
+        $tooltip.remove();
     }
 }
 
@@ -105,11 +167,11 @@ var Redirect = {
 // Authentication functions
 var Authentication = {
     login(href) {
-        Notification.push("icon-warning", "Test notification", type="alert");
+        //Notification.push("icon-warning", "Test notification", type="alert");
         if (!href) return; // There is no href data on the element (console tampered maybe?)
 
-        // Select the body element and append the main elements
-        let $overlay = $('.overlay');
+        // Select the overlay element and append the main elements
+        let $overlay = $('.overlay').empty();
         let $loginSection = $("<section>", { class: 'login-section' }).appendTo($overlay);
         let $close = $("<div>", { class: "icon-close" }).appendTo($loginSection);
         // When the close button is clicked hide the overlay
@@ -124,8 +186,8 @@ var Authentication = {
         Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
         Button.create("icon-sq-twitter", "Twitter", "twitter").appendTo($alternative);
         $("<div>", { class: "separator", text: "OR" }).appendTo($form);
-        Input.create(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
-        Input.create(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
+        Form.input(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
+        Form.input(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
         // Extra account options
         let $extra = $("<div>", { class: "extra" }).appendTo($form);
         $("<div>", { text: "Don't have an account? " }).append($("<a>", { class: "register", text: "Sign Up!" })).appendTo($extra);
@@ -133,6 +195,7 @@ var Authentication = {
         Button.create("icon-rarrow", "Log In", "submit").appendTo($form);
         // When the submit button is clicked post the data to our login url
         $form.on('submit', function(evt) {
+            Form.error.clear($form);
             $.post({
                 headers: { "X-CSRFToken": csrf_token },
                 url: document.location.origin + href,
@@ -140,17 +203,14 @@ var Authentication = {
                 // If the login is successful, redirect to index page
                 success(response) {
                     if (response['error']) {
-                        let error = {
-                            username: "Invalid asd",
-                            password: "Invalid asd"
-                        }
-                        Input.error($form, error);
-                        return console.error(response['error']);
+                        Form.error.show($form, response['error']['form']);
+                        Notification.push("icon-warning", response['error']['notification'], "warning");
+                        return;
                     }
                     Redirect.open(document.location.origin + response['redirect'])
                 },
                 fail() {                    
-                    console.log(arguments);
+                    console.error(arguments);
                 }
             })
             evt.preventDefault();
@@ -172,11 +232,8 @@ var Authentication = {
     register(href) {
         if (!href) return; // There is no href data on the element (console tampered maybe?)
 
-        // Select the body element and append the main elements
-        let $overlay = $('.overlay');
-
-        $overlay.empty();
-
+        // Select the overlay element and append the main elements
+        let $overlay = $('.overlay').empty();
         let $loginSection = $("<section>", { class: 'register-section' }).appendTo($overlay);
         let $close = $("<div>", { class: "icon-close" }).appendTo($loginSection);
         // When the close button is clicked hide the overlay
@@ -191,17 +248,18 @@ var Authentication = {
         Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
         Button.create("icon-sq-twitter", "Twitter", "twitter").appendTo($alternative);
         $("<div>", { class: "separator", text: "OR" }).appendTo($form);
-        Input.create(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
-        Input.create(type="text", ico="icon-mail", id="email", placeholder="E-MAIL ADDRESS").appendTo($form);
-        Input.create(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
-        Input.create(type="password", ico="icon-locked", id="confirm-password", placeholder="PASSWORD").appendTo($form);
+        Form.input(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
+        Form.input(type="text", ico="icon-mail", id="email", placeholder="E-MAIL ADDRESS").appendTo($form);
+        Form.input(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
+        Form.input(type="password", ico="icon-locked", id="confirm-password", placeholder="PASSWORD").appendTo($form);
         // Extra account options
         let $extra = $("<div>", { class: "extra" }).appendTo($form);
-        $("<div>", { text: "Don't have an account? " }).append($("<a>", { class: "register", text: "Sign Up!" })).appendTo($extra);
+        $("<div>", { text: "Already have an account? " }).append($("<a>", { class: "login", text: "Log In!" })).appendTo($extra);
         $("<div>").append($("<a>", { class: "recover", text: "Forgot password?" })).appendTo($extra);
         Button.create("icon-check", "Register", "submit").appendTo($form);
         // When the submit button is clicked post the data to our login url
         $form.on('submit', function(evt) {
+            Form.error.clear($form);
             $.post({
                 headers: { "X-CSRFToken": csrf_token },
                 url: document.location.origin + href,
@@ -213,7 +271,7 @@ var Authentication = {
                             username: "Invalid asd",
                             password: "Invalid asd"
                         }
-                        Input.error($form, error);
+                        Form.error.show($form, error);
                         return console.error(response['error']);
                     }
                     Redirect.open(document.location.origin + response['redirect'])
@@ -254,7 +312,7 @@ var Authentication = {
 
 // When document is ready
 $(document).ready(function() {
-    $(document).on('keyup', function(evt) {
+    $(document.body).on('keyup', function(evt) {
         // If the Escape key is released
         if (evt.key === 'Escape') {
             // Remove the overlay
@@ -262,18 +320,26 @@ $(document).ready(function() {
         }
     })
 
-    $(document).on('click', '.register', function(evt) {
+    $(document.body).on('click', '.register', function(evt) {
         let href = $(this).data('href') || "/codenamez/register/";
         Authentication.register(href);
     })
 
-    $(document).on('click', '.login', function(evt) {
-        let href = $(this).data('href');
+    $(document.body).on('click', '.login', function(evt) {
+        let href = $(this).data('href') || "/codenamez/login/";
         Authentication.login(href);
     })
 
-    $(document).on('click', '.logout', function(evt) {
+    $(document.body).on('click', '.logout', function(evt) {
         let href = $(this).data('href');
         Authentication.logout(href);
     })
+
+    $(document.body).on('mouseenter', '[class*="has-tooltip"]', function(evt) {
+        Tooltip.show($(this));
+	})
+
+	$(document.body).on('mouseleave', '[class*="has-tooltip"]', function(evt) { 
+		Tooltip.hide($(this));
+	})
 })
