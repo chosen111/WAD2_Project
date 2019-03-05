@@ -264,6 +264,7 @@ var Authentication = {
                         return;
                     }
                     Overlay.remove(forced=false);
+                    $form.trigger("reset");
                     Redirect.open(document.location.origin + response['redirect'])
                 },
                 fail() {                    
@@ -314,7 +315,7 @@ var Authentication = {
         $("<div>", { text: "Already have an account? " }).append($("<a>", { class: "login", text: "Log In!" })).appendTo($extra);
         $("<div>").append($("<a>", { class: "recover", text: "Forgot password?" })).appendTo($extra);
         Button.create("icon-check", "Register", "submit").appendTo($form);
-        // When the submit button is clicked post the data to our login url
+        // When the submit button is clicked post the data to our register url
         $form.on('submit', function(evt) {
             Form.error.clear($form);
             if(Form.validate($form)) {

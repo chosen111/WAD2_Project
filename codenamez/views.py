@@ -9,6 +9,8 @@ from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GameList
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
+from django.db import IntegrityError
+
 def index(request):
     response = { }
     try:
@@ -33,45 +35,26 @@ def index(request):
 
 def user_register(request):
     response = {}
-    print("register")
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        confirmPassword = request.POST.get('confirm-password')
-        print(username)
-        print(email)
-        print(password)
-        print(confirmPassword)
+        confirmPassword = request.POST.get('confirmPassword')
+        ipaddress = get_client_ip(request)
 
-        #user_form = UserForm(data=request.POST)
-        #profile_form = UserProfileForm(data=request.POST)
-
-        #if user_form.is_valid() and profile_form.is_valid():
-        #    user = user_form.save()
-        #    user.set_password(user.password)
-        #    user.save()
-
-        #    profile = profile_form.save(commit=False)
-        #    profile.user = user
-
-        #    if 'picture' in request.FILES:
-        #        profile.picture = request.FILES['picture']
-
-        #    profile.save()
-        #else:
-        #    print(user_form.errors, profile_form.errors)
+        try:
+            user = User(username=username, email=email)
+            user.set_password(password)
+            user.save()
+        except IntegrityError as e:
+            add_error_to_form(response, "username", "E_USERNAME_EXISTS")
+        else:
+            profile = UserProfile(user=user, ipaddress=ipaddress)
+            profile.save()
     else:
         return HttpResponseRedirect(reverse('index'))
 
     return JsonResponse(response)
-
-    #context_dict = {
-    #    'user_form': user_form,
-    #    'profile_form': profile_form,
-    #    'registered': registered,
-    #}
-    #return render(request, 'rango/register.html', context_dict)
 
 def user_login(request):
     response = {}
@@ -85,18 +68,10 @@ def user_login(request):
                 login(request, user)
                 response['redirect'] = reverse('index')
             else:
-                response['error'] = { 
-                    'form': {
-                        'username': "E_AUTH_DISABLED"
-                    }
-                }
+                add_error_to_form(response, "username", "E_AUTH_DISABLED")
         else:
-            response['error'] = { 
-                'form': {
-                    'username': "E_AUTH_MISMATCH", 
-                    'password': "E_AUTH_MISMATCH"
-                }
-            }
+            add_error_to_form(response, "username", "E_AUTH_MISMATCH")
+            add_error_to_form(response, "password", "E_AUTH_MISMATCH")
     else:
         return HttpResponseRedirect(reverse('index'))
     
@@ -130,7 +105,6 @@ def show_profile(request, profileId):
 
 @login_required
 def show_game(request, gameId):
-    response = { }
     #try:
         #game = Game.objects.get(id=uuid.UUID(gameId))
         #is_playing = GameList.objects.get(user=request.user, game=game)
@@ -142,5 +116,22 @@ def show_game(request, gameId):
         #response['error'] = "The game you are trying to access does not exist!"
     #except GameList.DoesNotExist:
         #response['error'] = "You are not currently invited to play in " + game.name
-        
-    return render(request, 'codenamez/game.html', response)
+    return render(request, 'codenamez/game.html', { })
+
+# Utility functions
+def add_error_to_form(obj, id, error):
+    if "error" not in obj: obj["error"] = { }
+    if "form" not in obj["error"]: obj["error"]["form"] = { }
+    obj["error"]["form"][id] = error
+
+def add_error_to_notification(obj, error):
+    if "error" not in obj: obj["error"] = { }
+    obj["error"]["notification"] = error
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
