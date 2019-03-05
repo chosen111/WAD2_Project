@@ -31,6 +31,48 @@ def index(request):
             
     return render(request, 'codenamez/index.html', response)
 
+def user_register(request):
+    response = {}
+    print("register")
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirmPassword = request.POST.get('confirm-password')
+        print(username)
+        print(email)
+        print(password)
+        print(confirmPassword)
+
+        #user_form = UserForm(data=request.POST)
+        #profile_form = UserProfileForm(data=request.POST)
+
+        #if user_form.is_valid() and profile_form.is_valid():
+        #    user = user_form.save()
+        #    user.set_password(user.password)
+        #    user.save()
+
+        #    profile = profile_form.save(commit=False)
+        #    profile.user = user
+
+        #    if 'picture' in request.FILES:
+        #        profile.picture = request.FILES['picture']
+
+        #    profile.save()
+        #else:
+        #    print(user_form.errors, profile_form.errors)
+    else:
+        return HttpResponseRedirect(reverse('index'))
+
+    return JsonResponse(response)
+
+    #context_dict = {
+    #    'user_form': user_form,
+    #    'profile_form': profile_form,
+    #    'registered': registered,
+    #}
+    #return render(request, 'rango/register.html', context_dict)
+
 def user_login(request):
     response = {}
     if request.method == 'POST':
@@ -44,13 +86,15 @@ def user_login(request):
                 response['redirect'] = reverse('index')
             else:
                 response['error'] = { 
-                    'notification': "The account you are trying to access is disabled !" 
+                    'form': {
+                        'username': "E_AUTH_DISABLED"
+                    }
                 }
         else:
             response['error'] = { 
                 'form': {
-                    'username': "The username or password is invalid !", 
-                    'password': "The username or password is invalid !"
+                    'username': "E_AUTH_MISMATCH", 
+                    'password': "E_AUTH_MISMATCH"
                 }
             }
     else:

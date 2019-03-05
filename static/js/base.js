@@ -1,3 +1,19 @@
+var LANG = {
+    E_USERNAME_INVALID: "The username is invalid!",
+    E_USERNAME_RANGE: "The username must have between 3 and 18 characters!",
+    E_USERNAME_EXISTS: "The username already exists!",
+    E_AUTH_MISMATCH: "Username or password mismatch!",
+    E_AUTH_DISABALED: "The account is currently disabled",
+    E_PASSWORD_MISMATCH: "Password mismatch!",
+    E_PASSWORD_RANGE: "The password must have between 6 and 18 characters!",
+    E_EMAIL_INVALID: "The e-mail is invalid!",
+    I_REGISTER_SUCCESS: "Your account has been successfully created!",
+
+    get(key) {
+        return this[key] || key;
+    }
+}
+
 // Overlay functions
 var Overlay = {
     // Show overlay
@@ -47,23 +63,63 @@ var Button = {
     }
 }
 
+var Validation = {
+    register(data) {
+        let error = { }
+        if (!RegExp("^.{6,18}$").test(data.username)) {
+            error.username = "E_USERNAME_RANGE";
+        }
+        else if (!RegExp("^[a-zA-Z0-9]+([\._\s\-]?[a-zA-Z0-9])*$").test(data.username)) {
+            error.username = "E_USERNAME_INVALID";
+        }
+        if (!RegExp("^.{6,18}$").test(data.password)) {
+            error.password = "E_PASSWORD_RANGE";
+        }
+        else if (data.password !== data.confirmPassword) {
+            error.password = "E_PASSWORD_MISMATCH";
+            error.confirmPassword = "E_PASSWORD_MISMATCH";
+        }
+        if (!RegExp("^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$").test(data.email)) {
+            error.email = "E_EMAIL_INVALID";
+        }
+        return error;
+    }
+}
+
 var Form = {
+    serialize($form) {
+        let $input = $form.find('input');
+        let data = { }
+
+        for (let i = 0; i < $input.length; i++) {
+            data[$input[i].id] = $input[i].value
+        }
+        return data;
+    },
+    validate($form) {
+        let error = Validation[$form.attr("id")].call($form, Form.serialize($form));
+        if (!$.isEmptyObject(error)) {
+            Form.error.show($form, error);
+            return false;
+        }
+        return true;
+    },
     input(type, ico, id, placeholder, cls, value) {
         let $input = $("<div>", { class: "input" }).addClass(id).addClass(cls);
         if (ico) $("<label>", { for: id, class: ico }).appendTo($input);
-        $("<input>", { id: id, type: type, name: id, value: value, placeholder: placeholder, size: 50 }).appendTo($input);
+        $("<input>", { id: id, type: type, name: id, value: value || "", placeholder: placeholder, size: 50 }).appendTo($input);
         return $input;
     },
     error: {
         show($form, error) {
-            if (!error) return;
+            if (!error) return false;
 
             for(let key in error) {
                 let $input = $form.find(`.input.${key}`).addClass('error');
                 if ($input.length == 0) Notification.push("icon-warning", `Cannot find the input: ${key}`, type="warning");
 
                 let $icon = $("<i>", { class: "icon-warning alert" }).appendTo($input);
-                Tooltip.add($icon, ico="icon-warning", text=error[key], type="alert");
+                Tooltip.add($icon, ico="icon-warning", text=LANG.get(error[key]), type="alert");
             }
         },
         clear($form) {
@@ -79,7 +135,7 @@ var Notification = {
         let $section = $("section.notification");
         let $notification = $("<div>", { class: "notification" }).addClass(type);
         if (ico) $("<i>", { class: ico }).appendTo($notification);
-        $("<span>", { class: "message", text: text }).appendTo($notification);
+        $("<span>", { class: "message", text: LANG.get(text) }).appendTo($notification);
 
         $section.append($notification);
         $notification.animate({ height: 32, opacity: 1 });
@@ -180,7 +236,7 @@ var Authentication = {
         })
 
         // Prepare the form elements
-        let $form = $("<form>", { id: "login-form" });
+        let $form = $("<form>", { id: "login" });
         $("<div>", { class: "title", text: "Log In" }).appendTo($form);
         let $alternative = $("<div>", { class: "alternative" }).appendTo($form);
         Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
@@ -207,6 +263,7 @@ var Authentication = {
                         Notification.push("icon-warning", response['error']['notification'], "warning");
                         return;
                     }
+                    Overlay.remove(forced=false);
                     Redirect.open(document.location.origin + response['redirect'])
                 },
                 fail() {                    
@@ -234,15 +291,15 @@ var Authentication = {
 
         // Select the overlay element and append the main elements
         let $overlay = $('.overlay').empty();
-        let $loginSection = $("<section>", { class: 'register-section' }).appendTo($overlay);
-        let $close = $("<div>", { class: "icon-close" }).appendTo($loginSection);
+        let $registerSection = $("<section>", { class: 'register-section' }).appendTo($overlay);
+        let $close = $("<div>", { class: "icon-close" }).appendTo($registerSection);
         // When the close button is clicked hide the overlay
         $close.on('click', function() {
             Overlay.remove(forced=false);
         })
 
         // Prepare the form elements
-        let $form = $("<form>", { id: "register-form" });
+        let $form = $("<form>", { id: "register" });
         $("<div>", { class: "title", text: "Sign Up" }).appendTo($form);
         let $alternative = $("<div>", { class: "alternative" }).appendTo($form);
         Button.create("icon-sq-facebook", "Facebook", "facebook").appendTo($alternative);
@@ -251,7 +308,7 @@ var Authentication = {
         Form.input(type="text", ico="icon-user", id="username", placeholder="USERNAME").appendTo($form);
         Form.input(type="text", ico="icon-mail", id="email", placeholder="E-MAIL ADDRESS").appendTo($form);
         Form.input(type="password", ico="icon-locked", id="password", placeholder="PASSWORD").appendTo($form);
-        Form.input(type="password", ico="icon-locked", id="confirm-password", placeholder="PASSWORD").appendTo($form);
+        Form.input(type="password", ico="icon-locked", id="confirmPassword", placeholder="PASSWORD").appendTo($form);
         // Extra account options
         let $extra = $("<div>", { class: "extra" }).appendTo($form);
         $("<div>", { text: "Already have an account? " }).append($("<a>", { class: "login", text: "Log In!" })).appendTo($extra);
@@ -260,30 +317,31 @@ var Authentication = {
         // When the submit button is clicked post the data to our login url
         $form.on('submit', function(evt) {
             Form.error.clear($form);
-            $.post({
-                headers: { "X-CSRFToken": csrf_token },
-                url: document.location.origin + href,
-                data: $form.serialize(),
-                // If the login is successful, redirect to index page
-                success(response) {
-                    if (response['error']) {
-                        let error = {
-                            username: "Invalid asd",
-                            password: "Invalid asd"
+            if(Form.validate($form)) {
+                $.post({
+                    headers: { "X-CSRFToken": csrf_token },
+                    url: document.location.origin + href,
+                    data: $form.serialize(),
+                    // If the register is successful, close the overlay
+                    success(response) {
+                        if (response['error']) {
+                            Form.error.show($form, response['error']['form']);
+                            Notification.push("icon-warning", response['error']['notification'], "warning");
+                            return;
                         }
-                        Form.error.show($form, error);
-                        return console.error(response['error']);
+                        Overlay.remove(forced=false);
+                        $form.trigger("reset");
+                        Notification.push("icon-check", "I_REGISTER_SUCCESS");
+                    },
+                    fail() {                    
+                        console.log(arguments);
                     }
-                    Redirect.open(document.location.origin + response['redirect'])
-                },
-                fail() {                    
-                    console.log(arguments);
-                }
-            })
+                })
+            }
             evt.preventDefault();
         })
         // Insert the form elements in our login section and the overlay in our body page
-        $form.appendTo($loginSection);
+        $form.appendTo($registerSection);
 
         // Animate the overlay and the login window
         let height = $form.height();
@@ -292,8 +350,7 @@ var Authentication = {
         Overlay.show(forced=false); 
         $form.delay(400).animate({ height: height }, {
             complete() {
-                $form.css({ height: 'auto' });
-                console.log($form.css("height"));
+                $form.css({ height: 'auto' }).trigger("reset");
             }
         })
     },
