@@ -127,6 +127,10 @@ body {
   color: #00dfa6;
 }
 
+li {
+  list-style: none;
+}
+
 a {
   color: #46ffd0;
   text-decoration: inherit;

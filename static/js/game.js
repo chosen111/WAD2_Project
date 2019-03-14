@@ -31,7 +31,6 @@ $(document).ready(function() {
 
         if (response.join) {
             Game.create(response.join);
-            
         } 
         else if (response.leave) {
             console.log("Leaving game " + response.leave);

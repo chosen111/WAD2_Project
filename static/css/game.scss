@@ -86,10 +86,9 @@ main div.game-wrapper {
                     transition: transform .4s ease;
                     transform-style: preserve-3d;
 
-                    &.guess-team-orange { border: 1px solid $team-orange; box-shadow: 0 0 8px $team-orange; }
+                    &.guess-team-orange { border: 1px solid $team-orange; box-shadow: 0 0 100px $team-orange; }
                     &.guess-team-purple { border: 1px solid lighten($team-purple, 10%); box-shadow: 0 0 8px lighten($team-purple, 10%); }
-
-                                     
+  
                     .front, .back {
                         position: absolute;
                         width: 100%;
