@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'codenamez/base.html' %}
+{% load staticfiles %}
+{% load codenamez_template_tags %}
 
-</body>
-</html>
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <h1>About Page</h1>
+{% endblock %}
