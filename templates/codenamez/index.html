@@ -15,7 +15,9 @@
         {% endif %}
         {% createButton "play" "Start a game" %}
         {% createButton "play" "Join a game" %}
+        {% createButton "how_to_play" "How to Play" %}
         {% createButton "options" "Options" %}
+
 
         {% if user.is_authenticated %}
             {% if user.is_staff %}

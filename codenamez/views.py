@@ -48,6 +48,10 @@ def about(request):
     print(request.user)
     return response
 
+def how_to_play(request):
+    response = {}
+    return render(request, 'codenamez/howtoplay.html',response)
+
 def user_register(request):
     response = {}
     if request.method == 'POST':
