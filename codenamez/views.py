@@ -50,7 +50,8 @@ def about(request):
 
 def how_to_play(request):
     response = {}
-    return render(request, 'codenamez/howtoplay.html',response)
+    response = render(request, 'codenamez/howtoplay.html', context = response )
+    return response
 
 def user_register(request):
     response = {}

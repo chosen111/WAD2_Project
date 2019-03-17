@@ -21,6 +21,8 @@ main {
             &.options {
                 margin-bottom: 40px;
             }
+            &.howtoplay {
+                margin-bottom: 40px;
             &.admin {
                 @include button($lred);
                 margin-bottom: 40px;

@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
     <!--<link rel="stylesheet" type="text/css" href="{% static 'css/clean.min.css' %}">-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/base.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
     <script type="text/javascript">
         var csrf_token = '{{ csrf_token }}'
     </script>
@@ -26,7 +26,14 @@
     <section class="application">
         <header>
             <a href="{% url 'index' %}">{% createLogoBySize "small" %}</a>
-            <div class="menu-col"></div>
+
+            <div class="menu-col">
+            <ul>
+                <li class="menu-bar"><a href="{% url 'about' %}">About</a></li>
+                <li class="menu-bar"> <a href="{% url 'how_to_play' %}">How to play</a></li>
+            </ul>
+            </div>
+
             <div class="user-col">
                 {% if user.is_authenticated %}
                     {% user user %}

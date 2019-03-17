@@ -29,6 +29,10 @@ main div.menu .button.options {
   margin-bottom: 40px;
 }
 
+main div.menu .button.howtoplay {
+  margin-bottom: 40px;
+}
+
 main div.menu .button.admin {
   border-color: #ff3814;
   background-color: rgba(255, 99, 71, 0.2);
