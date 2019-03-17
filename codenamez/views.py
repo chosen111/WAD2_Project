@@ -53,6 +53,11 @@ def how_to_play(request):
     response = render(request, 'codenamez/howtoplay.html', context = response )
     return response
 
+def contact_us(request):
+    response = {}
+    response = render(request, 'codenamez/contactus.html', context=response)
+    return response
+
 def user_register(request):
     response = {}
     if request.method == 'POST':
