@@ -58,6 +58,12 @@ def contact_us(request):
     response = render(request, 'codenamez/contactus.html', context=response)
     return response
 
+def faq(request):
+    response = {}
+    response = render(request, 'codenamez/faq.html', context=response)
+    return response
+
+
 def user_register(request):
     response = {}
     if request.method == 'POST':
