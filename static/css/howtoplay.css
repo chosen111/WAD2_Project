@@ -1,3 +1,21 @@
-@charset "UTF-8";
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
-@import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
+
+html {
+position: relative
+
+}
+h2 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    font-size: large;
+
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+}
