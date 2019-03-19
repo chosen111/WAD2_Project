@@ -10,14 +10,27 @@
 {% block main %}
     <div class="title">{% createLogoBySize %}</div>
     <div class="menu">
-        {% if game %}
-            {% createButton "continue" "Continue playing" href="game" args=game.id isAnchor=True %}
-        {% endif %}
-        {% createButton "play" "Start a game" %}
-        {% createButton "play" "Join a game" %}
-        {% createButton "options" "Options" %}
-
         {% if user.is_authenticated %}
+            {% if game %}
+                <div class="game">
+                    <span class="gameName">{{ game.name }}</span>
+                    <span class="gameOwner">Owner: {{ game.owner }}</span>
+                    <span class="gamePlayersTitle">Players ({{ game.player_count }}/{{ game.max_players }}):</span>
+                    <ul class="gamePlayers">
+                        {% for player in game.players %}
+                            <li class="player {{ player.team }}">{{ player.player }} ({{ player.points }})</li>
+                        {% endfor %}
+                    </ul>
+                    <span class="gameCreated">Created: {% ftime game.created %}</span>
+                    <span class="gameStarted">Started: {% ftime game.started %}</span>
+                </div>
+                {% createButton "continue" "Continue game" href="game" args=game.id isAnchor=True %}
+                {% createButton "leave" "Leave game" href="leavegame" args=game.id isAnchor=True %}
+            {% else %}
+                {% createButton "create" "Start a game" %}
+                {% createButton "join" "Join a game" %}
+            {% endif %}
+            {% createButton "options" "Options" %}
             {% if user.is_staff %}
                 {% createButton "admin" "Admin" href="/admin/" isAnchor=True %}
             {% endif %}

@@ -1,6 +1,5 @@
 $.fn.extend({
     replaceOrAdd($replace, $append) {
-        
         if ($(this).length) {
             $(this).replaceWith($replace); 
         }
@@ -22,13 +21,12 @@ $(document).ready(function() {
     // Handle incoming messages
     socket.onmessage = function (response) {
         // Decode the JSON
-        console.log("Got websocket message " + response.data);
         var response = JSON.parse(response.data);
         // Handle errors
         if (response.error) {
             return Error.display(response.error);
         }
-
+        // Handle responses
         if (response.join) {
             Game.create(response.join);
         } 
@@ -110,14 +108,10 @@ $(document).ready(function() {
             }));
         }
     }*/
-    // Helpful debugging
     socket.onopen = function () {
-        console.log("Connected to game socket");
-        socket.send(JSON.stringify({
-            "command": "join",
-            "game": game.id
-        }));
-    };
+        // If connection to game server is successful, ask the server to join the game
+        socket.send(JSON.stringify({ "command": "join", "game": game.id }))
+    }
     socket.onclose = function () {
         console.log("Disconnected from game socket");
     }
@@ -140,12 +134,21 @@ $(document).ready(function() {
             $('.loading').addClass('fail');
             $('.loading .icon span').text("Error");
             $('.loading .message').prepend($("<div>", { class: "icon-warning" }))
-            $('.loading .message span').text(err);            
+            $('.loading .message span').text(LANG.get(err));            
         }
     }
 
     let Game = {
         create(data) {
+            console.log(data);
+            let user = data.user;
+            let game = JSON.parse(data.game)[0].fields;
+            let players = JSON.parse(data.players);
+            console.log(user);
+            console.log(game);
+            console.log(players);
+
+
             let $game = $("<div>", { class: "game-wrapper" });
             let $colLeft = $("<section>", { class: "col-1" }).appendTo($game);
             let $colMiddle = $("<section>", { class: "col-2" }).appendTo($game);
@@ -153,7 +156,7 @@ $(document).ready(function() {
             var $gameInfo = $("<div>", { class: "game-info" }).appendTo($colMiddle);
             $("<span>", { class: "name", text: data.game.name }).appendTo($gameInfo);
 
-            Game.Board.create($colMiddle, data);
+            //Game.Board.create($colMiddle, data);
             let $colRight = $("<section>", { class: "col-3" }).appendTo($game);
 
             // -- left column -- //

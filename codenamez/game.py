@@ -1,9 +1,13 @@
 from django.core.cache import cache
-from codenamez.models import WordList
+from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GamePlayer, WordList
 
 from random import randint
 
-class GameError(Exception):
+from channels.db import database_sync_to_async
+
+import time
+
+class Error(Exception):
     """
     Custom exception class that is caught by the websocket receive()
     handler and translated into a send back to the client.
@@ -12,18 +16,29 @@ class GameError(Exception):
         super().__init__(code)
         self.code = code
 
-game = {
-    'connected_players': [],
-}
+def isPlaying(player, game=None):
+    playingGames = GamePlayer.objects.filter(player=player)
+    for game in playingGames:
+        game = game.game
 
-def init():
-    cache.add('games', {})
+        if game.cancelled or game.ended:
+            continue
+        
+        data = {
+            'id': str(game.id),
+            'name': game.name,
+            'owner': game.owner,
+            'max_players': game.max_players,
+            'created': game.created,
+            'started': game.started
+        }
+        return data
+    return False
 
-def connect(game, user):
-    init()
-
-    games = cache.get('games')
-    games[game]['connected_players'] = test
+@database_sync_to_async
+def removePlayerFromGame(game_id, player):
+    game = Game.objects.get(id=uuid.UUID(game_id))
+    GamePlayer.objects.filter(game=game, player=request.user).delete()
 
 #def generateCards(orange, purple, assassin=1, cards=25):
 #    result = { }

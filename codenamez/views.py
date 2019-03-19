@@ -1,36 +1,40 @@
 import json, uuid, time
+
+# HTTP
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
-from django.contrib.auth.models import User
-from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GameList
-
+# Auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
+# Database
 from django.db import IntegrityError
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GamePlayer
+from django.core import serializers
+
+# Channels
+from channels.db import database_sync_to_async
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+# Utility
+import codenamez.game as gameUtil
 
 def index(request):
     response = { }
-    try:
-        gameList = GameList.objects.filter(user=request.user)
-        for game in gameList:
-            game = game.game
-
-            if game.cancelled or game.ended:
-                continue
-
-            response['game'] = {
-                'id': str(game.id),
-                'name': game.name,
-                'created': game.created,
-                'started': game.started
-            }
-            break
-    except (TypeError, AttributeError, Exception):
-        pass
-            
+    #s = Session.objects.get(pk=request.session.session_key)
+    # Find if there is any active game for the user
+    if not request.user.is_anonymous:
+        alreadyPlaying = gameUtil.isPlaying(request.user)
+        if alreadyPlaying is not False:
+            response["game"] = alreadyPlaying
+            players = GamePlayer.objects.filter(player=request.user)
+            response["game"]["players"] = players
+            response["game"]["player_count"] = len(players)
     return render(request, 'codenamez/index.html', response)
 
 def user_register(request):
@@ -41,7 +45,6 @@ def user_register(request):
         password = request.POST.get('password')
         confirmPassword = request.POST.get('confirmPassword')
         ipaddress = get_client_ip(request)
-
         try:
             user = User(username=username, email=email)
             user.set_password(password)
@@ -53,7 +56,6 @@ def user_register(request):
             profile.save()
     else:
         return HttpResponseRedirect(reverse('index'))
-
     return JsonResponse(response)
 
 def user_login(request):
@@ -61,7 +63,6 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
@@ -74,7 +75,6 @@ def user_login(request):
             add_error_to_form(response, "password", "E_AUTH_MISMATCH")
     else:
         return HttpResponseRedirect(reverse('index'))
-    
     return JsonResponse(response)
 
 @login_required
@@ -85,13 +85,54 @@ def user_logout(request):
         response['redirect'] = reverse('index')
     else:
         return HttpResponseRedirect(reverse('index'))
-    
     return JsonResponse(response)
 
-def show_profile(request, profileId):
+@login_required
+def game_create(request):
+    response = {}
+    if request.method == 'POST':
+        owner = request.user
+        name = request.POST.get('name')
+        players = request.POST.get('players')
+        password = request.POST.get('password')
+    
+        # Check if the player is in an active game
+        alreadyPlaying = gameUtil.isPlaying(owner)
+        if alreadyPlaying is not False:
+            add_error_to_notification(response, "E_ALREADY_PLAYING")
+        else:
+            # Player is not in any game, try to create and join the game
+            game = Game(owner=owner, name=name, max_players=players) # todo: add password field
+            game.save()
+
+            player = GamePlayer(game=game, user=owner, is_admin=True)
+            player.save()
+
+            response['redirect'] = reverse('show_game', args=[game.id])
+    else:
+        return HttpResponseRedirect(reverse('index'))
+    return JsonResponse(response)
+
+@login_required
+def game_join(request):
+    response = {}
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        password = request.POST.get('password')
+        print(id)
+        try:
+            game = Game.objects.get(id=uuid.UUID(id)) # todo: password check
+            response['redirect'] = reverse('show_game', args=[game.id])
+        except (Game.DoesNotExist, ValueError):
+            add_error_to_form(response, "id", "E_GAME_NOT_FOUND")
+    else:
+        return HttpResponseRedirect(reverse('index'))
+    return JsonResponse(response)
+
+def show_profile(request, profile_id):
     response = { }
     try:
-        user = User.objects.get(id=profileId)
+        user = User.objects.get(id=profile_id)
         userProfile = UserProfile.objects.get(user=user)
         response = {
             'userProfile': userProfile,
@@ -99,24 +140,33 @@ def show_profile(request, profileId):
     except UserProfile.DoesNotExist:
         response['error'] = user.username + " does not have a profile set yet!"
     except User.DoesNotExist:
-        response['error'] = "Profile with the id " + profileId + " does not exist!"
-
+        response['error'] = "Profile with the id " + profile_id + " does not exist!"
     return render(request, 'codenamez/profile.html', response)
 
 @login_required
-def show_game(request, gameId):
-    #try:
-        #game = Game.objects.get(id=uuid.UUID(gameId))
-        #is_playing = GameList.objects.get(user=request.user, game=game)
-
-        #response = {
-        #    'game': game,
-        #}
-    #except (Game.DoesNotExist, ValueError):
-        #response['error'] = "The game you are trying to access does not exist!"
-    #except GameList.DoesNotExist:
-        #response['error'] = "You are not currently invited to play in " + game.name
+def show_game(request, game_id):
     return render(request, 'codenamez/game.html', { })
+
+@login_required
+def leave_game(request, game_id):
+    response = {}
+    try:
+        game = Game.objects.get(id=uuid.UUID(game_id))
+        GamePlayer.objects.get(game=game, player=request.user).delete()
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(game_id,
+            {
+                "type": "game.leave",
+                "game": game_id,
+                "player": request.user,
+            }
+        )
+    except (Game.DoesNotExist, ValueError):
+        pass
+    except GamePlayer.DoesNotExist:
+        pass
+    return HttpResponseRedirect(reverse('index'))
 
 # Utility functions
 def add_error_to_form(obj, id, error):

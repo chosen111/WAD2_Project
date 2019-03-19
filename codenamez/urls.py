@@ -7,8 +7,11 @@ urlpatterns = [
     url(r'^register/$', views.user_register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
-    url(r'^profile/(?P<profileId>[\w\-]+)/$', views.show_profile, name='show_profile'),
-    url(r'^game/(?P<gameId>[\w\-]+)/$', views.show_game, name='show_game'),
+    url(r'^creategame/$', views.game_create, name='create_game'),
+    url(r'^joingame/$', views.game_join, name='join_game'),
+    url(r'^profile/(?P<profile_id>[\w\-]+)/$', views.show_profile, name='show_profile'),
+    url(r'^game/(?P<game_id>[\w\-]+)/$', views.show_game, name='show_game'),
+    url(r'^leavegame/(?P<game_id>[\w\-]+)/$', views.leave_game, name='leave_game'),
 
     #url(r'^about/', views.about, name='about'),
     #url(r'^add_category/$', views.add_category, name='add_category'),

@@ -8,6 +8,11 @@ var LANG = {
     E_PASSWORD_RANGE: "The password must have between 6 and 18 characters!",
     E_EMAIL_INVALID: "The e-mail is invalid!",
     I_REGISTER_SUCCESS: "Your account has been successfully created!",
+    E_PLAYERS_RANGE: "You must enter a number between 2 and 12!",
+    E_GAME_NOT_FOUND: "The game could not be found!",
+    E_GAME_STARTED: "The game has already started!",
+    E_GAME_FULL: "The game is full!",
+    E_ALREADY_PLAYING: "Please continue or leave the game you are currently playing!",
 
     get(key) {
         return this[key] || key;
@@ -83,6 +88,13 @@ var Validation = {
             error.email = "E_EMAIL_INVALID";
         }
         return error;
+    },
+    createGame(data) {
+        let error = { }
+        if (!data.players || !(2 < parseInt(data.players) < 12)) {
+            error.players = "E_PLAYERS_RANGE";
+        }
+        return error;
     }
 }
 
@@ -97,6 +109,8 @@ var Form = {
         return data;
     },
     validate($form) {
+        if (typeof(Validation[$form.attr("id")]) != 'function') return true;
+
         let error = Validation[$form.attr("id")].call($form, Form.serialize($form));
         if (!$.isEmptyObject(error)) {
             Form.error.show($form, error);
@@ -368,6 +382,128 @@ var Authentication = {
     }
 }
 
+var Game = {
+    create() {
+        // Select the overlay element and append the main elements
+        let $overlay = $('.overlay').empty();
+        let $createSection = $("<section>", { class: 'create-game-section' }).appendTo($overlay);
+        let $close = $("<div>", { class: "icon-close" }).appendTo($createSection);
+        // When the close button is clicked hide the overlay
+        $close.on('click', function() {
+            Overlay.remove(forced=false);
+        })
+
+        // Prepare the form elements
+        let $form = $("<form>", { id: "createGame" });
+        $("<div>", { class: "title", text: "Create a new game" }).appendTo($form);
+        Form.input(type="text", ico="icon-user", id="name", placeholder="NAME OF THE GAME").appendTo($form);
+        Form.input(type="text", ico="icon-mail", id="players", placeholder="MAXIMUM PLAYERS").appendTo($form);
+        Form.input(type="password", ico="icon-locked", id="password", placeholder="PASSWORD (OPTIONAL)").appendTo($form);
+        // Extra account options
+        let $extra = $("<div>", { class: "extra" }).appendTo($form);
+        $("<div>", { text: "Did you want to " }).append($("<a>", { class: "join", text: "join a game?" })).appendTo($extra);
+        Button.create("icon-check", "Create", "submit").appendTo($form);
+        // When the submit button is clicked post the data to our register url
+        $form.on('submit', function(evt) {
+            Form.error.clear($form);
+            if(Form.validate($form)) {
+                $.post({
+                    headers: { "X-CSRFToken": csrf_token },
+                    url: document.location.origin + "/codenamez/creategame/",
+                    data: $form.serialize(),
+                    // If the register is successful, close the overlay
+                    success(response) {
+                        if (response['error']) {
+                            Form.error.show($form, response['error']['form']);
+                            Notification.push("icon-warning", response['error']['notification'], "warning");
+                            return;
+                        }
+                        Overlay.remove(forced=false);
+                        $form.trigger("reset");
+                        Redirect.open(document.location.origin + response['redirect'])
+                    },
+                    fail() {                    
+                        console.log(arguments);
+                    }
+                })
+            }
+            evt.preventDefault();
+        })
+        // Insert the form elements in our create a game section and the overlay in our body page
+        $form.appendTo($createSection);
+
+        // Animate the overlay and the create a game window
+        let height = $form.height();
+        $form.height(0);
+
+        Overlay.show(forced=false); 
+        $form.delay(400).animate({ height: height }, {
+            complete() {
+                $form.css({ height: 'auto' }).trigger("reset");
+            }
+        })
+    },
+    join() {
+        // Select the overlay element and append the main elements
+        let $overlay = $('.overlay').empty();
+        let $joinSection = $("<section>", { class: 'join-game-section' }).appendTo($overlay);
+        let $close = $("<div>", { class: "icon-close" }).appendTo($joinSection);
+        // When the close button is clicked hide the overlay
+        $close.on('click', function() {
+            Overlay.remove(forced=false);
+        })
+
+        // Prepare the form elements
+        let $form = $("<form>", { id: "joinGame" });
+        $("<div>", { class: "title", text: "Join a game" }).appendTo($form);
+        Form.input(type="text", ico="icon-user", id="id", placeholder="GAME ID").appendTo($form);
+        Form.input(type="password", ico="icon-locked", id="password", placeholder="PASSWORD (IF REQUIRED)").appendTo($form);
+        // Extra account options
+        let $extra = $("<div>", { class: "extra" }).appendTo($form);
+        $("<div>", { text: "Did you want to " }).append($("<a>", { class: "create", text: "create a game?" })).appendTo($extra);
+        Button.create("icon-check", "Join", "submit").appendTo($form);
+        // When the submit button is clicked post the data to our register url
+        $form.on('submit', function(evt) {
+            Form.error.clear($form);
+            if(Form.validate($form)) {
+                $.post({
+                    headers: { "X-CSRFToken": csrf_token },
+                    url: document.location.origin + "/codenamez/joingame/",
+                    data: $form.serialize(),
+                    // If the register is successful, close the overlay
+                    success(response) {
+                        if (response['error']) {
+                            Form.error.show($form, response['error']['form']);
+                            Notification.push("icon-warning", response['error']['notification'], "warning");
+                            return;
+                        }
+                        Overlay.remove(forced=false);
+                        $form.trigger("reset");
+                        Redirect.open(document.location.origin + response['redirect'])
+                    },
+                    fail() {                    
+                        console.log(arguments);
+                    }
+                })
+            }
+            evt.preventDefault();
+        })
+        // Insert the form elements in our create a game section and the overlay in our body page
+        $form.appendTo($joinSection);
+
+        // Animate the overlay and the create a game window
+        let height = $form.height();
+        $form.height(0);
+
+        Overlay.show(forced=false); 
+        $form.delay(400).animate({ height: height }, {
+            complete() {
+                $form.css({ height: 'auto' }).trigger("reset");
+            }
+        })
+    }
+}
+
 // When document is ready
 $(document).ready(function() {
     $(document.body).on('keyup', function(evt) {
@@ -376,6 +512,14 @@ $(document).ready(function() {
             // Remove the overlay
            Overlay.remove(forced=true);
         }
+    })
+
+    $(document.body).on('click', '.create', function(evt) {
+        Game.create();
+    })
+
+    $(document.body).on('click', '.join', function(evt) {
+        Game.join();
     })
 
     $(document.body).on('click', '.register', function(evt) {

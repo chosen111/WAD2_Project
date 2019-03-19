@@ -1,6 +1,7 @@
 import time, uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -48,15 +49,24 @@ class Game(models.Model):
     def __str__(self):
         return str(self.id)
 
-class GameList(models.Model):
+class GameConnection(models.Model):
+    session = models.CharField(primary_key=True, max_length=128, editable=False)
+    player = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return str(self.session)
+
+class GamePlayer(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    player = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
     team = models.CharField(max_length=32, blank=True)
     joined = models.FloatField(null=True, blank=True)
+    is_admin = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ("game", "user")
+        unique_together = ("game", "player")
 
     def __str__(self):
         return str(self.game.id)

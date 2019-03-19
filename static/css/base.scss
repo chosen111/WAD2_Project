@@ -15,8 +15,15 @@ body {
     color: $teal;
 }
 
-li {
+ol, ul {
+    margin: 0;
+    padding: 0;
     list-style: none;
+}
+
+::selection { 
+    background: darken($teal, 35%);
+    color: $teal;
 }
 
 a {
@@ -555,7 +562,7 @@ div#logo {
     }
 }
 
-.overlay section.login-section, .overlay section.register-section {
+.overlay section {
     flex: auto;
     display: flex;
     align-items: center;

@@ -1,8 +1,16 @@
+from datetime import datetime
+
 from django import template
 from django.urls import reverse
 from codenamez.models import UserProfile
 
 register = template.Library()
+
+@register.simple_tag
+def ftime(timestamp):
+    if timestamp:
+        return datetime.utcfromtimestamp(timestamp).strftime('%d %b %Y at %H:%M:%S')
+    return 'No'
 
 @register.inclusion_tag('codenamez/tags/logo.html')
 def createLogoBySize(size="big"):

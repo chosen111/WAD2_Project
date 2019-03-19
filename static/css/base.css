@@ -127,8 +127,15 @@ body {
   color: #00dfa6;
 }
 
-li {
+ol, ul {
+  margin: 0;
+  padding: 0;
   list-style: none;
+}
+
+::selection {
+  background: #002d21;
+  color: #00dfa6;
 }
 
 a {
@@ -722,7 +729,7 @@ div#logo.small:hover {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-.overlay section.login-section, .overlay section.register-section {
+.overlay section {
   flex: auto;
   display: flex;
   align-items: center;
@@ -731,12 +738,12 @@ div#logo.small:hover {
   animation: fadeIn .4s ease forwards;
 }
 
-.overlay section.login-section:before, .overlay section.register-section:before {
+.overlay section:before {
   background: url("../images/bg.jpg");
   opacity: .5;
 }
 
-.overlay section.login-section form, .overlay section.register-section form {
+.overlay section form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -746,47 +753,47 @@ div#logo.small:hover {
   animation: fadeIn .4s ease .8s forwards;
 }
 
-.overlay section.login-section form .alternative, .overlay section.register-section form .alternative {
+.overlay section form .alternative {
   display: flex;
   align-self: stretch;
 }
 
-.overlay section.login-section form .alternative .button, .overlay section.register-section form .alternative .button {
+.overlay section form .alternative .button {
   flex: 1;
 }
 
-.overlay section.login-section form .alternative .button.facebook, .overlay section.register-section form .alternative .button.facebook {
+.overlay section form .alternative .button.facebook {
   border-color: #2d4373;
   background-color: rgba(59, 89, 152, 0.2);
   color: #3b5998;
 }
 
-.overlay section.login-section form .alternative .button.facebook:hover, .overlay section.register-section form .alternative .button.facebook:hover {
+.overlay section form .alternative .button.facebook:hover {
   border-color: #3b5998;
   background-color: rgba(59, 89, 152, 0.4);
   color: #718dc8;
 }
 
-.overlay section.login-section form .alternative .button.twitter, .overlay section.register-section form .alternative .button.twitter {
+.overlay section form .alternative .button.twitter {
   border-color: #0e8aea;
   background-color: rgba(56, 161, 243, 0.2);
   color: #38a1f3;
 }
 
-.overlay section.login-section form .alternative .button.twitter:hover, .overlay section.register-section form .alternative .button.twitter:hover {
+.overlay section form .alternative .button.twitter:hover {
   border-color: #38a1f3;
   background-color: rgba(56, 161, 243, 0.4);
   color: #98cef9;
 }
 
-.overlay section.login-section form .separator, .overlay section.register-section form .separator {
+.overlay section form .separator {
   align-self: stretch;
   position: relative;
   margin: 20px 0 20px 0;
   text-align: center;
 }
 
-.overlay section.login-section form .separator:before, .overlay section.login-section form .separator:after, .overlay section.register-section form .separator:before, .overlay section.register-section form .separator:after {
+.overlay section form .separator:before, .overlay section form .separator:after {
   content: "";
   position: absolute;
   top: 50%;
@@ -795,35 +802,35 @@ div#logo.small:hover {
   border-bottom: 1px solid #00130e;
 }
 
-.overlay section.login-section form .separator:before, .overlay section.register-section form .separator:before {
+.overlay section form .separator:before {
   left: 0;
 }
 
-.overlay section.login-section form .separator:after, .overlay section.register-section form .separator:after {
+.overlay section form .separator:after {
   right: 0;
 }
 
-.overlay section.login-section form .title, .overlay section.register-section form .title {
+.overlay section form .title {
   font-size: 24px;
   margin: 32px 0 32px 0;
 }
 
-.overlay section.login-section form .input, .overlay section.register-section form .input {
+.overlay section form .input {
   max-width: 280px;
 }
 
-.overlay section.login-section form .input input, .overlay section.register-section form .input input {
+.overlay section form .input input {
   border-radius: 0 4px 4px 0;
   border-left: 0;
 }
 
-.overlay section.login-section form .extra, .overlay section.register-section form .extra {
+.overlay section form .extra {
   margin-top: 20px;
   font-size: 14px;
   text-align: center;
 }
 
-.overlay section.login-section form .button.submit, .overlay section.register-section form .button.submit {
+.overlay section form .button.submit {
   padding: 6px 25px 6px 25px;
   margin-top: 20px;
 }

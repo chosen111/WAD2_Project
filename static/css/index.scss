@@ -6,24 +6,51 @@ main {
         flex: 1;
         display: flex;
         flex-flow: column nowrap;
-        justify-content: center;        
+        justify-content: center;      
+        align-items: center;  
         padding: 10px 0 10px 0;
 
         .button {
+            width: 160px;
             display: block;
             border-radius: 40px;
             font-size: 20px;
 
-            &.continue {
+            &.continue, &.leave {
                 @include button($team-orange);
-                margin-bottom: 40px;
             }
-            &.options {
+            &.join {
                 margin-bottom: 40px;
             }
             &.admin {
                 @include button($lred);
                 margin-bottom: 40px;
+            }
+        }
+        div.game {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid $teal-border;
+            border-radius: 4px;
+            background-color: rgba(#000, .4);
+
+            .gameName {
+                padding: 2px;
+                margin-bottom: 4px;
+                background-color: rgba(darken($teal, 30%), .8);
+                text-align: center;
+            }
+
+            .gamePlayersTitle {
+                margin-top: 8px;
+            }
+            .gamePlayers {
+                margin-bottom: 8px;
+                .player {
+                    margin-left: 16px;
+                }
             }
         }
     }
