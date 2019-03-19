@@ -32,7 +32,8 @@ def index(request):
         alreadyPlaying = gameUtil.isPlaying(request.user)
         if alreadyPlaying is not False:
             response["game"] = alreadyPlaying
-            players = GamePlayer.objects.filter(player=request.user)
+            game = Game.objects.get(id=alreadyPlaying['id'])
+            players = GamePlayer.objects.filter(game=game)
             response["game"]["players"] = players
             response["game"]["player_count"] = len(players)
     return render(request, 'codenamez/index.html', response)
