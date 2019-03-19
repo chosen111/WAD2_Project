@@ -153,14 +153,6 @@ a:hover {
   text-shadow: #00dfa6 0 0 1px;
 }
 
-.menu-bar {
-    float: left;
-    margin-right:20px;
-    text-align: center;
-}
-
-
-
 .is-tooltip {
   position: absolute;
   display: flex;
@@ -702,13 +694,22 @@ div#logo.small:hover {
   border: none;
 }
 
+.application header .menu-col {
+  display: flex;
+  justify-content: space-around;
+}
+
+.application header .menu-col .button {
+  width: 150px;
+}
+
 .application main {
   order: 2;
   flex: 1;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  margin: 10px;
+  padding: 20px;
 }
 
 .application main .error {
@@ -729,6 +730,7 @@ div#logo.small:hover {
 .application footer {
   order: 3;
   flex: 40px 0 0;
+  display: grid;
   grid-auto-columns: auto;
   align-content: center;
   padding: 0 10px 0 10px;
@@ -736,13 +738,7 @@ div#logo.small:hover {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-<<<<<<< HEAD
 .overlay section {
-=======
-
-
-.overlay section.login-section, .overlay section.register-section {
->>>>>>> be1f9ed525ec677d73e342cfa4da717b417733d7
   flex: auto;
   display: flex;
   align-items: center;
@@ -847,4 +843,3 @@ div#logo.small:hover {
   padding: 6px 25px 6px 25px;
   margin-top: 20px;
 }
-

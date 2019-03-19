@@ -524,6 +524,15 @@ div#logo {
             background-color: transparent;
             border: none;
         }
+
+        .menu-col {
+            display: flex;
+            justify-content: space-around;
+
+            .button {
+                width: 150px;
+            }
+        }
     }
     
     main {
@@ -532,7 +541,7 @@ div#logo {
         display: flex;
         flex-flow: column nowrap;
         align-items: center; 
-        margin: 10px;
+        padding: 20px;
 
         .error {
             display: flex;

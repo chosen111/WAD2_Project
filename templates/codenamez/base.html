@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/clean.min.css' %}">-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
     <script type="text/javascript">
         var csrf_token = '{{ csrf_token }}'
@@ -27,13 +26,11 @@
         <header>
             <a href="{% url 'index' %}">{% createLogoBySize "small" %}</a>
 
-            <div >
-            <ul class="menu-col">
-                <li class="menu-bar"><a href="{% url 'about' %}">About us</a></li>
-                <li class="menu-bar"> <a href="{% url 'how_to_play' %}">How to play</a></li>
-                <li class="menu-bar"> <a href="{% url 'contact_us' %}">Contact us</a></li>
-                <li class="menu-bar"> <a href="{% url 'faq' %}">F.a.q</a></li>
-            </ul>
+            <div class="menu-col">
+                {% createButton "about" "About" href="about" isAnchor=True %}
+                {% createButton "how-to-play" "How to play" href="how_to_play" isAnchor=True %}
+                {% createButton "contact-us" "Contact Us" href="contact_us" isAnchor=True %}
+                {% createButton "faq" "F.A.Q." href="faq" isAnchor=True %}
             </div>
 
             <div class="user-col">

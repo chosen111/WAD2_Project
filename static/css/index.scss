@@ -22,8 +22,9 @@ main {
             &.join {
                 margin-bottom: 40px;
             }
-            &.howtoplay {
+            &.leave {
                 margin-bottom: 40px;
+            }
             &.admin {
                 @include button($lred);
                 margin-bottom: 40px;
