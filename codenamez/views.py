@@ -40,7 +40,7 @@ def index(request):
 def about(request):
     response = {}
 
-    response = render(request, 'codenamez/about.html', context = response )
+    response = render(request, 'codenamez/about.html', context=response )
     if request.session.test_cookie_worked():
         print("TEST COOKIE WORKED!")
         request.session.delete_test_cookie()
@@ -54,7 +54,7 @@ def about(request):
 
 def how_to_play(request):
     response = {}
-    response = render(request, 'codenamez/howtoplay.html', context = response )
+    response = render(request, 'codenamez/howtoplay.html', context=response)
     return response
 
 def contact_us(request):
@@ -66,7 +66,6 @@ def faq(request):
     response = {}
     response = render(request, 'codenamez/faq.html', context=response)
     return response
-
 
 def user_register(request):
     response = {}
@@ -119,7 +118,7 @@ def user_logout(request):
     return JsonResponse(response)
 
 @login_required
-def game_create(request):
+def create_game(request):
     response = {}
     if request.method == 'POST':
         owner = request.user
@@ -136,7 +135,7 @@ def game_create(request):
             game = Game(owner=owner, name=name, max_players=players) # todo: add password field
             game.save()
 
-            player = GamePlayer(game=game, user=owner, is_admin=True)
+            player = GamePlayer(game=game, player=owner, is_admin=True)
             player.save()
 
             response['redirect'] = reverse('show_game', args=[game.id])
@@ -145,12 +144,11 @@ def game_create(request):
     return JsonResponse(response)
 
 @login_required
-def game_join(request):
+def join_game(request):
     response = {}
     if request.method == 'POST':
         id = request.POST.get('id')
         password = request.POST.get('password')
-        print(id)
         try:
             game = Game.objects.get(id=uuid.UUID(id)) # todo: password check
             response['redirect'] = reverse('show_game', args=[game.id])
@@ -159,20 +157,6 @@ def game_join(request):
     else:
         return HttpResponseRedirect(reverse('index'))
     return JsonResponse(response)
-
-def show_profile(request, profile_id):
-    response = { }
-    try:
-        user = User.objects.get(id=profile_id)
-        userProfile = UserProfile.objects.get(user=user)
-        response = {
-            'userProfile': userProfile,
-        }
-    except UserProfile.DoesNotExist:
-        response['error'] = user.username + " does not have a profile set yet!"
-    except User.DoesNotExist:
-        response['error'] = "Profile with the id " + profile_id + " does not exist!"
-    return render(request, 'codenamez/profile.html', response)
 
 @login_required
 def show_game(request, game_id):
@@ -198,6 +182,20 @@ def leave_game(request, game_id):
     except GamePlayer.DoesNotExist:
         pass
     return HttpResponseRedirect(reverse('index'))
+
+def show_profile(request, profile_id):
+    response = { }
+    try:
+        user = User.objects.get(id=profile_id)
+        userProfile = UserProfile.objects.get(user=user)
+        response = {
+            'userProfile': userProfile,
+        }
+    except UserProfile.DoesNotExist:
+        response['error'] = user.username + " does not have a profile set yet!"
+    except User.DoesNotExist:
+        response['error'] = "Profile with the id " + profile_id + " does not exist!"
+    return render(request, 'codenamez/profile.html', response)
 
 # Utility functions
 def add_error_to_form(obj, id, error):

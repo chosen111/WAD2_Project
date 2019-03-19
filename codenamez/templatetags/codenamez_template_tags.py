@@ -19,12 +19,12 @@ def createLogoBySize(size="big"):
 @register.inclusion_tag('codenamez/tags/button.html')
 def createButton(id, text, href=None, args=None, isAnchor=False):
     try:
-        href = reverse(href)
+        if args is None:
+            href = reverse(href) 
+        else:
+            href = reverse(href, args=[args])             
     except:
         pass
-    
-    if args:
-        href = "{}/{}".format(href, args)
 
     return { 'id': id, 'text': text, 'href': href, 'isAnchor': isAnchor }
 

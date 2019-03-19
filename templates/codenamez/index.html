@@ -24,8 +24,8 @@
                     <span class="gameCreated">Created: {% ftime game.created %}</span>
                     <span class="gameStarted">Started: {% ftime game.started %}</span>
                 </div>
-                {% createButton "continue" "Continue game" href="game" args=game.id isAnchor=True %}
-                {% createButton "leave" "Leave game" href="leavegame" args=game.id isAnchor=True %}
+                {% createButton "continue" "Continue game" href="show_game" args=game.id isAnchor=True %}
+                {% createButton "leave" "Leave game" href="leave_game" args=game.id isAnchor=True %}
             {% else %}
                 {% createButton "create" "Start a game" %}
                 {% createButton "join" "Join a game" %}
