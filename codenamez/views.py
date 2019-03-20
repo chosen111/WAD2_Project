@@ -17,9 +17,9 @@ from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GamePlayer
 from django.core import serializers
 
 # Channels
-from channels.db import database_sync_to_async
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+#from channels.db import database_sync_to_async
+#from channels.layers import get_channel_layer
+#from asgiref.sync import async_to_sync
 
 # Utility
 import codenamez.game as gameUtil
@@ -169,15 +169,8 @@ def leave_game(request, game_id):
     try:
         game = Game.objects.get(id=uuid.UUID(game_id))
         GamePlayer.objects.get(game=game, player=request.user).delete()
-
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(game_id,
-            {
-                "type": "game.leave",
-                "game": game_id,
-                "player": request.user,
-            }
-        )
+        
+        # todo: Pusher trigger
     except (Game.DoesNotExist, ValueError):
         pass
     except GamePlayer.DoesNotExist:

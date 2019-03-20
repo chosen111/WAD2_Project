@@ -1,3 +1,4 @@
+### This file is used with channels, disabled for this project
 import json, uuid, time
 
 import codenamez.game as gameUtil

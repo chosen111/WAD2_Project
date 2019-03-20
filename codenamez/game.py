@@ -3,8 +3,6 @@ from codenamez.models import UserProfile, Chat, PrivateMessage, Game, GamePlayer
 
 from random import randint
 
-from channels.db import database_sync_to_async
-
 import time
 
 class Error(Exception):
@@ -34,11 +32,6 @@ def isPlaying(player, game=None):
         }
         return data
     return False
-
-@database_sync_to_async
-def removePlayerFromGame(game_id, player):
-    game = Game.objects.get(id=uuid.UUID(game_id))
-    GamePlayer.objects.filter(game=game, player=request.user).delete()
 
 #def generateCards(orange, purple, assassin=1, cards=25):
 #    result = { }

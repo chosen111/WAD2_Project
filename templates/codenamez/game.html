@@ -4,7 +4,9 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/game.min.css' %}">
-    <script type="text/javascript" src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+    <script type="text/javascript" src="https://js.pusher.com/4.4/pusher.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/axios.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/vue.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
 {% endblock %}
 

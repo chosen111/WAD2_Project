@@ -18,7 +18,6 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR,'media')
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -30,11 +29,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["82.28.140.171","127.0.0.1"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+#    'channels', ### Does not work on PythonAnywhere
     'codenamez',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -74,12 +72,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'WAD2_Project.wsgi.application'
-ASGI_APPLICATION = 'WAD2_Project.routing.application'
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+
+### ASGI Required for channels doesn't work on PythonAnywhere
+#ASGI_APPLICATION = 'WAD2_Project.routing.application'
+#CHANNEL_LAYERS = {
+#    "default": {
+#        "BACKEND": "channels.layers.InMemoryChannelLayer"
+#    }
+#}
 
 
 # Database

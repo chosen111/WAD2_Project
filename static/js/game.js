@@ -10,12 +10,37 @@ $.fn.extend({
 })
 
 $(document).ready(function() {
+    var $vue_game = new Vue({
+        delimiters: ['[[', ']]'],
+        el: 'main',
+        data: {
+
+        },
+        methods: {
+            greet: function(name) {
+                console.log('Hello from ' + name + '!')
+            }
+        }
+    })
+
     let path = window.location.pathname.split('/');
     let game = {
         id: path[path.indexOf('game') + 1]
     }
 
-    let scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    Pusher.logToConsole = true;
+    var pusher = new Pusher('f7e0c5de422f69bb8d14', {
+      cluster: 'eu',
+      forceTLS: true
+    });
+
+    var channel = pusher.subscribe(`game:${game.id}`);
+    channel.bind('my-event', function(data) {
+      alert(JSON.stringify(data));
+    });
+
+
+    /*let scheme = window.location.protocol == "https:" ? "wss" : "ws";
     let socket = new ReconnectingWebSocket(scheme + '://' + window.location.host + "/codenamez/game/");
 
     // Handle incoming messages
@@ -79,7 +104,7 @@ $(document).ready(function() {
                     return;
             }
             msgdiv.append(ok_msg);
-            msgdiv.scrollTop(msgdiv.prop("scrollHeight")); */
+            msgdiv.scrollTop(msgdiv.prop("scrollHeight")); 
         } else {
             console.log("Cannot handle message!");
         }
@@ -107,14 +132,14 @@ $(document).ready(function() {
                 "room": roomId
             }));
         }
-    }*/
+    }
     socket.onopen = function () {
         // If connection to game server is successful, ask the server to join the game
         socket.send(JSON.stringify({ "command": "join", "game": game.id }))
     }
     socket.onclose = function () {
         console.log("Disconnected from game socket");
-    }
+    }*/
 
     $(document).on('contextmenu', '.card', function(e) {
         let $flipCard = $(this).children();
