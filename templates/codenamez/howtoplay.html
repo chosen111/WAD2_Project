@@ -3,8 +3,7 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/howtoplay.css' %}">
-    <script type="text/javascript" src="{% static 'js/howtoplay.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
 {% endblock %}
 
 {% block main %}
@@ -12,22 +11,20 @@
     <div>
         <h2>Aim of the Game</h2>
         <p>The teams must contact all their secret agents before the other team does while carefully avoiding the assassin(s) or other innocent bystanders.</p>
-
+    </div>
+    <div>
         <h2>Setup</h2>
-        <p>Two teams, with at least two players on each team. One spymaster is elected on each team</p>
         <img src="{% static "images/boardlayout.jpg" %}" alt="Board Layout" class = "center" />
-
-        <p>The board is made up of 25 cards with a word on each card. Every secret agent is hidden behind a word. Only the spymasters know the identities of the secret agents</p>
-
+        <p>Two teams, with at least two players on each team. One spymaster is elected on each team.
+            The board is made up of 25 cards with a word on each card.
+            Every secret agent is hidden behind a word.
+            Only the spymasters know the identities of the secret agents</p>
+    </div>
         <h2>Rules</h2>
         <p>The spymaster must  say a one-word clue. The players, given that the clue is valid, must then continue and select
             the cards with the words that are best described by the clue received from the spymaster.
-        </p>
-        <p>The clue must be carefully chosen so that his/her team won't contact an assassin or an agent on the opposing team.</p>
-        <p>
+            The clue must be carefully chosen so that his/her team won't contact an assassin or an agent on the opposing team.
             Finishing the turn will then reveal the outcome, and then the other team proceeds with the clues.
             The game goes turn-by-turn until all the agents from a team or an assassin has been contacted.
            </p>
-    </div>
-
 {% endblock %}
