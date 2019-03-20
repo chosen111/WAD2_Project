@@ -40,6 +40,8 @@ h3 {
 }
 
 .team-member {
+    color: #666666;
+    font-size: 1.4em;
   float: start;
   text-align: center;
   align-items: center;
