@@ -40,17 +40,7 @@ def index(request):
     
 def about(request):
     response = {}
-
     response = render(request, 'codenamez/about.html', context=response )
-    if request.session.test_cookie_worked():
-        print("TEST COOKIE WORKED!")
-        request.session.delete_test_cookie()
-
-
-    # print out whether the method is a GET or a POST
-    print(request.method)
-    #print out the user name, if no one is logged in it prints 'AnonymousUser'
-    print(request.user)
     return response
 
 def how_to_play(request):
