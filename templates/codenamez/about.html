@@ -4,7 +4,7 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
-    <script type="text/javascript" src="{% static 'js/info.js' %}"></script>
+
 
 {% endblock %}
 
@@ -59,21 +59,7 @@ information to personalize their profile.</p>
     <u><a href="{% url 'contact_us' %}">Details of developers</a><u/>
     </p>
 
+<script type="text/javascript" src="{% static 'js/info.js' %}"></script>
 
-    <script type="text/javascript">
-                    var acc = document.getElementsByClassName("accordion");
-                    var i;
-
-                    for (i = 0; i < acc.length; i++) {
-                      acc[i].addEventListener("click", function() {
-                        this.classList.toggle("active");
-                        var panel = this.nextElementSibling;
-                        if (panel.style.maxHeight){
-                          panel.style.maxHeight = null;
-                        } else {
-                          panel.style.maxHeight = panel.scrollHeight + "px";
-                        }
-                      });
-                    }</script>
 
 {% endblock %}

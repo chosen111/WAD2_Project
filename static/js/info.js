@@ -7,8 +7,7 @@ var acc = document.getElementsByClassName("accordion");
                         var panel = this.nextElementSibling;
                         if (panel.style.maxHeight){
                           panel.style.maxHeight = null;
-                        } else {
-                          panel.style.maxHeight = panel.scrollHeight + "px";
+                        } else {panel.style.maxHeight = panel.scrollHeight + "px";
                         }
                       });
                     }
