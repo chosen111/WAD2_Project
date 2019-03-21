@@ -2,12 +2,12 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
 @import url("https://fonts.googleapis.com/css?family=Black+Ops+One:400");
 
-
 p {
     color: #666666;
     font-size: large;
     line-height: 1.3em;
     float: left;
+    margin: 20px;
 
 }
 
@@ -33,10 +33,12 @@ h3 {
 
 
 .center {
+  margin-block-start: 20px;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 600px;
+  height: auto;
 
 }
 
@@ -45,4 +47,37 @@ h3 {
   float: start;
   text-align: center;
   align-items: center;
+}
+
+.panel {
+  padding: 0 18px;
+  margin-left: 40px;
+  margin-right: 40px;
+  background-color: rgba(0, 223, 166, 0.2);
+  max-height: 0;
+  overflow: scroll;
+  transition: max-height 0.2s ease-out;
+  width:50%;
+}
+
+.panel p {
+  color: #46ffd0;
+  text-align: center;
+  align-items: center;
+}
+
+.accordion {
+  border-color: #00dfa6;
+  background-color: rgba(0, 223, 166, 0.4);
+  color: #46ffd0;
+  cursor: pointer;
+  padding: 20px;
+  width: 50%;
+  text-align: center;
+  outline: none;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: rgba(0, 223, 166, 0.4);
 }
