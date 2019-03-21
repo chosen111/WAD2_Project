@@ -4,7 +4,7 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
+
     {% endblock %}
 
 {% block main %}
@@ -20,7 +20,7 @@
                 <p>Two teams, with at least two players on each team. One spymaster is elected on each team.
                 The board is made up of 25 cards with a word on each card.
                 Every secret agent is hidden behind a word.
-                Only the spymasters know the identities of the secret agents.</p>
+                Only the spymasters know the identities of the secret agents</p>
             </div>
 
             <button class = "accordion">Rules</button>
@@ -32,23 +32,22 @@
                 The game goes turn-by-turn until all the agents from a team or an assassin has been contacted.
                 </p>
             </div>
-
-
-            <script>
-                    var acc = document.getElementsByClassName("accordion");
-                    var i;
-                    
-                    for (i = 0; i < acc.length; i++) {
-                      acc[i].addEventListener("click", function() {
-                        this.classList.toggle("active");
-                        var panel = this.nextElementSibling;
-                        if (panel.style.maxHeight){
-                          panel.style.maxHeight = null;
-                        } else {
-                          panel.style.maxHeight = panel.scrollHeight + "px";
-                        } 
-                      });
-                    }</script>
+            
+    <script>
+    var acc = document.getElementsByClassName("accordion");
+        var i;
+        
+        for (i = 0; i < acc.length; i++) {
+          acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight){
+              panel.style.maxHeight = null;
+            } else {
+              panel.style.maxHeight = panel.scrollHeight + "px";
+            } 
+          });
+        }</script>
                     
 {% endblock %}
 

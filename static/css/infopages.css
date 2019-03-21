@@ -37,13 +37,14 @@ h3 {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 600px;
+  width: 50%;
   height: auto;
 
 }
 
 .team-member {
   color: #666666;
+  font-size: large;
   float: start;
   text-align: center;
   align-items: center;
