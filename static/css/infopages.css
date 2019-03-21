@@ -79,6 +79,41 @@ h3 {
   transition: 0.4s;
 }
 
+ /* Style inputs with type="text", select elements and textareas */
+input[type=text], select, textarea {
+  width: 100%; 
+  padding: 20px; /* Some padding */ 
+  border: 1px  #00dfa6; 
+  border-radius: 1px; 
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 5px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+  resize: both /* Allow the user to vertically resize the textarea (not horizontally) */
+  overflow: auto
+ 
+}
+
+/* Style the submit button with a specific background color etc */
+input[type=submit] {
+  background-color: rgba(0, 223, 166, 0.4);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: grab;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+input[type=submit]:hover {
+  background-color: rgba(0, 223, 166, 0.4);
+}
+
+/* Add a background color and some padding around the form */
+.container {
+  border-radius: 3px;
+  background-color: rgba(0, 223, 166, 0.4);
+  padding: 20px;
+} 
 .active, .accordion:hover {
   background-color: rgba(0, 223, 166, 0.4);
 }
