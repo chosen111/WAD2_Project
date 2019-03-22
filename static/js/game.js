@@ -1,246 +1,359 @@
-$.fn.extend({
-    replaceOrAdd($replace, $append) {
-        if ($(this).length) {
-            $(this).replaceWith($replace); 
-        }
-        else {
-            $append.append($replace);
-        }      
-    }
-})
-
 $(document).ready(function() {
-    var $vue_game = new Vue({
-        delimiters: ['[[', ']]'],
-        el: 'main',
-        data: {
+  let path = window.location.pathname.split('/');
+  let game = {
+    id: path[path.indexOf('game') + 1]
+  }
 
-        },
-        methods: {
-            greet: function(name) {
-                console.log('Hello from ' + name + '!')
-            }
+  //Pusher.logToConsole = true;
+  let pusher = new Pusher('f7e0c5de422f69bb8d14', {
+    cluster: 'eu',
+    forceTLS: true
+  });
+
+  let gameChannel = pusher.subscribe(`game=${game.id}`);
+  const vcButton = Vue.component('vc-button', {
+    props: [ 'id', 'text', 'fn' ],
+    template: `
+      <div class="button" :class="id" @click="fn">
+        <span class="text"><slot></slot></span>
+      </div>`
+  })
+  
+  new Vue({
+    delimiters: ['[[', ']]'],
+    components: {
+      'vc-button': vcButton
+    },
+    el: '.vue-game',
+    data: {
+      player: {},
+      game: {
+        data: {},
+        players: [],
+        cards: {},
+      },
+      cards: [],
+      loading: {
+        status: true,
+        message: "Searching for game",
+        error: false
+      },
+      notifications: [],
+      //
+      clue: {
+        word: "",
+        num: 0
+      },
+      display: {
+        board: true,
+      }
+    },
+    async mounted() {
+      try {
+        let result = await $.post({
+            headers: { "X-CSRFToken": csrf_token },
+            url: '/codenamez/connectgame/',
+            data: game
+        })
+
+        if (result.error) {
+          this.loading.error = true;
+          this.loading.message = LANG.get(result.error);
         }
-    })
+        // Update board
+        this.updateBoard(result.game);
+        this.updatePlayers(result.players);
+        // Update self
+        this.updatePlayer(result.player);
 
-    let path = window.location.pathname.split('/');
-    let game = {
-        id: path[path.indexOf('game') + 1]
-    }
+        this.loading.status = false;
+        this.gameNotification(undefined, `Welcome to ${this.game.data.name} game room!`);
+        this.startRound(result.game.current_round);
+      }
+      catch(e) {
+        console.error(e);
+      }
 
-    Pusher.logToConsole = true;
-    var pusher = new Pusher('f7e0c5de422f69bb8d14', {
-      cluster: 'eu',
-      forceTLS: true
-    });
-
-    var channel = pusher.subscribe(`game:${game.id}`);
-    channel.bind('my-event', function(data) {
-      alert(JSON.stringify(data));
-    });
-
-
-    /*let scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    let socket = new ReconnectingWebSocket(scheme + '://' + window.location.host + "/codenamez/game/");
-
-    // Handle incoming messages
-    socket.onmessage = function (response) {
-        // Decode the JSON
-        var response = JSON.parse(response.data);
-        // Handle errors
-        if (response.error) {
-            return Error.display(response.error);
+      gameChannel.bind('game_started', (data) => {
+        // Update board
+        this.updateBoard(data.game);
+        this.updatePlayers(data.players);
+        // Update self
+        for(let i in data.players) {
+          if(data.players[i].user.id == this.player.user.id) {
+            this.updatePlayer(data.players[i]);
+            break;
+          }
         }
-        // Handle responses
-        if (response.join) {
-            Game.create(response.join);
-        } 
-        else if (response.leave) {
-            console.log("Leaving game " + response.leave);
-        } 
-        else if (response.message) {
-            console.log("chat message")
-            /*var msgdiv = $("#room-" + data.room + " .messages");
-            var ok_msg = "";
-            // msg types are defined in chat/settings.py
-            // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
-            switch (data.msg_type) {
-                case 0:
-                    // Message
-                    ok_msg = "<div class='message'>" +
-                            "<span class='username'>" + data.username + "</span>" +
-                            "<span class='body'>" + data.message + "</span>" +
-                            "</div>";
-                    break;
-                case 1:
-                    // Warning / Advice messages
-                    ok_msg = "<div class='contextual-message text-warning'>" + data.message +
-                            "</div>";
-                    break;
-                case 2:
-                    // Alert / Danger messages
-                    ok_msg = "<div class='contextual-message text-danger'>" + data.message +
-                            "</div>";
-                    break;
-                case 3:
-                    // "Muted" messages
-                    ok_msg = "<div class='contextual-message text-muted'>" + data.message +
-                            "</div>";
-                    break;
-                case 4:
-                    // User joined room
-                    ok_msg = "<div class='contextual-message text-muted'>" + data.username +
-                            " joined the room!" +
-                            "</div>";
-                    break;
-                case 5:
-                    // User left room
-                    ok_msg = "<div class='contextual-message text-muted'>" + data.username +
-                            " left the room!" +
-                            "</div>";
-                    break;
-                default:
-                    console.log("Unsupported message type!");
-                    return;
-            }
-            msgdiv.append(ok_msg);
-            msgdiv.scrollTop(msgdiv.prop("scrollHeight")); 
-        } else {
-            console.log("Cannot handle message!");
-        }
-    };
-    // Says if we joined a room or not by if there's a div for it
-    let inRoom = function(room) {
-        return $("#room-" + roomId).length > 0;
-    };
+        this.gameNotification(undefined, `Game has now started!`);
+        this.startRound(data.game.current_round);
+      })
 
-    /* Room join/leave
-    $("li.room-link").click(function () {
-        roomId = $(this).attr("data-room-id");
-        if (inRoom(roomId)) {
-            // Leave room
-            $(this).removeClass("joined");
-            socket.send(JSON.stringify({
-                "command": "leave",
-                "room": roomId
-            }));
-        } else {
-            // Join room
-            $(this).addClass("joined");
-            socket.send(JSON.stringify({
-                "command": "join",
-                "room": roomId
-            }));
-        }
-    }
-    socket.onopen = function () {
-        // If connection to game server is successful, ask the server to join the game
-        socket.send(JSON.stringify({ "command": "join", "game": game.id }))
-    }
-    socket.onclose = function () {
-        console.log("Disconnected from game socket");
-    }*/
+      gameChannel.bind('game_cancelled', (data) => {
+        // Update board
+        this.updateBoard(data.game);
 
-    $(document).on('contextmenu', '.card', function(e) {
-        let $flipCard = $(this).children();
-        let toggle = $flipCard.hasClass('reversed') ? true : false;
-        if (toggle) {
-            $flipCard.removeClass('reversed').addClass('normal');
+        this.loading.status = true
+        this.loading.error = true;
+        this.loading.message = LANG.get("E_GAME_CANCELLED");
+      })
+
+      gameChannel.bind('game_round_end', (data) => {
+        this.updateBoard(data.game);        
+        this.startRound();
+      })
+
+      gameChannel.bind('player_switched_team', (data) => {
+        for(let i in this.game.players) {
+          if(this.game.players[i].user.id == data.player.user.id) {
+            this.game.players.splice(i, 1, data.player);
+
+            this.gameNotification(this.getTeamColor(data.player.team), `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has switched to ${this.getTeamName(data.player.team)}`);
+            break;
+          }
+        }
+      })
+
+      gameChannel.bind('player_locked_in', (data) => {
+        if (data.clue) {
+          let clue = JSON.parse(data.clue);
+          this.$set(this.game.data, 'current_clue', clue);
+          this.gameNotification(this.getTeamColor(data.player.team), `Spymaster ${data.player.user.username} (${data.player.user.profile.ranking}) has revealed the clue as: ${clue.word.toLowerCase()} (${clue.num})`);
+        }
+        if (data.selected) {
+          let selected = JSON.parse(data.selected);
+          this.gameNotification(this.getTeamColor(data.player.team), `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has locked in the cards ${this.formatSelectedCards(selected)}`);
+        }
+      })
+
+      gameChannel.bind('player_joined_game', (data) => {
+        let flag = false;
+        for(let i in this.game.players) {
+          if(this.game.players[i].user.id == data.player.user.id) {
+            flag = true;
+            break;
+          }
+        }
+        if(!flag) {
+          self.gameNotification("#a68e42", `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has joined the game`);
+          self.game.players.push(data.player);
+        }
+      });
+
+      gameChannel.bind('player_left_game', (data) => {
+        for(let i in this.game.players) {
+          if(this.game.players[i].user.id == data.player.user.id) {
+            self.gameNotification("#a68e42", `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has left the game`);
+            self.game.players.splice(i, 1);
+          }
+        }
+      });
+    },
+    computed: {
+      lockTurnCondition() {
+        return !this.game.data.ended && (this.game.data.current_team == this.player.team && ((this.player.is_spymaster && !this.game.data.current_clue.word) || (!this.player.is_spymaster && this.game.data.current_clue.word)));
+      },
+      gameHeader() {
+        if (this.game.data.ended) {
+          return `Game Over! ${this.game.data.name}`;
+        }
+        else if (this.game.data.started) {
+          return `Turn ${this.game.data.current_round}: ${this.game.data.name}`;
         }
         else {
-            $flipCard.removeClass('normal').addClass('reversed');
+          return `Preparing: ${this.game.data.name}`;
         }
-
-        e.preventDefault();
-    })
-
-    let Error = {
-        display(err) {
-            $('.loading').addClass('fail');
-            $('.loading .icon span').text("Error");
-            $('.loading .message').prepend($("<div>", { class: "icon-warning" }))
-            $('.loading .message span').text(LANG.get(err));            
+      },
+      gameStatus() {
+        return (this.game.data.ended) ? "GAME ENDED" : (!this.game.data.started) ? "PREPARING" : "IN PROGRESS";
+      },
+      gameStatusSlug() {
+        return (this.game.data.ended) ? "ended" : (!this.game.data.started) ? "preparing" : "in-progress";
+      },
+      teamOrange() {
+        return this.game.players.filter((p) => { return p.team == 1 });
+      },
+      teamPurple() {
+        return this.game.players.filter((p) => { return p.team == 2 });
+      },
+      teamNeutral() {
+        return this.game.players.filter((p) => { return p.team == 0 });
+      },
+    },
+    methods: {
+      async asyncAjax(url, method, data) {
+        try {
+          let result = await $.ajax({
+            headers: { "X-CSRFToken": csrf_token },
+            url, method, data
+          })
+          if (result.error) {
+            throw new Error(LANG.get(result.error));
+          }
+          return result;
         }
+        catch(e) {
+          throw e.message || e.statusText;
+        }
+      },
+      gameNotification(color, message, spacing) {
+        let date = new Date();
+        let dateString = `[${date.getFullYear()}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')} \
+                           ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}]`
+
+        this.notifications.unshift(Object.assign({}, { 
+          date: dateString,
+          color: color || "inherit",
+          message,
+          spacing
+        }))
+      },
+      getTeamColor(team) {
+        return (team == 1) ? "#ff6600" : "#660066";
+      },
+      getTeamName(team) {
+        if (team == 1) return "Orange Team";
+        else if (team == 2) return "Purple Team";
+        else return "Neutral Team";
+      },
+      getTeamSlug(team) {
+        if (team == 1) return "team-orange";
+        else if (team == 2) return "team-purple";
+        else return "default";
+      },
+      getTypeSlug(type) {
+        let rand = Math.round(Math.random()) + 1;
+        if (type == 0) return `assassin`;
+        if (type == 1) return `team-orange-${rand}`;
+        if (type == 2) return `team-purple-${rand}`;
+        if (type == 5) return `bystander-${rand}`;
+        else return `default`;
+      },
+      evFlipCard(id) {
+        this.$set(this.cards[id], 'reversed', !this.cards[id].reversed);
+      },
+      evSelectCard(id) {
+        if (this.player.locked_in || this.player.is_spymaster) return;
+        this.$set(this.cards[id], 'selected', !this.cards[id].selected);
+      },
+      formatSelectedCards(cards) {
+        return `[${cards.map((c) => this.game.cards[c].word).join(', ')}]`;
+      },
+      getSelectedCards() {
+        let selected = [];
+        for(let i = 0; i < this.cards.length; i++) {
+          if (this.cards[i].selected) {
+            selected.push(i);
+          }
+        }
+        return (selected.length) ? selected : null;
+      },
+      startRound(turn) {
+        if (!this.game.data.started) return;
+        if (this.game.data.ended) {
+          this.display.board = false;
+          return this.gameNotification(this.getTeamColor(this.game.data.winner), `The ${this.getTeamName(this.game.data.winner)} has won the game!`, true);
+        }
+        this.gameNotification(this.getTeamColor(this.game.data.current_team), `Turn ${this.game.data.current_round}: Is ${this.getTeamName(this.game.data.current_team)}'s turn!`, true);
+        if (turn == 1) {
+          if (this.player.is_spymaster) {
+            this.gameNotification(this.getTeamColor(this.player.team), `You are the spymaster for the ${this.getTeamName(this.player.team)}!`);
+          }
+        }
+        if (this.game.data.current_clue.word) {
+          this.gameNotification(this.getTeamColor(this.game.data.current_team), `The ${this.getTeamName(this.game.data.current_team)} has revealed the current clue as: ${this.game.data.current_clue.word.toLowerCase()} (${this.game.data.current_clue.num})`);
+        }
+      },
+      toggleBoard() {
+        this.display.board = !this.display.board;
+      },
+      async lockTurn() {
+        try {
+          let response = await this.asyncAjax('/codenamez/lockturn/', "POST", {
+            gameId: this.game.data.id,
+            clue: (this.player.is_spymaster) ? JSON.stringify(this.clue) : null,
+            selected: JSON.stringify(this.getSelectedCards()),
+          })
+          this.updatePlayer(response.player)
+        }
+        catch(e) {
+          this.gameNotification('#ff6347', e);
+        }
+      },
+      async switchTeam(team) {
+        try {
+          let response = await this.asyncAjax('/codenamez/switchteam/', "POST", {
+            gameId: this.game.data.id,
+            team
+          })
+          this.updatePlayer(response.player)
+        }
+        catch(e) {
+          this.gameNotification('#ff6347', e);
+        }
+      },
+      async startGame() {
+        try {
+          let response = await this.asyncAjax('/codenamez/startgame/', "POST", {
+            gameId: this.game.data.id,
+          })
+        }
+        catch(e) {
+          this.gameNotification('#ff6347', e);
+        }
+      },
+      async cancelGame() {
+        try {
+          let response = await this.asyncAjax('/codenamez/cancelgame/', "POST", {
+            gameId: this.game.data.id,
+          })
+        }
+        catch(e) {
+          this.gameNotification('#ff6347', e);
+        }
+      },
+      updatePlayer(player) {
+        this.player = player;
+      },
+      updateBoard(game) {
+        this.$set(this.game, 'data', game);
+        this.$set(this.game, 'cards', JSON.parse(game.cards));
+        this.$set(this.game.data, 'current_clue', JSON.parse(game.current_clue));
+      },
+      updatePlayers(players) {
+        this.game.players = players;
+      },
+      initVueCards(game) {
+        cards = JSON.parse(game.cards);
+        for(const [i, card] of cards.entries()) {
+          this.setVueCards(i, card);
+        }
+      },
+      setVueCards(id, card) {
+        this.cards.splice(id, 1, {
+          reversed: (card.guess) ? true : false,
+          selected: false,
+          face: (card.guess || this.player.is_spymaster) ? this.getTypeSlug(card.type) : null,
+          guess: (card.guess) ? `guess-${this.getTeamSlug(card.guess)}` : null
+        })
+      },
+    },
+    watch: {
+      'game.cards': function(newVal, oldVal) {
+        if (!newVal.length) return;
+
+        if (oldVal.length) {
+          for (let i = 0; i < newVal.length; i++) {
+            if (!_.isEqual(newVal[i], oldVal[i])) {
+              this.setVueCards(i, newVal[i]);
+            }
+          }
+        }
+        else {
+          this.initVueCards(this.game.data);
+        }
+      }
     }
-
-    let Game = {
-        create(data) {
-            console.log(data);
-            let user = data.user;
-            let game = JSON.parse(data.game)[0].fields;
-            let players = JSON.parse(data.players);
-            console.log(user);
-            console.log(game);
-            console.log(players);
-
-
-            let $game = $("<div>", { class: "game-wrapper" });
-            let $colLeft = $("<section>", { class: "col-1" }).appendTo($game);
-            let $colMiddle = $("<section>", { class: "col-2" }).appendTo($game);
-            // Middle :: Game Info
-            var $gameInfo = $("<div>", { class: "game-info" }).appendTo($colMiddle);
-            $("<span>", { class: "name", text: data.game.name }).appendTo($gameInfo);
-
-            //Game.Board.create($colMiddle, data);
-            let $colRight = $("<section>", { class: "col-3" }).appendTo($game);
-
-            // -- left column -- //
-            var $gameInfo = $("<div>", { class: "panel game-info" }).appendTo($colLeft);
-            $("<label>", { class: "title", text: "Game Info" }).appendTo($gameInfo);
-            let $gameChat = $("<div>", { class: "panel game-chat" }).appendTo($colLeft);
-            $("<label>", { class: "title", text: "Game Chat" }).appendTo($gameChat);
-            Game.show($game);
-        },
-        show($game) {
-            let $main = $("main").empty();
-            $game.appendTo($main);
-            $game.animate({ opacity: 1 }, 800);
-        },
-        Board: {
-            create($el, data) {
-                let $board = $("<ul>", { class: "board" });
-                
-                let game = JSON.parse(data.game);
-                let players = JSON.parse(data.players);
-                
-                let gameData = JSON.parse(game[0].fields.data);
-                let cards = gameData.cards;
-                let moves = gameData.moves[gameData.moves.length-1];
-                let isSpymaster = Game.Spymaster.isSpymaster(gameData, data.user);
-                for (let i in cards) {
-                    let $card = $("<li>", { class: "card" }).appendTo($board);
-                    let $flipCard = $("<div>", { class: "flip-card" }).appendTo($card);
-                    let $front = $("<div>", { class: "front" }).appendTo($flipCard);
-                    $("<div>", { class: "word-upside", text: cards[i].word.toUpperCase() }).appendTo($front);
-                    $("<div>", { class: "word", text: cards[i].word.toUpperCase() }).appendTo($front);                    
-                    let $back = $("<div>", { class: "back" }).appendTo($flipCard);
-
-                    if (moves.cards[i].guess) {
-                        $card.addClass(Game.Cards.getTypeAsClass(cards[i].type))
-                        $flipCard.addClass("reversed").addClass(`guess-${moves.cards[i].guess}`)
-                    }
-
-                    if (isSpymaster) {
-                        $card.addClass(Game.Cards.getTypeAsClass(cards[i].type))
-                        $("<div>", { class: "type" }).appendTo($front);
-                    }
-                }
-                $el.children('.board').replaceOrAdd($board, $el)          
-            }
-        },
-        Cards: {
-            getTypeAsClass(type) {
-                let rand = Math.round(Math.random()) + 1;
-                switch(type) {
-                    case "team-orange": case "team-purple": case "bystander": return type + "-" + rand;
-                    default: return type;
-                }
-            }
-        },
-        Spymaster: {
-            isSpymaster(game, user) {
-                return (game.spymaster["team-orange"].player === user || game.spymaster["team-purple"].player === user)
-            }
-        }
-    }
-});
+  })
+  $(".vue-game").css({ display: "flex" });
+})

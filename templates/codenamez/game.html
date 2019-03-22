@@ -3,13 +3,147 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/game.min.css' %}">
-    <script type="text/javascript" src="https://js.pusher.com/4.4/pusher.min.js"></script>
-    <script type="text/javascript" src="{% static 'js/axios.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/vue.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/game.min.css' %}">
+  <script type="text/javascript" src="https://js.pusher.com/4.4/pusher.min.js"></script>
+  <script type="text/javascript" src="{% static 'js/underscore.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/vue.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
+{% endblock %}
+
+{% block title %} 
+  {% if game %}
+    -- Playing in {{ game.name }} game room
+  {% else %}
+    -- Invalid game
+  {% endif %}
 {% endblock %}
 
 {% block main %}
-    {% showLoading "Searching for game" %}
+  <div class="vue-game">
+    <div v-if="loading.status" class="loading" :class="{ fail: loading.error }">
+      <div class="icon">
+        <span v-if="loading.error">Error</span>
+        <span v-else>Loading</span>
+      </div>
+      <div v-if="loading.message" class="message">
+        <i v-if="loading.error" class="icon-warning"></i>
+        <span>[[ loading.message ]]</span>
+      </div>
+    </div>
+    <div v-else class="game-wrapper" :class="[ getTeamSlug(player.team) ]">
+      <section class="col-1">
+        <div class="panel game-info">
+          <label class="title">Game Info</label>
+          <div class="content">
+            <div class="status" :class="[ gameStatusSlug ]">[[ gameStatus ]]</div>
+          </div>
+        </div>
+      </section>
+      <section class="col-2" :class="{ ended: game.data.ended && !display.board }">
+        <div class="game-header">
+          <span class="game-name">[[ gameHeader ]]</span>
+        </div>
+        <div v-if="!game.data.started" class="pre-game">
+          <div class="teams">
+            <div class="team orange">
+              <div class="teamName">
+                <span>Orange</span>
+                <vc-button v-if="player.team != 1" id="join-team" :fn="switchTeam.bind(null, 1)">Join</vc-button>
+              </div>
+              <ul class="playerList">
+                <li v-for="player in teamOrange" :key="player.user.id" class="player">
+                    <span class="playerName">[[ player.user.username ]] ([[ player.user.profile.ranking ]])</span>
+                </li>
+              </ul>
+            </div>
+            <div class="team neutral">
+              <div class="teamName">
+                <span>Choosing...</span>
+              </div>
+              <ul class="playerList">
+                <li v-for="player in teamNeutral" :key="player.user.id" class="player">
+                    <span class="playerName">[[ player.user.username ]] ([[ player.user.profile.ranking ]])</span>
+                </li>
+              </ul>
+            </div>
+            <div class="team purple">
+              <div class="teamName">
+                <span>Purple</span>
+                <vc-button v-if="player.team != 2" id="join-team" :fn="switchTeam.bind(null, 2)">Join</vc-button>
+              </div>
+              <ul class="playerList">
+                <li v-for="player in teamPurple" :key="player.user.id" class="player">
+                  <span class="playerName">[[ player.user.username ]] ([[ player.user.profile.ranking ]])</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div v-if="player.is_admin" class="gameMenu">
+            <vc-button id="cancel-game" :fn="startGame.bind(null)">Start Game</vc-button>
+            <vc-button id="cancel-game" :fn="cancelGame.bind(null)">Cancel Game</vc-button>
+          </div>
+        </div>
+        <div v-else-if="display.board || (game.data.started && game.cards && !game.data.ended)" class="game">
+          <ul class="board">
+            <li v-for="card, key in game.cards" :key="key" class="card" :class="[ cards[key].face ]">
+              <div class="flip-card" :class="[ { reversed: cards[key].reversed }, cards[key].guess ]" @click.prevent="evSelectCard(key)" @contextmenu.prevent="evFlipCard(key)">
+                <div class="front" :class="{ selected: cards[key].selected }">
+                  <div class="word-upside">[[ card.word.toUpperCase() ]]</div>
+                  <div class="word">[[ card.word.toUpperCase() ]]</div>
+                  <div v-if="player.is_spymaster" class="type"></div>
+                </div>
+                <div class="back" :class="{ selected: cards[key].selected }"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div v-else-if="game.data.ended" class="post-game">
+          <div class="team orange">
+            <div class="teamName">Orange</div>
+            <ul class="playerList">
+              <li v-for="player in teamOrange" :key="player.user.id" class="player">
+                  <span class="playerName">[[ player.user.username ]] ([[ player.points ]])</span>
+              </li>
+            </ul>
+          </div>
+          <div class="winnerTrophy" :style="{ color: getTeamColor(game.data.winner) }">
+            <div class="winnerTitle">WINNER</div>
+            <i class="icon-award1"></i>
+            <div class="winnerTeam">[[ getTeamName(game.data.winner).toUpperCase() ]]</div>
+            <div class="buttons">
+              <vc-button id="toggle-board" :fn="toggleBoard.bind(null)">Show board</vc-button>
+            </div>
+          </div>
+          <div class="team purple">
+            <div class="teamName">Purple</div>
+            <ul class="playerList">
+              <li v-for="player in teamPurple" :key="player.user.id" class="player">
+                  <span class="playerName">[[ player.user.username ]] ([[ player.points ]])</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div v-if="!game.data.ended || display.board" class="gameControl" :class="{ spymaster: player.is_spymaster && game.data.current_team == player.team && !game.data.current_clue.word, turn: lockTurnCondition || (display.board && game.data.ended) }">
+          <ul class="gameNotifications">
+            <li v-for="line,id in notifications" :key="id" class="line" :class="{ spacing: line.spacing }">
+              <span class="date">[[ line.date ]]</span>
+              <span class="message" :style="{ color: line.color }">[[ line.message ]]</span>
+            </li>
+          </ul>
+          <div class="buttons" v-if="lockTurnCondition || game.data.ended && display.board">
+            <vc-button v-if="lockTurnCondition" id="confirm" :fn="lockTurn.bind(null)">Lock In</vc-button>
+            <vc-button v-if="game.data.ended && display.board" id="toggle-board" :fn="toggleBoard.bind(null)">Hide Board</vc-button>
+          </div>
+          <div v-if="game.data.current_team == player.team && player.is_spymaster && !game.data.current_clue.word" class="gameClueWrapper">
+            <div class="input gameClue">
+              <input type="text" placeholder="CLUE" v-model="clue.word"/>
+            </div>
+            <div class="input gameClueNumber">
+              <input type="text" maxlength="1" v-model="clue.num" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
 {% endblock %}

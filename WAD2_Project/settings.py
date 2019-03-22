@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["82.28.140.171","127.0.0.1"]
 
 INSTALLED_APPS = [
 #    'channels', ### Does not work on PythonAnywhere
+    'rest_framework',
     'codenamez',
     'django.contrib.admin',
     'django.contrib.auth',

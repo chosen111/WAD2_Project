@@ -18,7 +18,7 @@
                     <span class="gamePlayersTitle">Players ({{ game.player_count }}/{{ game.max_players }}):</span>
                     <ul class="gamePlayers">
                         {% for player in game.players %}
-                            <li class="player {{ player.team }}">{{ player.player }} ({{ player.points }})</li>
+                            <li class="player {{ player.team }}">{{ player.user }} ({{ player.points }})</li>
                         {% endfor %}
                     </ul>
                     <span class="gameCreated">Created: {% ftime game.created %}</span>

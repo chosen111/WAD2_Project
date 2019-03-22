@@ -5,6 +5,8 @@ cffi==1.12.2
 chardet==3.0.4
 cryptography==2.6.1
 Django==2.1.7
+django-cors-headers==2.5.2
+djangorestframework==3.9.2
 idna==2.8
 ndg-httpsclient==0.5.1
 Pillow==5.4.1

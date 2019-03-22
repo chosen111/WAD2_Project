@@ -1,152 +1,519 @@
-@import 'vars.scss';
+@import '_vars.scss';
+@import '_funcs.scss';
 
-main div.game-wrapper {
+main .vue-game {
+  flex: 1;
+  display: none;
+  align-self: stretch;
+  
+  .loading {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    
+    animation: fadeIn .8s ease .2s forwards;
+    &.fail {
+      .icon {
+        border-color: $lred;
+        span {
+          color: $lred;
+        }
+        &:after {
+          display: none;
+        }
+      }
+      .message {
+        border: 1px solid $lred;
+        color: $lred;
+        background-color: rgba(darken($lred, 50%), .6);      
+        animation: none;
+        
+        .icon-warning {
+          display: inline-block;
+          margin-right: 5px;
+        }
+      }
+      
+    }
+    .icon {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border: 3px solid rgba($teal-border, .6);		
+      border-radius: 100px;
+      background-color: rgba(#000, .5);
+      text-align: center;		
+      
+      span {
+        position: absolute;
+        width: 100%;
+        @include align-element('both', 50%);
+      }
+      
+      &:after {
+        content: "";
+        position: absolute;
+        left: -3px; top: -3px;
+        padding: 40px;
+        border: 3px solid transparent;
+        border-top: 3px solid $teal;
+        border-radius: 100px;
+        animation: rotate .8s linear infinite;
+      }
+    }
+    
+    .message {
+      margin-top: 14px;
+      padding: 5px 10px 5px 10px;
+      border-radius: 4px;
+      
+      animation: blink 2s ease infinite;
+    }
+  }
+  
+  div.game-wrapper {
     flex: 1;
     display: grid;
-    grid-template-columns: 350px 1fr 350px;
+    grid-template-columns: 350px 1fr;
     align-self: stretch;
     opacity: 0;
+    
+    animation: fadeIn .8s ease forwards;
 
-    section.col-1 {
-        display: grid;
-        grid-template-columns: 350px;
-        grid-template-rows: auto 550px;
-        grid-row-gap: 10px;
-        padding: 0 20px 0 20px;
-
-        div.game-info {
-
-        }
-        div.game-chat {
-
-        }
+    &.team-orange {
+      .flip-card .front.selected, .flip-card .back.selected {
+        box-shadow: 0 0 5px 5px $team-orange inset; 
+      }
     }
-    section.col-2 {
+
+    &.team-purple {
+      .flip-card .front.selected, .flip-card .back.selected {
+        box-shadow: 0 0 5px 5px $team-purple inset; 
+      }
+    }
+    
+    section.col-1 {
+      display: grid;
+      grid-template-columns: 350px;
+      grid-template-rows: auto 550px;
+      grid-row-gap: 10px;
+      grid-column-gap: 20px;
+      
+      .game-info {
         display: flex;
         flex-direction: column;
-        align-items: stretch;
 
-        div.game-info {
-            display: flex;
+        .content {
+          display: flex;
+          flex-direction: column;
+          padding: 0 20px;
+          
+          .status {
+            align-self: center;
+            width: 180px;
+            margin: 10px 0;
+            padding: 6px 0;
+            text-align: center;
 
-            span.name {
-                flex: 1;
-                border-bottom: 1px solid $teal;
-                border-radius: 15px;
-                padding: 4px;
-                text-align: center;
+            &.preparing {
+              background-color: rgba(darken($mustard, 30%), .8);
+              color: $mustard;
             }
-        }
-
-        ul.board {
-            display: grid;
-            grid-template-columns: repeat(5, 180px);
-            grid-template-rows: repeat(5, 114px);
-            grid-gap: 10px 10px;
-
-            li.card {
-                position: relative;
-                perspective: 1000px;
-                border-radius: 4px;
-                cursor: pointer;
-
-                .back { background: $teal url('../images/cards/bword.jpg') no-repeat center top / cover; }
-                &.team-orange-1 {
-                    .back { background: $team-orange url('../images/cards/team-orange-1.jpg') no-repeat center top / cover; }
-                    .front .type { background-color: $team-orange }
-                }
-                &.team-orange-2 {
-                    .back { background: $team-orange url('../images/cards/team-orange-2.jpg') no-repeat center top / cover; }
-                    .front .type { background-color: $team-orange }
-                }
-                &.team-purple-1 { 
-                    .back { background: $team-purple url('../images/cards/team-purple-1.jpg') no-repeat center top / cover; }
-                    .front .type { background-color: $team-purple }
-                }
-                &.team-purple-2 {
-                    .back { background: $team-purple url('../images/cards/team-purple-2.jpg') no-repeat center top / cover; }
-                    .front .type { background-color: $team-purple }
-                }
-                &.bystander-1 .back { background: #bbb url('../images/cards/bystander-1.jpg') no-repeat center top / cover; }
-                &.bystander-2 .back { background: #bbb url('../images/cards/bystander-2.jpg') no-repeat center top / cover; }
-                &.assassin {
-                    .back { background: #000 url('../images/cards/assassin.jpg') no-repeat center top / cover; }
-                    .front .type { background-color: $assassin }
-                }
-                
-                .flip-card {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 5px;
-                    transition: transform .4s ease;
-                    transform-style: preserve-3d;
-
-                    &.guess-team-orange { border: 1px solid $team-orange; box-shadow: 0 0 8px $team-orange; }
-                    &.guess-team-purple { border: 1px solid lighten($team-purple, 10%); box-shadow: 0 0 8px lighten($team-purple, 10%); }
-  
-                    .front, .back {
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        border-radius: 5px;
-                        backface-visibility: hidden;
-                    }
-                    .front {
-                        background: $teal url('../images/cards/word.jpg') no-repeat center top / cover;
-                        color: $dark-teal;
-
-                        .type {
-                            position: absolute;
-                            top: 14px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            width: 14px;
-                            height: 14px;
-                            border-radius: 20px;
-                        }
-                        .word, .word-upside {
-                            position: absolute;
-                            font-weight: bold;
-                            overflow: hidden;
-                            white-space: nowrap;
-                        }
-                        .word {
-                            bottom: 20px;
-                            left: 16px;
-                            right: 16px;
-                            font-weight: bold;
-                            text-align: center;
-                        }
-                        .word-upside {
-                            top: 44px;
-                            left: 20px;
-                            right: 60px;
-                            font-size: 10px;
-                            font-style: italic;
-                            transform: rotate(-180deg);
-                            direction: rtl;
-                            color: lighten($dark-teal, 10%);
-                        }
-                    }
-                    .back {
-                        transform: rotateY(180deg);
-                    }
-
-                    &.normal {
-                        transform: rotateY(0deg);
-                    }
-                    &.reversed {
-                        transform: rotateY(180deg);
-                    }
-                }
-                
+            &.in-progress {
+              background-color: rgba(darken($teal, 30%), .8);
+              color: $teal;
             }
+            &.ended {
+              background-color: rgba(darken($lred, 30%), .8);
+              color: $lred;
+            }
+          }
         }
+      }
     }
-    section.col-3 {
+    section.col-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: min-content 1fr 150px;
+      grid-row-gap: 5px;
+
+      &.ended {
+        grid-template-rows: min-content 1fr;
+      }
+      
+      .game-header {
+        display: flex;
+        padding: 5px 15px;
+        border-bottom: 1px solid $teal;
+        border-radius: 15px;
+        
+        .game-name {
+          flex: 1;
+          padding: 4px;
+          background-color: rgba(darken($teal, 30%), .8);
+          text-align: center;          
+        }
+      }
+
+      .pre-game, .game, .post-game {
+        opacity: 0;
+        animation: fadeIn .8s ease forwards;
+      }
+
+      .pre-game {
         flex: 1;
-        min-width: 200px;
-    }
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-columns: min-content;
+        grid-auto-flow: column;
+        .teams {
+          display: flex;
+          flex-direction: column;
+          .team {
+            flex: 1;
+            margin: 5px;
+            border-radius: 4px;
+            overflow: hidden;
 
+            &.orange { 
+              background: rgba(darken($team-orange, 20%), .2); 
+              border: 1px solid $team-orange; 
+              color: lighten($team-orange, 10%);
+
+              .teamName {
+                background: rgba(darken($team-orange, 20%), .8); 
+              }
+              .player:hover {
+                background: rgba(darken($team-orange, 20%), .5);
+              }
+              .join-team {
+                @include button(lighten($team-orange, 20%));
+              }
+            }
+            &.purple { 
+              background: rgba(darken($team-purple, 10%), .2); 
+              border: 1px solid $team-purple; 
+              color: lighten($team-purple, 10%);
+
+              .teamName {
+                background: rgba(darken($team-purple, 10%), .8); 
+              }
+              .player:hover {
+                background: rgba(darken($team-purple, 10%), .5); 
+              }
+              .join-team {
+                @include button(lighten($team-purple, 20%));
+              }
+            }
+            &.neutral { 
+              background: rgba(gray, .2);
+              border: 1px solid gray; 
+              color: lighten(gray, 10%);
+
+              .teamName {
+                background: rgba(darken(gray, 20%), .8); 
+              }
+              .player:hover {
+                background: rgba(darken(gray, 20%), .5); 
+              }
+            }
+
+            .teamName {
+              position: relative;
+              padding: 8px 0;
+              text-align: center;
+
+              .join-team {
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 2px 12px;
+              }
+            }
+
+            .playerList {
+              padding: 10px;
+              
+              .player {
+                padding: 2px 8px;
+                border-radius: 2px;
+                transition: background .4s ease;              
+              }
+            }
+          }
+        }
+        .gameMenu {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(darken($teal, 30%), .4);
+          
+          .button {
+            width: 120px;
+            span {
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+      
+      .game {
+        justify-self: center;
+        align-self: center;
+        ul.board {
+          display: grid;
+          grid-template-columns: repeat(5, 180px);
+          grid-template-rows: repeat(5, 114px);
+          grid-gap: 10px 10px;
+          
+          li.card {
+            position: relative;
+            perspective: 1000px;
+            border-radius: 4px;
+            @include no-user-select();
+            cursor: pointer;
+            
+            .back { background: $teal url('../images/cards/bword.jpg') no-repeat center top / cover; }
+            &.team-orange-1 {
+              .back { background: $team-orange url('../images/cards/team-orange-1.jpg') no-repeat center top / cover; }
+              .front .type { background-color: $team-orange }
+            }
+            &.team-orange-2 {
+              .back { background: $team-orange url('../images/cards/team-orange-2.jpg') no-repeat center top / cover; }
+              .front .type { background-color: $team-orange }
+            }
+            &.team-purple-1 { 
+              .back { background: $team-purple url('../images/cards/team-purple-1.jpg') no-repeat center top / cover; }
+              .front .type { background-color: $team-purple }
+            }
+            &.team-purple-2 {
+              .back { background: $team-purple url('../images/cards/team-purple-2.jpg') no-repeat center top / cover; }
+              .front .type { background-color: $team-purple }
+            }
+            &.bystander-1 .back { background: #bbb url('../images/cards/bystander-1.jpg') no-repeat center top / cover; }
+            &.bystander-2 .back { background: #bbb url('../images/cards/bystander-2.jpg') no-repeat center top / cover; }
+            &.assassin {
+              .back { background: #000 url('../images/cards/assassin.jpg') no-repeat center top / cover; }
+              .front .type { background-color: $assassin }
+            }
+            
+            .flip-card {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              border-radius: 5px;
+              transition: transform .4s ease;
+              transform-style: preserve-3d;
+              
+              &.guess-team-orange { border: 1px solid $team-orange; box-shadow: 0 0 8px $team-orange; }
+              &.guess-team-purple { border: 1px solid lighten($team-purple, 10%); box-shadow: 0 0 8px lighten($team-purple, 10%); }
+              
+              .front, .back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 5px;
+                backface-visibility: hidden;
+
+                transition: box-shadow .2s ease;
+              }
+              .front {
+                background: $teal url('../images/cards/word.jpg') no-repeat center top / cover;
+                color: $dark-teal;
+                
+                .type {
+                  position: absolute;
+                  top: 14px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  width: 14px;
+                  height: 14px;
+                  border-radius: 20px;
+                }
+                .word, .word-upside {
+                  position: absolute;
+                  font-weight: bold;
+                  overflow: hidden;
+                  white-space: nowrap;
+                }
+                .word {
+                  bottom: 20px;
+                  left: 16px;
+                  right: 16px;
+                  font-weight: bold;
+                  text-align: center;
+                }
+                .word-upside {
+                  top: 44px;
+                  left: 20px;
+                  right: 60px;
+                  font-size: 10px;
+                  font-style: italic;
+                  transform: rotate(-180deg);
+                  direction: rtl;
+                  color: lighten($dark-teal, 10%);
+                }
+              }
+              .back {
+                transform: rotateY(180deg);
+              }
+              
+              &.normal {
+                transform: rotateY(0deg);
+              }
+              &.reversed {
+                transform: rotateY(180deg);
+              }
+            }
+          }
+        }
+      }
+
+      .post-game {
+        display: grid;
+        grid-template-columns: minmax(200px, 300px) 1fr minmax(200px, 300px);
+        justify-items: center;
+        padding: 25px;
+        .team {
+          justify-self: stretch;
+          border-radius: 4px;
+          overflow: hidden;
+
+          &.orange { 
+            background: rgba(darken($team-orange, 20%), .2); 
+            border: 1px solid $team-orange; 
+            color: lighten($team-orange, 10%);
+
+            .teamName {
+              background: rgba(darken($team-orange, 20%), .8); 
+            }
+            .player:hover {
+              background: rgba(darken($team-orange, 20%), .5);
+            }
+          }
+          &.purple { 
+            background: rgba(darken($team-purple, 10%), .2); 
+            border: 1px solid $team-purple; 
+            color: lighten($team-purple, 10%);
+
+            .teamName {
+              background: rgba(darken($team-purple, 10%), .8); 
+            }
+            .player:hover {
+              background: rgba(darken($team-purple, 10%), .5); 
+            }
+          }
+          &.neutral { 
+            background: rgba(gray, .2);
+            border: 1px solid gray; 
+            color: lighten(gray, 10%);
+
+            .teamName {
+              background: rgba(darken(gray, 20%), .8); 
+            }
+            .player:hover {
+              background: rgba(darken(gray, 20%), .5); 
+            }
+          }
+
+          .teamName {
+            position: relative;
+            padding: 8px 0;
+            text-align: center;
+
+            .join-team {
+              position: absolute;
+              top: 0;
+              right: 0;
+              padding: 2px 12px;
+            }
+          }
+
+          .playerList {
+            padding: 10px;
+            
+            .player {
+              padding: 2px 8px;
+              border-radius: 2px;
+              transition: background .4s ease;              
+            }
+          }
+        }
+        
+        .winnerTrophy {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          .winnerTitle, .winnerTeam {
+            font-size: 50px;
+            font-family: 'Black Ops One';
+            text-align: center;
+          }
+          .icon-award1 {
+            margin: 10px 0;
+            font-size: 400px;
+            text-shadow: 0 0 20px;
+          }
+        }
+      }
+
+      .gameControl {
+        display: grid;
+        grid-template-columns: 1fr 160px;
+        grid-template-rows: 94px auto;
+        grid-template-areas: "notifications notifications" "notifications notifications";
+        border: 1px solid $teal-border;
+        border-radius: 2px;
+        padding: 5px;
+
+        &.turn {
+          grid-template-areas: "notifications ." "notifications confirm";
+        }
+        &.spymaster {
+          grid-template-areas: "notifications clue" "notifications confirm";
+        }
+        
+        .gameNotifications {
+          grid-area: notifications;
+          overflow-y: scroll;
+          li.line {
+            &.spacing {
+              margin-bottom: 14px;
+            }
+            .date {
+              color: gray;
+            }
+          }
+        }
+
+        .gameClueWrapper {
+          grid-area: clue;
+          display: grid;
+          grid-template-columns: 120px 30px;
+          grid-column-gap: 5px;
+          align-items: center;
+          padding: 4px;
+          .input {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+        
+        .buttons {
+          grid-area: confirm;
+          display: flex;
+          flex-direction: column;
+        }
+      } 
+    }
+  }
 }

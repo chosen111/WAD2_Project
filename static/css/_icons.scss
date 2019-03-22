@@ -24,6 +24,8 @@ $icon-check: "\f00c";
 $icon-close: "\f00d";
 $icon-shield: "\e900";
 $icon-warning: "\f071";
+$icon-award: "\e902";
+$icon-award1: "\e903";
 
 .icon-user:before {
     content: $icon-user;
@@ -63,4 +65,10 @@ $icon-warning: "\f071";
 }
 .icon-warning:before {
     content: $icon-warning;
+}
+.icon-award:before {
+    content: $icon-award;
+}
+.icon-award1:before {
+    content: $icon-award1;
 }
