@@ -3,18 +3,18 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-     <link rel="stylesheet" type="text/css" href="{% static 'css/contactus.css' %}">
+     <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
 {% endblock %}
 
 {% block main %}
     <h1>Contact us</h1>
 
     <div>
-        <h2>developer team</h2>
+
 
     </div>
-
-    <div>
+    <button class = "accordion">Developer Team</button>
+    <div class = "panel">
     <ul class="team-member">
                 <li class="team-member">Robert Neagu: 2318538n@student.gla.ac.uk</li>
                 <li class="team-member">Zi Qin Wong: 2318997w@student.gla.ac.uk</li>
@@ -24,5 +24,35 @@
 
     </div>
 
+    <div class="container">
+  <form action="action_page.php">
+
+    <label for="fname">First Name</label>
+    <input type="text" id="fname" name="firstname" placeholder="Your name..">
+
+    <label for="lname">Last Name</label>
+    <input type="text" id="lname" name="lastname" placeholder="Your last name.." >
+
+    <label for="country">Country</label>
+    <select id="country" name="country">
+      <option value="australia">Australia</option>
+      <option value="canada">Canada</option>
+      <option value="usa">USA</option>
+      <option value="bgn">Bulgaria</option>
+      <option value="gbr">United Kingdom</option>
+    </select>
+
+    <label for="subject">Message</label>
+    <textarea id="Message" name="message" placeholder="Type something.." style="height:200px"></textarea>
+
+    <input type="submit" value="Submit">
+
+  </form>
+
+</div> 
+
+    <script type="text/javascript" src="{% static 'js/info.js' %}"></script>
+    
+     
 
 {% endblock %}

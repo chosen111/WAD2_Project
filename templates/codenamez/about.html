@@ -3,26 +3,29 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
+
 
 {% endblock %}
 
 {% block main %}
     <h1>About CodeNameZ</h1>
-    <p>
-     The program itself is a assignment for us, it is a team project that contains technologies
+
+
+
+    <button class = "accordion">Objective of this program</button>
+        <div class = "panel">
+            <p> The program itself is a assignment for us, it is a team project that contains technologies
      like Python, Django, HTML, CSS,Javascript, JQuery and AJAX.
-    </p>
-
-    <h2>Objective of this program</h2>
-
-    <p>The objective of our application is to provide the users around the world a way to connect with friends and
+        The objective of our application is to provide the users around the world a way to connect with friends and
         play the Codenames Board Game over the internet
-    </p>
+            </p>
+        </div>
 
-    <h3>Details of process</h3>
 
-    <p>Players will be able to create private or public games,
+    <button class = "accordion">Details of process</button>
+        <div class = "panel">
+            <p>Players will be able to create private or public games,
 invite other players, join other games or just relax and
 spectate.
 Any game created requires a minimum of 2 players per
@@ -35,7 +38,7 @@ contacts all their secret agents first. The game owner can
 set the game to have limited rounds/time per round,
 infinite amount of clues or other custom rules that will
 lead one team or the other to the victory.</p>
-    <p>The game also provides the possibility to move through
+            <p>The game also provides the possibility to move through
 the round’s previous turns allowing players to review
 their decisions that led to that outcome.
 When any of the team is victorious, every member of the
@@ -48,7 +51,15 @@ player’s profile which displays the information about his
 account and how successful has he been at the game.
 They can also change their user avatar and other trivial
 information to personalize their profile.</p>
-    <p><u><a href="{% url 'how_to_play' %}">Details of game rules<u/></p>
+        </div>
 
-    <p><u><a href="{% url 'contact_us' %}">Details of developers<u/></p>
+
+    <p>
+    <u><a href="{% url 'how_to_play' %}">Details of game rules</a><u/>   ___
+    <u><a href="{% url 'contact_us' %}">Details of developers</a><u/>
+    </p>
+
+<script type="text/javascript" src="{% static 'js/info.js' %}"></script>
+
+
 {% endblock %}

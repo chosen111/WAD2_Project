@@ -3,11 +3,46 @@
 {% load codenamez_template_tags %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/index.min.css' %}">
-    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/infopages.css' %}">
+    <script type="text/javascript" src="{% static 'js/accordion.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-    <h1>f.a.q</h1>
+    <h1>F.A.Q</h1>
 
+    <button class = "accordion">Where did the idea for this project come from?</button>
+    <div class = "panel">
+        <p>One of our group members plays the web version of Codenames on another website, but was unhappy with the implementation. 
+            We decided to make a better version, making improvements where we saw fit.
+            The site that sparked this idea can be found here: https://horsepaste.com
+        </p>
+    </div>
+
+    <button class = "accordion">Who can play?</button>
+    <div class = "panel">
+        <p>Literally anyone with a laptop and internet access can play! It's easy to learn and our website makes it easy to join and create games.</p>
+    </div>
+
+    <button class = "accordion">Where can I buy the original card game?</button>
+    <div class = "panel">
+        <p>It can be bought on amazon here: https://www.amazon.co.uk/Czech-Games-Codenames-Card-Game/dp/B01M5FQZ55</p>
+    </div>
+
+
+    <script>
+            var acc = document.getElementsByClassName("accordion");
+                var i;
+                
+                for (i = 0; i < acc.length; i++) {
+                  acc[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.maxHeight){
+                      panel.style.maxHeight = null;
+                    } else {
+                      panel.style.maxHeight = panel.scrollHeight + "px";
+                    } 
+                  });
+                }</script>
+        
 {% endblock %}
