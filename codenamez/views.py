@@ -390,13 +390,13 @@ def leave_game(request, game_id):
     response = {}
     try:
         game = Game.objects.get(id=uuid.UUID(game_id))
-        playing = GamePlayer.objects.get(game=game, user=request.user)
+        player = GamePlayer.objects.get(game=game, user=request.user)
 
         # Notify everyone a player has left the game
         pusher_client.trigger('game=' + game_id, 'player_left_game', {
-            'player': GamePlayerSerializer(playing).data,
+            'player': GamePlayerSerializer(player).data,
         })
-        playing.delete()
+        player.delete()
     except (Game.DoesNotExist, ValueError):
         pass
     except GamePlayer.DoesNotExist:

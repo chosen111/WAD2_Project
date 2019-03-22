@@ -127,6 +127,7 @@ $(document).ready(function() {
       })
 
       gameChannel.bind('player_joined_game', (data) => {
+        console.log(data);
         let flag = false;
         for(let i in this.game.players) {
           if(this.game.players[i].user.id == data.player.user.id) {
@@ -135,16 +136,16 @@ $(document).ready(function() {
           }
         }
         if(!flag) {
-          self.gameNotification("#a68e42", `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has joined the game`);
-          self.game.players.push(data.player);
+          this.gameNotification("#a68e42", `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has joined the game`);
+          this.game.players.push(data.player);
         }
       });
 
       gameChannel.bind('player_left_game', (data) => {
         for(let i in this.game.players) {
           if(this.game.players[i].user.id == data.player.user.id) {
-            self.gameNotification("#a68e42", `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has left the game`);
-            self.game.players.splice(i, 1);
+            this.gameNotification("#a68e42", `Player ${data.player.user.username} (${data.player.user.profile.ranking}) has left the game`);
+            this.game.players.splice(i, 1);
           }
         }
       });

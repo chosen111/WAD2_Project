@@ -14,7 +14,7 @@
   {% if game %}
     -- Playing in {{ game.name }} game room
   {% else %}
-    -- Invalid game
+    -- Playing
   {% endif %}
 {% endblock %}
 
@@ -36,6 +36,24 @@
           <label class="title">Game Info</label>
           <div class="content">
             <div class="status" :class="[ gameStatusSlug ]">[[ gameStatus ]]</div>
+            <div v-if="game.data.started && !game.data.ended" class="teams">
+              <div class="team orange">
+                <div class="teamName">Orange</div>
+                <ul class="playerList">
+                  <li v-for="player in teamOrange" :key="player.user.id" class="player">
+                      <span class="playerName">[[ player.user.username ]] ([[ player.points ]])</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="team purple">
+                <div class="teamName">Purple</div>
+                <ul class="playerList">
+                  <li v-for="player in teamPurple" :key="player.user.id" class="player">
+                      <span class="playerName">[[ player.user.username ]] ([[ player.points ]])</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

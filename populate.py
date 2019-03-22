@@ -66,7 +66,7 @@ def populate():
   games = [
     { "id": "3ba2df11-7b57-469c-9019-48da3dfaa200",
       "name": "Demo",
-      "max_players": 6 }
+      "max_players": 4 }
   ]
 
   for i,game in enumerate(games):

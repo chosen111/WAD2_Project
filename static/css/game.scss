@@ -97,11 +97,88 @@ main .vue-game {
         box-shadow: 0 0 5px 5px $team-purple inset; 
       }
     }
+
+    .teams, .post-game {
+      display: flex;
+      flex-direction: column;
+      .team {
+        flex: 1;
+        margin: 5px;
+        border-radius: 4px;
+        overflow: hidden;
+
+        &.orange { 
+          background: rgba(darken($team-orange, 20%), .2); 
+          border: 1px solid $team-orange; 
+          color: lighten($team-orange, 10%);
+
+          .teamName {
+            background: rgba(darken($team-orange, 20%), .8); 
+          }
+          .player:hover {
+            background: rgba(darken($team-orange, 20%), .5);
+          }
+          .join-team {
+            @include button(lighten($team-orange, 20%));
+          }
+        }
+        &.purple { 
+          background: rgba(darken($team-purple, 10%), .2); 
+          border: 1px solid $team-purple; 
+          color: lighten($team-purple, 10%);
+
+          .teamName {
+            background: rgba(darken($team-purple, 10%), .8); 
+          }
+          .player:hover {
+            background: rgba(darken($team-purple, 10%), .5); 
+          }
+          .join-team {
+            @include button(lighten($team-purple, 20%));
+          }
+        }
+        &.neutral { 
+          background: rgba(gray, .2);
+          border: 1px solid gray; 
+          color: lighten(gray, 10%);
+
+          .teamName {
+            background: rgba(darken(gray, 20%), .8); 
+          }
+          .player:hover {
+            background: rgba(darken(gray, 20%), .5); 
+          }
+        }
+
+        .teamName {
+          position: relative;
+          padding: 8px 0;
+          text-align: center;
+
+          .join-team {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 2px 12px;
+          }
+        }
+
+        .playerList {
+          padding: 10px;
+          
+          .player {
+            padding: 2px 8px;
+            border-radius: 2px;
+            transition: background .4s ease;              
+          }
+        }
+      }
+    }
     
     section.col-1 {
       display: grid;
       grid-template-columns: 350px;
-      grid-template-rows: auto 550px;
+      grid-template-rows: 1fr;
       grid-row-gap: 10px;
       grid-column-gap: 20px;
       
@@ -110,6 +187,7 @@ main .vue-game {
         flex-direction: column;
 
         .content {
+          flex: 1;
           display: flex;
           flex-direction: column;
           padding: 0 20px;
@@ -133,6 +211,10 @@ main .vue-game {
               background-color: rgba(darken($lred, 30%), .8);
               color: $lred;
             }
+          }
+
+          .teams {
+            flex: 1;
           }
         }
       }
@@ -172,82 +254,7 @@ main .vue-game {
         grid-template-columns: 1fr;
         grid-auto-columns: min-content;
         grid-auto-flow: column;
-        .teams {
-          display: flex;
-          flex-direction: column;
-          .team {
-            flex: 1;
-            margin: 5px;
-            border-radius: 4px;
-            overflow: hidden;
-
-            &.orange { 
-              background: rgba(darken($team-orange, 20%), .2); 
-              border: 1px solid $team-orange; 
-              color: lighten($team-orange, 10%);
-
-              .teamName {
-                background: rgba(darken($team-orange, 20%), .8); 
-              }
-              .player:hover {
-                background: rgba(darken($team-orange, 20%), .5);
-              }
-              .join-team {
-                @include button(lighten($team-orange, 20%));
-              }
-            }
-            &.purple { 
-              background: rgba(darken($team-purple, 10%), .2); 
-              border: 1px solid $team-purple; 
-              color: lighten($team-purple, 10%);
-
-              .teamName {
-                background: rgba(darken($team-purple, 10%), .8); 
-              }
-              .player:hover {
-                background: rgba(darken($team-purple, 10%), .5); 
-              }
-              .join-team {
-                @include button(lighten($team-purple, 20%));
-              }
-            }
-            &.neutral { 
-              background: rgba(gray, .2);
-              border: 1px solid gray; 
-              color: lighten(gray, 10%);
-
-              .teamName {
-                background: rgba(darken(gray, 20%), .8); 
-              }
-              .player:hover {
-                background: rgba(darken(gray, 20%), .5); 
-              }
-            }
-
-            .teamName {
-              position: relative;
-              padding: 8px 0;
-              text-align: center;
-
-              .join-team {
-                position: absolute;
-                top: 0;
-                right: 0;
-                padding: 2px 12px;
-              }
-            }
-
-            .playerList {
-              padding: 10px;
-              
-              .player {
-                padding: 2px 8px;
-                border-radius: 2px;
-                transition: background .4s ease;              
-              }
-            }
-          }
-        }
+        
         .gameMenu {
           display: flex;
           flex-direction: column;
@@ -384,67 +391,6 @@ main .vue-game {
         .team {
           justify-self: stretch;
           border-radius: 4px;
-          overflow: hidden;
-
-          &.orange { 
-            background: rgba(darken($team-orange, 20%), .2); 
-            border: 1px solid $team-orange; 
-            color: lighten($team-orange, 10%);
-
-            .teamName {
-              background: rgba(darken($team-orange, 20%), .8); 
-            }
-            .player:hover {
-              background: rgba(darken($team-orange, 20%), .5);
-            }
-          }
-          &.purple { 
-            background: rgba(darken($team-purple, 10%), .2); 
-            border: 1px solid $team-purple; 
-            color: lighten($team-purple, 10%);
-
-            .teamName {
-              background: rgba(darken($team-purple, 10%), .8); 
-            }
-            .player:hover {
-              background: rgba(darken($team-purple, 10%), .5); 
-            }
-          }
-          &.neutral { 
-            background: rgba(gray, .2);
-            border: 1px solid gray; 
-            color: lighten(gray, 10%);
-
-            .teamName {
-              background: rgba(darken(gray, 20%), .8); 
-            }
-            .player:hover {
-              background: rgba(darken(gray, 20%), .5); 
-            }
-          }
-
-          .teamName {
-            position: relative;
-            padding: 8px 0;
-            text-align: center;
-
-            .join-team {
-              position: absolute;
-              top: 0;
-              right: 0;
-              padding: 2px 12px;
-            }
-          }
-
-          .playerList {
-            padding: 10px;
-            
-            .player {
-              padding: 2px 8px;
-              border-radius: 2px;
-              transition: background .4s ease;              
-            }
-          }
         }
         
         .winnerTrophy {
