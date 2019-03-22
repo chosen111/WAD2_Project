@@ -392,7 +392,7 @@ def leave_game(request, game_id):
         game = Game.objects.get(id=uuid.UUID(game_id))
         playing = GamePlayer.objects.get(game=game, user=request.user)
 
-        # Notify everyone a player has joined the game
+        # Notify everyone a player has left the game
         pusher_client.trigger('game=' + game_id, 'player_left_game', {
             'player': GamePlayerSerializer(playing).data,
         })
